@@ -1,0 +1,1063 @@
+1
+00:00:00,000 --> 00:00:05,790
+In this session, we are going to introduce
+sets as another fundamental collection
+
+2
+00:00:05,790 --> 00:00:09,722
+type.
+We are then going to combine sets and for
+
+3
+00:00:09,722 --> 00:00:13,583
+expressions in a classical common for
+search problem.
+
+4
+00:00:13,583 --> 00:00:19,088
+Namely, the N-queens problem.
+So far all the collection that we've seen
+
+5
+00:00:19,088 --> 00:00:24,592
+were sequences of some sort or another.
+But actually also two other, fundamental
+
+6
+00:00:24,592 --> 00:00:28,453
+class of collections.
+One is sets and the other is map.
+
+7
+00:00:28,453 --> 00:00:32,600
+In this session, we're going to take a
+closer look at sets.
+
+8
+00:00:32,600 --> 00:00:38,420
+Sets are actually very close to sequences.
+You form sets just like sequences so you
+
+9
+00:00:38,420 --> 00:00:43,961
+could write fruit equals set of apple,
+banana, pears lets say or S equals one to
+
+10
+00:00:43,961 --> 00:00:49,851
+six toset. or two set is on operator that
+takes the sequence and converts the
+
+11
+00:00:49,851 --> 00:00:53,779
+sequence to a set.
+Most operations on sequences are also
+
+12
+00:00:53,779 --> 00:00:57,987
+available on sets.
+So you could write as map underscore plus
+
+13
+00:00:57,987 --> 00:01:04,361
+two and then you would.
+Expect to a set that goes from 3,4,5,6,7,
+
+14
+00:01:04,361 --> 00:01:10,748
+and eight.
+Or you could write fruit filter, where the
+
+15
+00:01:10,748 --> 00:01:18,180
+fruit must start with APP.
+So that would us a set of just apples.
+
+16
+00:01:19,960 --> 00:01:23,341
+Or you could ask whether a set is non
+empty say.
+
+17
+00:01:23,341 --> 00:01:27,497
+All these operations are shared between
+sequences and sets.
+
+18
+00:01:27,497 --> 00:01:32,709
+To find a complete set of operations, you
+could look in the class iterable.
+
+19
+00:01:32,709 --> 00:01:38,204
+The common sequence class of second
+sequence and find all the operations that
+
+20
+00:01:38,204 --> 00:01:42,430
+are supported there.
+Or you go and look at the operations in
+
+21
+00:01:42,430 --> 00:01:47,080
+class set and you find in addition the
+operation specific to sets.
+
+22
+00:01:48,140 --> 00:01:53,513
+Well the principal differences between
+sets and sequences are three.
+
+23
+00:01:53,513 --> 00:01:59,834
+The first one is that sets are unordered.
+That means the element of a set do not
+
+24
+00:01:59,834 --> 00:02:04,260
+have a predefined order in which they
+appear in the set.
+
+25
+00:02:04,260 --> 00:02:09,673
+So when I wrote here set of three, four,
+five, six, seven, eight that's actually
+
+26
+00:02:09,673 --> 00:02:15,442
+one plus ability but you might just as
+well see in the output something like set
+
+27
+00:02:15,442 --> 00:02:20,285
+of five, six three, eight, seven the
+element's in a different order.
+
+28
+00:02:20,285 --> 00:02:25,912
+So it's not guaranteed at all that the
+elements that you put, that you define a
+
+29
+00:02:25,912 --> 00:02:31,945
+set with will appear in the same order.
+The second difference is that sets do not
+
+30
+00:02:31,945 --> 00:02:36,906
+have duplicate elements.
+So if I would, let's say, map the set, and
+
+31
+00:02:36,906 --> 00:02:43,144
+I was going from one to six, and I would,
+So if I would map the set from.
+
+32
+00:02:43,144 --> 00:02:48,515
+Going from one to six with a function that
+divides each element by two.
+
+33
+00:02:48,515 --> 00:02:53,432
+I would obtain the set that contains
+elements zero, one, two, three.
+
+34
+00:02:53,432 --> 00:02:59,710
+So this set of six elements has just
+shrunk to four elements because duplicates
+
+35
+00:02:59,710 --> 00:03:03,568
+were removed.
+And the third operation is where, in a
+
+36
+00:03:03,568 --> 00:03:08,788
+sequence the fundamental operations would
+be head and tail for lists.
+
+37
+00:03:08,788 --> 00:03:13,402
+Or indexing for vectors.
+For set the fundamental operation is
+
+38
+00:03:13,402 --> 00:03:14,310
+contents.
+So.
+
+39
+00:03:14,310 --> 00:03:20,506
+The principal operation that you can do
+with a set is asking whether there is an
+
+40
+00:03:20,506 --> 00:03:25,844
+element in the set.
+So let's now use that eh data structure
+
+41
+00:03:25,844 --> 00:03:31,038
+and what we've seen so far.
+In a somewhat more involved problem that
+
+42
+00:03:31,038 --> 00:03:37,301
+highlights very well the techniques that
+you could apply to combinatory search.
+
+43
+00:03:37,301 --> 00:03:42,993
+The problem is one known one.
+So you start with a chess board Eight By
+
+44
+00:03:42,993 --> 00:03:48,347
+eight rows normally.
+I will, draw a smaller version with just
+
+45
+00:03:48,347 --> 00:03:53,077
+four by four.
+And the problem is to place queens into
+
+46
+00:03:53,077 --> 00:03:58,521
+every row of the chess board.
+Such, that none of the queens is
+
+47
+00:03:58,521 --> 00:04:03,964
+threatened by another.
+So, one way to do that here, would be to
+
+48
+00:04:03,964 --> 00:04:08,070
+place a queen here, and here, and here,
+and here.
+
+49
+00:04:08,070 --> 00:04:14,733
+Because in all of these cases, each queen
+sits in its own row, in its own column.
+
+50
+00:04:14,733 --> 00:04:20,300
+And it also cannot threaten another queen
+by following a diagonal.
+
+51
+00:04:21,040 --> 00:04:27,572
+So now we want to develop a solution for
+chessboards of any size, not just four or
+
+52
+00:04:27,572 --> 00:04:30,875
+eight.
+One way to solve the problem, would be to
+
+53
+00:04:30,875 --> 00:04:34,804
+place a queen in each row.
+So we start with the first row.
+
+54
+00:04:34,804 --> 00:04:39,422
+Place a queen there, then place a queen in
+the second row and so on.
+
+55
+00:04:39,422 --> 00:04:44,729
+Once we've placed a number of queens, we
+must check for the next queen in the
+
+56
+00:04:44,729 --> 00:04:48,658
+column that does not threaten any of the
+other queens.
+
+57
+00:04:48,658 --> 00:04:54,172
+So that it sits in it's own column and it
+doesn't threaten the other queen's by
+
+58
+00:04:54,172 --> 00:04:59,348
+following a diagonal.
+So let's.
+
+59
+00:04:59,348 --> 00:05:03,362
+That leads to an algorithm for solving the
+problem.
+
+60
+00:05:03,362 --> 00:05:08,793
+The algorithm is recursive.
+Says, suppose that we've already generated
+
+61
+00:05:08,793 --> 00:05:15,090
+all the solutions consisting of placing K
+minus one queens on a board of size N.
+
+62
+00:05:15,090 --> 00:05:18,810
+First question is how do we represent each
+solution.
+
+63
+00:05:18,810 --> 00:05:24,105
+So the idea there is you would just
+represented by their list of length K
+
+64
+00:05:24,105 --> 00:05:29,257
+minus one, obtaining the numbers of
+columns between zero and N minus one.
+
+65
+00:05:29,257 --> 00:05:32,763
+So let's see in this example how that
+would work.
+
+66
+00:05:32,763 --> 00:05:36,700
+So I number columns from zero.
+Something like that.
+
+67
+00:05:37,900 --> 00:05:45,125
+And then the solution of my first three
+queens, would be the list of Saying the
+
+68
+00:05:45,125 --> 00:05:50,237
+last queen that I've placed, that was the
+queen in the row two.
+
+69
+00:05:50,237 --> 00:05:55,034
+That column was zero.
+The one before that I've placed was the
+
+70
+00:05:55,034 --> 00:05:59,832
+queen in column three.
+And the first queen I've placed in the
+
+71
+00:05:59,832 --> 00:06:04,849
+zero row, had column one.
+So that would be as, partial solution of
+
+72
+00:06:04,849 --> 00:06:09,465
+the three greens.
+I can then complete it to a full solution
+
+73
+00:06:09,465 --> 00:06:14,628
+by adding another green in this column two
+that I've seen here.
+
+74
+00:06:14,628 --> 00:06:19,791
+So that solution would evolve to the
+solution two, zero, three, one that you've
+
+75
+00:06:19,791 --> 00:06:24,228
+seen on the board.
+But of course in general there can be more
+
+76
+00:06:24,228 --> 00:06:28,453
+solutions or none at all.
+So we're dealing not with a single
+
+77
+00:06:28,453 --> 00:06:34,086
+solution here, but with sets of solutions.
+So let's put this into an actual Scala
+
+78
+00:06:34,086 --> 00:06:37,633
+program.
+I've opened a new worksheet, call it n
+
+79
+00:06:37,633 --> 00:06:41,127
+queens.
+And I've given you already, the signature
+
+80
+00:06:41,127 --> 00:06:46,731
+of these queens method that finds all
+solutions to place n queens on a chess
+
+81
+00:06:46,731 --> 00:06:51,025
+board of n rows.
+So the input to queens would be the number
+
+82
+00:06:51,025 --> 00:06:55,392
+of rows of our chess board.
+And the output would be a set of
+
+83
+00:06:55,392 --> 00:06:58,958
+solutions.
+And each solution is a list of int, the
+
+84
+00:06:58,958 --> 00:07:03,033
+one we've seen.
+So to implement the queens method, we use
+
+85
+00:07:03,033 --> 00:07:06,381
+a recursive algorithm with an auxiliary
+method.
+
+86
+00:07:06,381 --> 00:07:13,756
+Call it place queens which places a
+number, K of queens to, on the board and
+
+87
+00:07:13,756 --> 00:07:21,545
+produces the set of solutions.
+So the initial call would be place queens
+
+88
+00:07:21,545 --> 00:07:27,100
+N, which means we place all N,
+Want to place all N-queens. So now we've
+
+89
+00:07:27,100 --> 00:07:31,560
+reduced the problem to how to implement
+the place queens.
+
+90
+00:07:32,840 --> 00:07:36,309
+Well, let's deal with the boundary case
+first.
+
+91
+00:07:36,309 --> 00:07:43,350
+If K equals zero, So if we don't need to
+place any queen, what do we return?
+
+92
+00:07:43,350 --> 00:07:48,974
+Well, you might be tempted to say, return
+the empty set of solutions but that's
+
+93
+00:07:48,974 --> 00:07:54,999
+actually not quite right, because if we're
+not asked to do anything that there is a
+
+94
+00:07:54,999 --> 00:08:00,544
+solution, namely, count to anything.
+So that means, we return just the empty
+
+95
+00:08:00,544 --> 00:08:02,806
+list as our solution here.
+Okay,
+
+96
+00:08:02,806 --> 00:08:08,570
+So that was the case where K equals zero
+so now, in the case where K is greater
+
+97
+00:08:08,570 --> 00:08:13,240
+than zero, we have to do some real work.
+So, what do we need to do?
+
+98
+00:08:13,240 --> 00:08:21,568
+So in general, we have to place K queens,
+we first have to solve the sub problem of
+
+99
+00:08:21,568 --> 00:08:29,280
+placing K minus one queens, so place the
+queens up to row K, so we call this.
+
+100
+00:08:31,180 --> 00:08:38,690
+Kind of way, lets .
+Now, we have to look at this again, from
+
+101
+00:08:38,690 --> 00:08:40,686
+the side.
+Oh, yeah.
+
+102
+00:08:40,686 --> 00:08:48,314
+So we call this, four queens coming from
+place queens, K minus one.
+
+103
+00:08:48,314 --> 00:08:57,350
+So that was the, the set of our partial
+solutions returned by placed queens K
+
+104
+00:08:57,350 --> 00:09:05,747
+minus one and we let queens range over it.
+Now the second thing we would have to
+
+105
+00:09:05,747 --> 00:09:10,490
+check for is we have to put our K queen
+into a certain column.
+
+106
+00:09:10,490 --> 00:09:14,162
+And we will simply try all the possible
+columns.
+
+107
+00:09:14,162 --> 00:09:18,140
+So we would say the column ranges from
+zero until N.
+
+108
+00:09:20,540 --> 00:09:27,047
+But we can't place the queen in any column
+we please because we still have to check
+
+109
+00:09:27,047 --> 00:09:33,399
+that it doesn't threaten any other queen.
+So we put a test in there, a filter, which
+
+110
+00:09:33,399 --> 00:09:39,520
+says that the column for the queen is safe
+with respect to the previous queens.
+
+111
+00:09:40,160 --> 00:09:43,964
+And if it is then we can yield a new
+solution.
+
+112
+00:09:43,964 --> 00:09:49,837
+What would that solution be?
+Well it would be our partial solution here
+
+113
+00:09:49,837 --> 00:09:56,620
+augmented by the queen in the new column.
+So it would be column followed by queens.
+
+114
+00:09:58,780 --> 00:10:04,456
+So that gives the outline of our solution.
+There's still one thing to do namely
+
+115
+00:10:04,456 --> 00:10:09,054
+define this method is safe.
+So I would like you to do that as an
+
+116
+00:10:09,054 --> 00:10:12,503
+exercise.
+So you should write a function is safe
+
+117
+00:10:12,503 --> 00:10:16,814
+that takes a column for the new green and
+partial solutions.
+
+118
+00:10:16,814 --> 00:10:21,413
+I'm sorry that's actually,
+So the exercise for you is to write a
+
+119
+00:10:21,413 --> 00:10:25,652
+function is safe.
+That takes a column for a new queen and an
+
+120
+00:10:25,652 --> 00:10:31,280
+existing solution call it queens and
+returns a boolean indicating whether it's
+
+121
+00:10:31,280 --> 00:10:34,080
+safe to put the new queen in the given
+column.
+
+122
+00:10:34,840 --> 00:10:40,020
+It's assumed, of course, that the new
+queen is placed in the next available role
+
+123
+00:10:40,020 --> 00:10:44,545
+after all the other placed queens.
+Well, let's say, if we had put three
+
+124
+00:10:44,545 --> 00:10:49,070
+queens in row zero to two, then the new
+queen would be put in row two.
+
+125
+00:10:49,070 --> 00:10:53,509
+No, no, row three, [laugh].
+So, let's say, if we had put three queens
+
+126
+00:10:53,509 --> 00:10:57,949
+in row zero to two, then the new queen
+would be put in row three.
+
+127
+00:10:57,949 --> 00:11:03,430
+So let's see how we would solve this.
+I've already given you the sigma chart of
+
+128
+00:11:03,430 --> 00:11:07,592
+each site from the worksheet.
+The thing to do is work on its
+
+129
+00:11:07,592 --> 00:11:11,546
+implementation.
+The first thing I want to do is, I want to
+
+130
+00:11:11,546 --> 00:11:14,876
+add rows to all the queens that we look at
+here.
+
+131
+00:11:14,876 --> 00:11:17,769
+So, the row.
+Of the queen to be placed.
+
+132
+00:11:17,769 --> 00:11:22,357
+Let's call it row.
+So that would be simply queens.length,
+
+133
+00:11:22,357 --> 00:11:27,108
+because the other queens are in row zero
+to row minus one.
+
+134
+00:11:27,108 --> 00:11:33,907
+The next thing I want to do is I want to
+also add a row to each of these queens, so
+
+135
+00:11:33,907 --> 00:11:39,887
+transforming the list of INTs to, into a
+list of pairs of row and columns.
+
+136
+00:11:39,887 --> 00:11:46,714
+So what I want to do is, let's say if I
+have a solution, list of 031, partial
+
+137
+00:11:46,714 --> 00:11:51,215
+solution.
+Then I want to transform that into a
+
+138
+00:11:51,215 --> 00:11:57,968
+solution that adds the rows.
+So, the first element was actually the
+
+139
+00:11:57,968 --> 00:12:03,840
+last row to be placed, so it was row two.
+So I would get 2013.
+
+140
+00:12:03,840 --> 00:12:09,664
+And 01.
+So I want to go from here to here.
+
+141
+00:12:09,664 --> 00:12:15,690
+How can we do that?
+So the idea here is that we use a zip with
+
+142
+00:12:15,690 --> 00:12:20,355
+a range.
+So the range that we want to apply here
+
+143
+00:12:20,355 --> 00:12:31,200
+would be the range that goes from row
+minus one to zero, by minus one steps.
+
+144
+00:12:32,360 --> 00:12:38,040
+And that, sequence we zip with, the list
+of our queens.
+
+145
+00:12:39,820 --> 00:12:51,123
+And we call that with the row.
+So that would be now the partial solution
+
+146
+00:12:51,123 --> 00:12:57,519
+of queens represented with rows.
+So what we can do now is we can simply
+
+147
+00:12:57,519 --> 00:13:04,636
+check whether the queen at row, row, and
+column, column here is in check with any
+
+148
+00:13:04,636 --> 00:13:08,420
+of these here.
+So that would be, for all.
+
+149
+00:13:10,760 --> 00:13:15,840
+For all of these queens it must be that
+the new queen is not in check.
+
+150
+00:13:18,520 --> 00:13:23,243
+So when we go through these partial
+solutions, they're all pairs.
+
+151
+00:13:23,243 --> 00:13:28,040
+So let's immediately take the row and the
+column out of the pair.
+
+152
+00:13:28,970 --> 00:13:32,938
+And now comes our check.
+So what do we need to check here?
+
+153
+00:13:32,938 --> 00:13:38,159
+Well the first is of course that the
+current column is not the same as any
+
+154
+00:13:38,159 --> 00:13:43,241
+columns of the previous queens.
+So that would be called different or from
+
+155
+00:13:43,241 --> 00:13:46,444
+z.
+And the next the other thing to check is
+
+156
+00:13:46,444 --> 00:13:50,760
+that the queen is also not in check over
+any of the diagonals.
+
+157
+00:13:50,760 --> 00:13:55,593
+What that means is that the.
+Absolute difference between the two
+
+158
+00:13:55,593 --> 00:13:59,437
+columns.
+So call that math dot apps, call minus C
+
+159
+00:13:59,437 --> 00:14:04,962
+must not be the same as the absolute
+difference between the two rows.
+
+160
+00:14:04,962 --> 00:14:11,129
+So that's row minus R, because in this
+case we know that row is always bigger
+
+161
+00:14:11,129 --> 00:14:14,547
+than R.
+So, in that case, if that predicate is
+
+162
+00:14:14,547 --> 00:14:20,724
+true, then we know that the queen is not
+in check over any of the diagonals with
+
+163
+00:14:20,724 --> 00:14:25,920
+the queen in RC.
+So that's our definition of it's safe.
+
+164
+00:14:31,860 --> 00:14:36,884
+Let's try to test this with a simple
+example.
+
+165
+00:14:36,884 --> 00:14:42,118
+Let's just run queens of four and see what
+we get.
+
+166
+00:14:42,118 --> 00:14:47,980
+So what we get is a list of two solutions,
+1302 and 2031.
+
+167
+00:14:50,080 --> 00:14:55,902
+And if you look at it, then it seems that
+the two solutions are both correct.
+
+168
+00:14:55,902 --> 00:14:59,071
+But it's better to actually visualize
+this.
+
+169
+00:14:59,071 --> 00:15:04,820
+So as a last step, I would like to add a
+component that shows all solutions as
+
+170
+00:15:04,820 --> 00:15:07,990
+actual chessboards.
+So let's try to do that.
+
+171
+00:15:07,990 --> 00:15:14,355
+I've put up a function here called show,
+that takes a solution and will print it as
+
+172
+00:15:14,355 --> 00:15:18,651
+a chess board.
+You can see that immediately how it would
+
+173
+00:15:18,651 --> 00:15:22,485
+work.
+Let's call it queens of four, that now map
+
+174
+00:15:22,485 --> 00:15:26,397
+would show.
+So, for each of the solutions, we want to
+
+175
+00:15:26,397 --> 00:15:30,385
+see that a check chess board, so that's
+what we get.
+
+176
+00:15:30,385 --> 00:15:35,143
+We get a set of solutions.
+And each solution is a four line string.
+
+177
+00:15:35,143 --> 00:15:40,739
+So here, is this rectangle you see the
+first one, and, in this rectangle you see
+
+178
+00:15:40,739 --> 00:15:44,470
+the second one.
+And as you see, yes it's true, that none
+
+179
+00:15:44,470 --> 00:15:49,513
+of the x's, which, which represent the
+queens is in check, with each of the
+
+180
+00:15:49,513 --> 00:15:54,832
+others, so they are all in their own
+column, in their own row, and none of them
+
+181
+00:15:54,832 --> 00:16:00,932
+are on the same diagonal.
+So let's have a quick look how we, printed
+
+182
+00:16:00,932 --> 00:16:06,280
+the queens here.
+So what I did is I had a list of lines,
+
+183
+00:16:06,280 --> 00:16:11,373
+and that's just essentially.
+I took the solution but I reversed it
+
+184
+00:16:11,373 --> 00:16:16,157
+because we know that in the solution later
+queens comes first.
+
+185
+00:16:16,157 --> 00:16:20,247
+So, we let the columns range over queens
+stop reverse.
+
+186
+00:16:20,247 --> 00:16:26,420
+And then for each of these rows I had to
+produce the string that consists of
+
+187
+00:16:26,420 --> 00:16:32,902
+asterisks and the x where the queen is.
+So the first thing I did, was I produced a
+
+188
+00:16:32,902 --> 00:16:37,070
+vector with n elements that each red star
+and a space.
+
+189
+00:16:37,070 --> 00:16:43,310
+And then I use the updated call, at the
+column, to replace the star enter space
+
+190
+00:16:43,310 --> 00:16:48,102
+with an X center space.
+And then I converted the whole vector of
+
+191
+00:16:48,102 --> 00:16:53,142
+string elements to a string.
+There's a handy utility function for that,
+
+192
+00:16:53,142 --> 00:16:59,047
+make string, will take any collection and
+simply print out all the elements in the
+
+193
+00:16:59,047 --> 00:17:04,610
+collection one after the other.
+So that was how we converted the single
+
+194
+00:17:04,610 --> 00:17:08,367
+line to a string.
+To actually Show a whole chessboard.
+
+195
+00:17:08,367 --> 00:17:14,028
+The idea is that we have to show each line
+and we have to separate them by new line
+
+196
+00:17:14,028 --> 00:17:17,734
+characters.
+So that's another usage of this make
+
+197
+00:17:17,734 --> 00:17:22,047
+string, which is a function that can also
+take a second argument.
+
+198
+00:17:22,047 --> 00:17:27,371
+In that case, it will print each lines
+separated by the, the second operand here.
+
+199
+00:17:27,371 --> 00:17:30,135
+So, in that case.
+That we've seen here.
+
+200
+00:17:30,135 --> 00:17:36,557
+Lines would be separated by new lines.
+And I proceeded by an additional new line
+
+201
+00:17:36,557 --> 00:17:39,607
+character.
+So that's what you saw here.
+
+202
+00:17:39,607 --> 00:17:43,380
+We can even make this somewhat nicer by
+saying.
+
+203
+00:17:43,380 --> 00:17:49,344
+Instead of the scaffolding with the set
+here, I just want to convert it directly
+
+204
+00:17:49,344 --> 00:17:54,190
+into a make string.
+And, I want to convert sets, maybe by
+
+205
+00:17:54,190 --> 00:17:59,483
+another new line character like that.
+So let's see what that would give.
+
+206
+00:17:59,483 --> 00:18:02,689
+So now I have the solutions in a nicer
+way.
+
+207
+00:18:02,689 --> 00:18:08,132
+Each set nicely separated by black lines.
+Let's play with it a little bit.
+
+208
+00:18:08,132 --> 00:18:13,574
+If you have some queens of eight.
+And, we will probably get too many
+
+209
+00:18:13,574 --> 00:18:15,530
+solutions.
+And it's a holt.
+
+210
+00:18:15,530 --> 00:18:19,086
+It's a whole lot of solutions that we get
+here.
+
+211
+00:18:19,086 --> 00:18:26,864
+So what we do instead is let's take the
+first three And there you would have all
+
+212
+00:18:26,864 --> 00:18:34,133
+the solution of size eight.
+And inspecting each of them you see that
+
+213
+00:18:34,133 --> 00:18:36,055
+yes indeed, it is a solution.

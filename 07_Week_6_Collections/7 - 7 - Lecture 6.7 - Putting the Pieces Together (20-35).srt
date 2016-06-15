@@ -1,0 +1,1248 @@
+1
+00:00:00,000 --> 00:00:05,591
+This session recapitulates materials on
+collections seen in the previous sessions
+
+2
+00:00:05,591 --> 00:00:10,842
+in the context of a larger example.
+The task will be to design a program that
+
+3
+00:00:10,842 --> 00:00:15,006
+converts telephone numbers to sentences.
+So here is the task.
+
+4
+00:00:15,006 --> 00:00:19,102
+You know that phone keys have mnemonics
+assigned to them.
+
+5
+00:00:19,102 --> 00:00:24,921
+If you look at your smartphone or other
+phone, you find that two gets associated
+
+6
+00:00:24,921 --> 00:00:28,370
+with ABC, three with DEF, four with GHI,
+and so on.
+
+7
+00:00:28,370 --> 00:00:33,964
+Assume you're giving a dictionary, which
+is a list of words that we call words for
+
+8
+00:00:33,964 --> 00:00:37,387
+simplicity.
+What I want you to do is design a method
+
+9
+00:00:37,387 --> 00:00:42,850
+translate, such that translate of a phone
+number would produce all phrases of words
+
+10
+00:00:42,850 --> 00:00:46,010
+that can save as mnemonics for the phone
+number.
+
+11
+00:00:46,248 --> 00:00:52,524
+So it's something like, one 1-800-CALLME,
+only for the words in the dictionary.
+
+12
+00:00:52,524 --> 00:00:57,212
+So here's an example.
+The phone number that is given by the
+
+13
+00:00:57,212 --> 00:01:03,727
+digit string, 7225247386,, should have the
+mnemonic, Scala is fun as one element of
+
+14
+00:01:03,727 --> 00:01:06,270
+the set of solution phrases.
+Why?
+
+15
+00:01:06,270 --> 00:01:12,474
+Because the digit seven has one of the
+letters associated with it, the S, 2wo has
+
+16
+00:01:12,474 --> 00:01:18,057
+both C and A, so that gives SCA.
+The five has the L, so that, this gives
+
+17
+00:01:18,057 --> 00:01:21,160
+SCAL, and so on.
+So you see the principle.
+
+18
+00:01:22,000 --> 00:01:28,146
+That's actually an example that has been
+studied before, I've taken it from a paper
+
+19
+00:01:28,146 --> 00:01:34,292
+by Lutz Prechelt, paper's called An
+Empirical Comparison of Seven Programming
+
+20
+00:01:34,292 --> 00:01:38,662
+Languages.
+It appeared, it appeared at EEE Computer,
+
+21
+00:01:38,662 --> 00:01:43,993
+number 33 in 2000. At the time the
+students were asked to solve this puzzle
+
+22
+00:01:43,993 --> 00:01:49,072
+in a set of scripting languages and in a
+set of general purpose languages.
+
+23
+00:01:49,072 --> 00:01:52,596
+And then.,
+Various measures, were produced, like, how
+
+24
+00:01:52,596 --> 00:01:57,777
+long it took them, how many bugs, how long
+the program was, how fast the program was,
+
+25
+00:01:57,777 --> 00:02:00,936
+and so on.
+One fairly obvious outcome was that the
+
+26
+00:02:00,936 --> 00:02:05,611
+scripting languages were shorter, about
+100 lines of code for the solution,
+
+27
+00:02:05,611 --> 00:02:10,350
+compared to two, 200 or 300 lines of code
+for the general purpose languages.
+
+28
+00:02:10,350 --> 00:02:15,152
+There were a lot of other interesting
+findings in that paper, so if you come
+
+29
+00:02:15,152 --> 00:02:19,775
+across it, I encourage you to read it.
+So let's see how we would solve this
+
+30
+00:02:19,775 --> 00:02:24,578
+problem in Scala using a worksheet.
+I've already laid down some intermediate
+
+31
+00:02:24,578 --> 00:02:30,870
+steps for you towards the final solution.
+The first thing we want to do is get a
+
+32
+00:02:30,870 --> 00:02:37,424
+dictionary of useful words.
+We have, put up one for you and under the
+
+33
+00:02:37,885 --> 00:02:41,763
+lamp.epfl.ch site, so here you find the
+full URL.
+
+34
+00:02:41,763 --> 00:02:47,610
+So that, using that URL, we can use the
+Source object that we have imported from
+
+35
+00:02:47,610 --> 00:02:53,546
+Scala IO to get an iterator that can, read
+in, one by one, all the characters in
+
+36
+00:02:53,546 --> 00:02:57,870
+that, under that URL.
+And the first thing we are going to do
+
+37
+00:02:57,870 --> 00:03:03,367
+with that is we are going to call get
+lines and that would now give you an
+
+38
+00:03:03,367 --> 00:03:09,596
+iterator that gives you back, the strings
+that make up the individual words, one by
+
+39
+00:03:09,596 --> 00:03:12,616
+one,
+Because in a dictionary, in fact, every
+
+40
+00:03:12,616 --> 00:03:14,697
+word is in its own line.
+Good.
+
+41
+00:03:14,697 --> 00:03:18,285
+The next thing we have given is the
+mnemonics map,
+
+42
+00:03:18,285 --> 00:03:23,667
+Which is the same on every phone here.
+So it's just a map from character to
+
+43
+00:03:23,667 --> 00:03:28,260
+string that contains the associations that
+you, that you know.
+
+44
+00:03:28,260 --> 00:03:34,239
+So the first task to do, then, would be,
+we would need to invert them on mnemonics
+
+45
+00:03:34,239 --> 00:03:37,375
+map.
+So now we wouldn't have a mapping from
+
+46
+00:03:37,375 --> 00:03:42,406
+digit to character strings.
+We want to have a mapping from characters
+
+47
+00:03:42,406 --> 00:03:46,225
+to digit,
+Call that map charCode. So the question
+
+48
+00:03:46,225 --> 00:03:52,908
+is, how do we implement that map?
+Well, one thing we could do, of course, is
+
+49
+00:03:52,908 --> 00:03:58,285
+write it down.
+We could say, A maps to two B maps to two
+
+50
+00:03:58,291 --> 00:04:03,100
+and so on,
+For every letter in the alphabet.
+
+51
+00:04:03,100 --> 00:04:07,912
+But that's a bit repetitive, and it
+violates the so-called DRY principle.
+
+52
+00:04:07,912 --> 00:04:12,657
+Dry means don't repeat yourself,
+Because, in a sense, we have encoded the
+
+53
+00:04:12,657 --> 00:04:18,178
+same information from this map twice.
+So in the unlikely case that the mnemonics
+
+54
+00:04:18,178 --> 00:04:23,708
+bindings for phone would change some
+points in the future, we'd have to change
+
+55
+00:04:23,708 --> 00:04:28,671
+two places in our program to reflect that
+instead of ideally, just one.
+
+56
+00:04:28,671 --> 00:04:34,202
+So let's do something that's shorter.
+So what we want to do is we want to, in a
+
+57
+00:04:34,202 --> 00:04:40,016
+sense, invert this map, now going from a
+map from the characters in the string here
+
+58
+00:04:40,016 --> 00:04:43,844
+to the digits.
+So the way we can do that is with a for
+
+59
+00:04:43,844 --> 00:04:50,127
+expression, so we let the four range of
+all the key value bindings in the map.
+
+60
+00:04:50,127 --> 00:04:54,641
+So the key would be a digit,
+The value would be a string,
+
+61
+00:04:54,641 --> 00:05:01,985
+And it comes from the map here.
+And then we still need to let the second
+
+62
+00:05:01,985 --> 00:05:07,224
+generator range of all the possible
+letters in the string.
+
+63
+00:05:07,224 --> 00:05:11,560
+So we say, letter taken from string and we
+yield.
+
+64
+00:05:12,720 --> 00:05:18,654
+What do we yield in that case?
+Well, we yield the binding that goes from
+
+65
+00:05:18,654 --> 00:05:26,013
+the letter to the digit.
+And what you see here is now a map that,
+
+66
+00:05:26,013 --> 00:05:29,555
+indeed, inverts the mnemonic maps that
+we've seen here.
+
+67
+00:05:29,555 --> 00:05:32,696
+So, equals to three is equals to nine, and
+so on.
+
+68
+00:05:32,696 --> 00:05:38,042
+The maps are, as you know, unordered so
+theses letters, these bindings will appear
+
+69
+00:05:38,042 --> 00:05:42,520
+in any order that's convenient for the
+implementation to be stored.
+
+70
+00:05:42,880 --> 00:05:45,286
+Good.
+So that was step one.
+
+71
+00:05:45,286 --> 00:05:52,714
+Step two is, I want to map not just a
+single character, but a whole word to the
+
+72
+00:05:52,714 --> 00:05:59,598
+digit-string it can represent.
+So for instance, if Java should map to
+
+73
+00:05:59,598 --> 00:06:02,101
+5282,
+Because J maps to five, A
+
+74
+00:06:02,101 --> 00:06:06,840
+Maps to two, and so on.
+So how can I achieve that?
+
+75
+00:06:10,340 --> 00:06:12,520
+Well, that's a simple map.
+Right?
+
+76
+00:06:12,520 --> 00:06:17,231
+I want to apply the same operation on
+every character in the world.
+
+77
+00:06:17,231 --> 00:06:21,240
+So, what I would write here, I would say
+word, map, charCode.
+
+78
+00:06:21,760 --> 00:06:28,279
+And that makes use of the fact that in
+fact maps like charCodes are functions
+
+79
+00:06:28,279 --> 00:06:31,538
+themselves.
+We've seen that before.
+
+80
+00:06:31,538 --> 00:06:36,119
+So we can use a map as the function of a
+map method.
+
+81
+00:06:36,119 --> 00:06:39,132
+Okay.
+So we have wordCode.
+
+82
+00:06:39,132 --> 00:06:45,580
+Let's, test it,
+Wordcode of Java.
+
+83
+00:06:47,080 --> 00:06:51,490
+That give us indeed 5282, But that was all
+upper case.
+
+84
+00:06:51,490 --> 00:06:56,512
+If you apply that to a lower case
+character, oops, we get a no such element
+
+85
+00:06:56,512 --> 00:07:00,855
+exception keynote found.
+The key that wasn't found was the lower
+
+86
+00:07:00,855 --> 00:07:03,968
+case n.
+Well, that's pretty understandable,
+
+87
+00:07:03,968 --> 00:07:10,255
+because, after all, our map went only from
+uppercase characters to digits, not from
+
+88
+00:07:10,255 --> 00:07:15,145
+lowercase characters.
+So the best way to correct it would be to
+
+89
+00:07:15,145 --> 00:07:21,200
+simply convert the word to uppercase using
+Java method on string to uppercase.
+
+90
+00:07:22,020 --> 00:07:28,740
+And that will do the trick,
+So now Java would map 25282 as we expect.
+
+91
+00:07:30,140 --> 00:07:33,781
+Good.
+The next step, then, would be to go again
+
+92
+00:07:33,781 --> 00:07:37,665
+the other way.
+So we know that Java maps to 5282.
+
+93
+00:07:37,665 --> 00:07:42,521
+What I want now is a list of all the words
+that map to 5282.
+
+94
+00:07:42,521 --> 00:07:46,810
+So I want to go the other way.
+I want to go from 5282.
+
+95
+00:07:46,810 --> 00:07:53,284
+And I want to find all the words that map
+to it and it's the same, of course, for
+
+96
+00:07:53,284 --> 00:07:57,977
+every digit string.
+So I will call this another map called
+
+97
+00:07:57,977 --> 00:08:01,585
+wordsForNum
+And that then would be a map from,
+
+98
+00:08:01,810 --> 00:08:03,989
+strings,
+Mainly digit strings,
+
+99
+00:08:03,989 --> 00:08:08,574
+Two, a sequence of strings.
+So that is the sequence of all the
+
+100
+00:08:08,574 --> 00:08:14,740
+possible words that I have on this list.
+So what do, how do I do that?
+
+101
+00:08:15,600 --> 00:08:22,403
+Well, if you think about it, then really,
+what we want to do is a By.group We want
+
+102
+00:08:22,403 --> 00:08:29,462
+to group lists of words that have the same
+code and we want to then, given the code,
+
+103
+00:08:29,462 --> 00:08:31,928
+retrieve that list.
+So it's a,.
+
+104
+00:08:32,183 --> 00:08:39,154
+It's simply the words, groupBy,.
+And the function B use as a discriminant
+
+105
+00:08:39,154 --> 00:08:47,057
+function is word, wordCode.
+So here's a small glitch.
+
+106
+00:08:47,254 --> 00:08:52,773
+The error message here says that the group
+by is not a member of the tight iterator
+
+107
+00:08:52,773 --> 00:08:55,861
+string which is a type of words and thats
+true.
+
+108
+00:08:55,861 --> 00:09:00,724
+The problem here is that words is an
+iterator which is the same as a Java
+
+109
+00:09:00,724 --> 00:09:04,601
+Iterator and, it doesn't have a groupBy
+method.
+
+110
+00:09:04,601 --> 00:09:09,726
+We haven't really covered iterators in
+this course, because it's an imperative
+
+111
+00:09:09,726 --> 00:09:13,077
+concept.
+So the best way to fix the problem here is
+
+112
+00:09:13,077 --> 00:09:18,400
+to just convert the iterator to a list.
+And we can do that with a two list method.
+
+113
+00:09:18,400 --> 00:09:25,536
+So now the word is a list and if we print
+it, then we see first the output that we
+
+114
+00:09:25,536 --> 00:09:30,130
+see the word list.
+So that looks like the prefix of a
+
+115
+00:09:30,130 --> 00:09:34,560
+dictionary, until the output exceeds the
+cutoff limit.
+
+116
+00:09:34,560 --> 00:09:39,215
+By the way, if you use the first version
+of the worksheet, then you will have
+
+117
+00:09:39,215 --> 00:09:43,197
+gotten a, the same thing that the output
+exceeds the cutoff limit.
+
+118
+00:09:43,197 --> 00:09:45,953
+But then you wouldn't get any further
+output,
+
+119
+00:09:45,953 --> 00:09:50,792
+Because there was a problem that the
+cutoff limit was determined for the whole
+
+120
+00:09:50,792 --> 00:09:53,855
+worksheet rather than for each command
+separately.
+
+121
+00:09:53,855 --> 00:09:59,000
+If you see that problem, then you should
+update your worksheet and, that will take
+
+122
+00:09:59,000 --> 00:10:02,370
+care of it.
+So let's see what the, worksheet gives us,
+
+123
+00:10:02,370 --> 00:10:09,034
+Otherwise, we see here a no such element
+exception that a key was not found and the
+
+124
+00:10:09,034 --> 00:10:13,450
+key not found was a minus.
+Let's try to track that down.
+
+125
+00:10:13,450 --> 00:10:18,377
+What we see here,
+We see, we see a stack of methods that all
+
+126
+00:10:18,377 --> 00:10:24,700
+came from the collection hierarchies.
+And then the first method that we wrote
+
+127
+00:10:24,700 --> 00:10:29,463
+was wordCode itself.
+So it seems that invert wordCode, we,
+
+128
+00:10:29,710 --> 00:10:36,097
+passed a key to charCode that wasn't found
+and the key, so the key here is, was a
+
+129
+00:10:36,097 --> 00:10:39,611
+minus.
+Charcode,, of course, takes care only of
+
+130
+00:10:39,611 --> 00:10:44,481
+uppercase letters whereas minus is not a
+letter at all.
+
+131
+00:10:44,481 --> 00:10:47,924
+So it seems,
+The diagnosis is that our dictionary
+
+132
+00:10:47,924 --> 00:10:53,563
+contains words that contain an embedded
+hyphen and our code here can't deal with
+
+133
+00:10:53,563 --> 00:10:56,584
+those.
+So I propose the best way to deal with
+
+134
+00:10:56,584 --> 00:11:01,888
+that is simply to drop words containing
+hyphens or other non-letter characters
+
+135
+00:11:01,888 --> 00:11:04,775
+from our word list,
+So let's try to do that.
+
+136
+00:11:04,775 --> 00:11:09,944
+So, we say we have a word list that we
+want to retain all the words that only
+
+137
+00:11:09,944 --> 00:11:16,480
+consist of letters.
+So retain would be a filter and we would
+
+138
+00:11:16,480 --> 00:11:23,596
+then say word forall.
+So all characters for the word, , are a
+
+139
+00:11:23,596 --> 00:11:30,070
+letter.
+And if we do that, that then we still get
+
+140
+00:11:30,070 --> 00:11:36,342
+the same dictionary, but scrolling down
+actually wordsForNum now gives us a true
+
+141
+00:11:36,342 --> 00:11:40,500
+map that has as a prefix the things that
+you see here.
+
+142
+00:11:40,500 --> 00:11:44,826
+Okay, great.
+So the almost the final thing to do now is
+
+143
+00:11:44,826 --> 00:11:50,195
+to write function in code.
+And function in code would return always
+
+144
+00:11:50,195 --> 00:11:55,323
+to encode a number, given it's a digit
+string as a list of words,
+
+145
+00:11:55,323 --> 00:11:58,929
+So it would give us a set of list of
+strings.
+
+146
+00:11:58,929 --> 00:12:05,340
+That's the words in each phrase and the
+set contains all the possible solutions.
+
+147
+00:12:05,680 --> 00:12:11,406
+So, so far, all our, implementations of
+methods were some simple application of a
+
+148
+00:12:11,406 --> 00:12:15,806
+method that's defined in the, in the Scala
+collection libraries.
+
+149
+00:12:15,806 --> 00:12:20,275
+With encode, we're not so lucky,
+So, there's nothing directly that,
+
+150
+00:12:20,694 --> 00:12:24,395
+represents encode, so we have to work on
+it ourselves.
+
+151
+00:12:24,395 --> 00:12:29,842
+A good strategy here is if you're given,
+data, like a string, or a list or
+
+152
+00:12:29,842 --> 00:12:34,382
+something to always get, take care of the
+boundary cases first.
+
+153
+00:12:34,382 --> 00:12:39,480
+So the boundary case here would be, what
+will you do if the number is empty?
+
+154
+00:12:39,820 --> 00:12:44,530
+What should you return then?
+The empty set.
+
+155
+00:12:44,530 --> 00:12:47,810
+Well, the answer is, no not really because
+the,
+
+156
+00:12:47,810 --> 00:12:51,956
+The empty number does have a solution and
+it's the empty phrase.
+
+157
+00:12:51,956 --> 00:12:57,139
+The empty phrase represents the empty
+number and the empty phrase would be just
+
+158
+00:12:57,139 --> 00:13:01,999
+represented as an empty list.
+So I argue that should be the right result
+
+159
+00:13:01,999 --> 00:13:03,489
+for empty numbers.
+Okay.
+
+160
+00:13:03,489 --> 00:13:06,340
+So if the number is not empty, what do we
+do?
+
+161
+00:13:06,340 --> 00:13:11,564
+Well, the new thing here is, we're dealing
+with phrases instead of words.
+
+162
+00:13:11,564 --> 00:13:17,524
+So we need to determine, essentially, how
+many characters we take from this number
+
+163
+00:13:17,524 --> 00:13:22,234
+to form the first word.
+And here we have a choice, that number
+
+164
+00:13:22,234 --> 00:13:32,180
+could range from one to the length of the
+number itself. So we could say for split
+
+165
+00:13:32,180 --> 00:13:37,984
+taken from one, two number of length.
+So that's where we want to split our
+
+166
+00:13:37,984 --> 00:13:41,801
+number.
+And up to the characters, up to the split
+
+167
+00:13:41,801 --> 00:13:47,049
+would form the first word and the rest
+would form the other words.
+
+168
+00:13:47,049 --> 00:13:52,854
+So lets see how we go, on then.
+So once we have a split, we can find out
+
+169
+00:13:52,854 --> 00:13:58,167
+what the first word should be.
+So that, that word would come in
+
+170
+00:13:58,167 --> 00:14:05,030
+wordsForNum off the number with the first
+split characters taken.
+
+171
+00:14:05,030 --> 00:14:10,931
+So, we take first split characters from
+the number, we apply wordsForNum, so that
+
+172
+00:14:10,931 --> 00:14:16,110
+gives us a sequence of all the strengths
+that have this number and to let word
+
+173
+00:14:16,110 --> 00:14:17,992
+range over that.
+Good.
+
+174
+00:14:17,992 --> 00:14:21,451
+Almost done.
+The other thing we need to do is to say,
+
+175
+00:14:21,451 --> 00:14:26,839
+Well, once we have taken split characters
+of the number, we need to treat the rest
+
+176
+00:14:26,839 --> 00:14:30,564
+of the number.
+So, what we need to do is we need to do
+
+177
+00:14:30,564 --> 00:14:35,154
+something with the number twelve split,
+That's the rest of the number.
+
+178
+00:14:35,154 --> 00:14:38,680
+And what do we need to do?
+Well, we apply encode to it.
+
+179
+00:14:40,360 --> 00:14:46,027
+And so, once, once we have that, we can
+compose our solution,
+
+180
+00:14:46,027 --> 00:14:52,060
+The solution would consist of the first
+word followed by the rest.
+
+181
+00:14:56,000 --> 00:15:01,647
+So we get an error here.
+The error message says that there is type
+
+182
+00:15:01,647 --> 00:15:04,922
+error.
+It found an index sequence, and it
+
+183
+00:15:04,922 --> 00:15:08,173
+required a set.
+Index sequence, you remember,
+
+184
+00:15:08,173 --> 00:15:11,352
+We got that because we started with a
+range.
+
+185
+00:15:11,352 --> 00:15:15,471
+And of course, the result can't be
+represented as a range.
+
+186
+00:15:15,471 --> 00:15:21,542
+So the Scala type inference will widen the
+type and the next available one is index
+
+187
+00:15:21,542 --> 00:15:25,588
+sequence, which has vector as its primary
+implementation.
+
+188
+00:15:25,805 --> 00:15:28,985
+So that's, of course, incompatible with a
+set,
+
+189
+00:15:28,985 --> 00:15:34,260
+So we have to convert the whole thing to a
+set and, one way to do that.
+
+190
+00:15:34,260 --> 00:15:39,680
+We could do that, at the end,
+Simply write two set for the result here.
+
+191
+00:15:40,520 --> 00:15:44,649
+And that would give us a valid in code,
+method.
+
+192
+00:15:44,649 --> 00:15:49,873
+So, let's test in code.
+I have prepared a test case here with a
+
+193
+00:15:49,873 --> 00:15:53,160
+digit string.
+Let's see what that gives.
+
+194
+00:15:55,382 --> 00:15:59,818
+We get a no such element exception key not
+found, seven.
+
+195
+00:15:59,822 --> 00:16:03,860
+So it seems we're not done yet.
+What happened here.
+
+196
+00:16:04,200 --> 00:16:09,404
+Well, if you look at where the t wasn't
+found, it was in the encode function
+
+197
+00:16:09,404 --> 00:16:12,800
+itself.
+So the map that we.
+
+198
+00:16:12,800 --> 00:16:17,798
+Apply here is wordsForNum..
+So, obviously, we have a key where that is
+
+199
+00:16:17,798 --> 00:16:23,376
+not contained in the words for num map.
+That was, the key was the string seven.
+
+200
+00:16:23,376 --> 00:16:27,578
+And that becomes clear if you look at the
+mnemonics map.
+
+201
+00:16:27,578 --> 00:16:32,938
+So seven maps to P, Q, R, S and indeed,
+there's no single letter word that is
+
+202
+00:16:32,938 --> 00:16:37,357
+consists of any of these four letters.
+So, how can we fix that?
+
+203
+00:16:37,357 --> 00:16:40,769
+Well,
+You have seen in a previous session that
+
+204
+00:16:40,769 --> 00:16:46,867
+one way to deal with these keynote found
+errors is to make your maps total, and we
+
+205
+00:16:46,867 --> 00:16:52,743
+can do that, for wordsForNum,, we can make
+the map total by adding a default, so
+
+206
+00:16:52,743 --> 00:16:57,684
+we'll say, with default value.
+And what should be the default value B?
+
+207
+00:16:57,684 --> 00:17:02,111
+Well, we have a map to a sequence of all
+possible solutions.
+
+208
+00:17:02,111 --> 00:17:05,966
+So, I guess the empty sequence is a good
+default value.
+
+209
+00:17:05,966 --> 00:17:11,464
+So, essentially, if a key is not in the
+map, then we say, well, it doesn't have a
+
+210
+00:17:11,464 --> 00:17:14,820
+word that is associated with that digit
+string.
+
+211
+00:17:17,180 --> 00:17:21,974
+So, if you do that, then, indeed, we do
+get a result and we get a number of
+
+212
+00:17:21,974 --> 00:17:25,437
+phrases.
+The one we are after is, this one here.
+
+213
+00:17:25,437 --> 00:17:28,500
+Scala is fun is one of the possible
+solutions.
+
+214
+00:17:28,500 --> 00:17:33,228
+So, that's what we wanted here.
+You can play with other possible numbers
+
+215
+00:17:33,228 --> 00:17:35,192
+and see what they give.
+Good.
+
+216
+00:17:35,192 --> 00:17:41,162
+So, one more thing to do.,
+We got the solutions as a set of lists.
+
+217
+00:17:41,162 --> 00:17:47,305
+But what I really would like to do is
+present them as complete phrases.
+
+218
+00:17:47,305 --> 00:17:51,805
+So, what I want to do is I want to, write
+a method,
+
+219
+00:17:52,064 --> 00:18:01,298
+Translate that gets a number and returns a
+set of, not list of strings, but strings
+
+220
+00:18:01,298 --> 00:18:04,540
+where the strings should be the whole
+phrase.
+
+221
+00:18:05,280 --> 00:18:11,676
+So how do we do that?
+Well, we start with encode number and then
+
+222
+00:18:11,676 --> 00:18:17,808
+for each solution, which is a list of
+strings, we have to present the solution
+
+223
+00:18:17,808 --> 00:18:21,949
+as a phrase.
+So for each means we have a map and the
+
+224
+00:18:21,949 --> 00:18:28,718
+operation we want to apply is a mkString
+operation, where we separate the words in
+
+225
+00:18:28,718 --> 00:18:32,700
+the list with spaces.
+So let's see what that gives.
+
+226
+00:18:33,902 --> 00:18:39,820
+If you now do translate of the digit
+string here.
+
+227
+00:18:54,080 --> 00:19:00,695
+Then, indeed, we get all the solutions as
+phrases, and one of them was the one we're
+
+228
+00:19:00,695 --> 00:19:03,894
+after,
+So that's it.
+
+229
+00:19:03,894 --> 00:19:09,498
+I hope you have gotten the impression how
+much fun it is to write programs in
+
+230
+00:19:09,498 --> 00:19:14,312
+interactive way, using immutable data
+structures and functions only.
+
+231
+00:19:14,600 --> 00:19:19,102
+In fact, I think that the immutable
+collections that you'll see in Scala and a
+
+232
+00:19:19,102 --> 00:19:23,604
+couple of other languages are, something
+that is, will play an increasingly
+
+233
+00:19:23,604 --> 00:19:26,879
+important role for the future of
+programming in general.
+
+234
+00:19:26,879 --> 00:19:30,662
+They're just too good not to happen..
+They're very easy to use,
+
+235
+00:19:30,662 --> 00:19:34,208
+Because, generally, a few steps are
+sufficient to do the job.
+
+236
+00:19:34,208 --> 00:19:37,934
+They're very concise, typically, one word
+replaces a whole loop.
+
+237
+00:19:37,934 --> 00:19:41,059
+That's safe.
+So the type checker you've seen now, is
+
+238
+00:19:41,059 --> 00:19:45,746
+really good at catching the errors.
+Typically, errors we had when we when we
+
+239
+00:19:45,746 --> 00:19:48,451
+wrote the program where keynote found
+errors,
+
+240
+00:19:48,451 --> 00:19:51,816
+That's true that's one thing type checker
+doesn't check,
+
+241
+00:19:51,816 --> 00:19:57,663
+But a lot of the other things annoying
+errors already caught during compile time.
+
+242
+00:19:57,663 --> 00:20:01,170
+You don't need to test your program to
+find them.
+
+243
+00:20:01,170 --> 00:20:06,545
+The immutable collections are also pretty
+fast; because the collection operations
+
+244
+00:20:06,545 --> 00:20:11,324
+are tuned to the library and it turns out
+they can also be parallelized.
+
+245
+00:20:11,324 --> 00:20:16,302
+And then finally they're universal.
+That's one vocabulary that works on all
+
+246
+00:20:16,302 --> 00:20:21,412
+kinds of collections from lists, to
+vectors, to ranges, to sequences, to sets,
+
+247
+00:20:21,412 --> 00:20:24,434
+to maps.
+But also to further kind of collections
+
+248
+00:20:24,434 --> 00:20:28,733
+like parallel collections or even
+vestibule collections that you would
+
+249
+00:20:28,733 --> 00:20:33,031
+typically attack with map [inaudible].
+I believe that makes it a really
+
+250
+00:20:33,031 --> 00:20:35,513
+attractive tool for software development.

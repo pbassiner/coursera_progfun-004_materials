@@ -1,0 +1,473 @@
+1
+00:00:00,216 --> 00:00:04,697
+For expressions look somewhat like an
+embedded query language.
+
+2
+00:00:04,697 --> 00:00:10,262
+This session is going to explore the
+details of the relationship between for
+
+3
+00:00:10,262 --> 00:00:15,827
+expressions and database queries.
+The for notation that you've seen in the
+
+4
+00:00:15,827 --> 00:00:21,825
+last session is essentially equivalent to
+common operations on query languages for
+
+5
+00:00:21,825 --> 00:00:25,150
+databases.
+Languages such as SQL or XQuery, say.
+
+6
+00:00:25,150 --> 00:00:30,443
+To see this, suppose that we have a
+database of books, which is represented as
+
+7
+00:00:30,443 --> 00:00:34,706
+a list of books.
+Each book we model as a case class with a
+
+8
+00:00:34,706 --> 00:00:40,000
+title, which is a string, and the authors,
+which would be a list of string.
+
+9
+00:00:40,820 --> 00:00:46,202
+Here's a mini database that we would, will
+fit comfortably in memory.
+
+10
+00:00:46,202 --> 00:00:51,127
+So it's just a list of five books and each
+book has title and authors.
+
+11
+00:00:51,127 --> 00:00:56,538
+What I've done here is actually a, I've
+used name parameters, which you can do in
+
+12
+00:00:56,538 --> 00:00:59,537
+Scala.
+So, because book had title and authors, I
+
+13
+00:00:59,537 --> 00:01:03,449
+could have written just book and then a
+string and a list.
+
+14
+00:01:03,449 --> 00:01:08,730
+But you can also write book where title
+equals the string, and authors equals the
+
+15
+00:01:08,730 --> 00:01:13,359
+list, and often that's clearer.
+So I've, I've picked that here, so to make
+
+16
+00:01:13,359 --> 00:01:16,880
+it clear what was the title and what were
+the authors.
+
+17
+00:01:17,600 --> 00:01:22,701
+So now that we have this database, let's
+run some queries over it.
+
+18
+00:01:22,701 --> 00:01:28,509
+First query would be, find the titles of
+books whose author's name is Bird.
+
+19
+00:01:28,509 --> 00:01:33,297
+So what, a query like that could be
+written like you see here.
+
+20
+00:01:33,297 --> 00:01:39,497
+We let b range over books, we let a range
+over the authors of the book b, and we
+
+21
+00:01:39,497 --> 00:01:42,872
+demand that a starts with Bird and a
+comma.
+
+22
+00:01:42,872 --> 00:01:46,640
+So that would be, the author's last name
+is Bird.
+
+23
+00:01:47,400 --> 00:01:50,976
+So that would be the author's last name is
+Bird.
+
+24
+00:01:50,976 --> 00:01:55,820
+And, for each of these books we want to
+produce the title of book.
+
+25
+00:01:56,260 --> 00:02:02,367
+Or, to find all books which have the word
+program in the title one way we could
+
+26
+00:02:02,367 --> 00:02:08,101
+write that is, again, we let b range over
+the books, and we'd ask whether b.title
+
+27
+00:02:08,101 --> 00:02:13,687
+has the word Program in it a way to
+achieve that would be to use Java's
+
+28
+00:02:13,687 --> 00:02:20,018
+indexOf function, which produces the index
+of the substring if it appears and -one if
+
+29
+00:02:20,018 --> 00:02:23,965
+it doesn't.
+For all the books where this condition is
+
+30
+00:02:23,965 --> 00:02:29,562
+true, we yield again the title.
+So let's do one of these queries on the
+
+31
+00:02:29,562 --> 00:02:33,681
+work sheet.
+I have here the first kind of query, where
+
+32
+00:02:33,681 --> 00:02:39,272
+I demand now all the authors whose name
+starts with Bloch. And if I run that,
+
+33
+00:02:39,272 --> 00:02:45,304
+then, what I would get back here is the
+two books in my list that Joshua Bloch has
+
+34
+00:02:45,304 --> 00:02:53,823
+written, Effective Java and Java Puzzlers.
+A slightly more involved query is this one
+
+35
+00:02:53,823 --> 00:02:56,866
+here.
+We want to find the names of all authors
+
+36
+00:02:56,866 --> 00:03:01,430
+who have written at least two books that
+are present in the database.
+
+37
+00:03:01,430 --> 00:03:08,845
+So way to do this would be to, actually we
+have two iterators ranging over the books
+
+38
+00:03:08,845 --> 00:03:12,766
+by database.
+So we let b1 range over books, and b2
+
+39
+00:03:12,766 --> 00:03:17,880
+range over books, and we demand that b1
+and b2 are different.
+
+40
+00:03:17,880 --> 00:03:24,002
+Now we have pairs of different books, and
+we let a1 and a2 range over the authors of
+
+41
+00:03:24,002 --> 00:03:27,792
+these pairs.
+And if we find a match, so if we find an
+
+42
+00:03:27,792 --> 00:03:33,405
+author that appears in the authors lists
+of both b1 and b2, then we find, have
+
+43
+00:03:33,405 --> 00:03:39,059
+found an author that has published at
+least two books, so we give it back as a
+
+44
+00:03:39,059 --> 00:03:41,986
+result.
+If we do that then I've, I've put the
+
+45
+00:03:41,986 --> 00:03:45,127
+query that you've seen on the slide up
+here.
+
+46
+00:03:45,127 --> 00:03:49,768
+Let's see what the result is.
+Well, we get Joshua Bloch, that's fine,
+
+47
+00:03:49,768 --> 00:03:54,223
+but we actually get him twice.
+So why do solutions show up twice?
+
+48
+00:03:54,223 --> 00:03:59,804
+The reason is that we have two generators
+that both go over books, so each pair of
+
+49
+00:03:59,804 --> 00:04:03,751
+book will show up twice once with the
+argument swapped.
+
+50
+00:04:03,751 --> 00:04:08,855
+So, for instance here with the books, we
+would have one pair that would read
+
+51
+00:04:09,059 --> 00:04:13,440
+Effective Java,
+That was one of the books Josh wrote,
+
+52
+00:04:13,440 --> 00:04:21,820
+And the other which read Java Puzzlers.
+And then we would have another pair where
+
+53
+00:04:21,820 --> 00:04:27,453
+the two were swapped.
+So that's why we get the, the same couple
+
+54
+00:04:27,453 --> 00:04:32,740
+of books in two pairs and why the
+solutions show up twice.
+
+55
+00:04:32,740 --> 00:04:37,298
+How can we avoid this?
+Well, one easy way to avoid that would be
+
+56
+00:04:37,298 --> 00:04:43,159
+to say, instead of just demanding that the
+two books are different, we demand that
+
+57
+00:04:43,159 --> 00:04:48,730
+the title of the first book must be
+lexicographically smaller than the title
+
+58
+00:04:48,730 --> 00:04:52,999
+of the second book.
+So that would mean that in our previous
+
+59
+00:04:52,999 --> 00:04:58,787
+one we would get Effective Java and Java
+Puzzlers as before, but we wouldn't get
+
+60
+00:04:58,787 --> 00:05:04,286
+the pair in reversed orders, because in
+lexicographical order, Effective Java
+
+61
+00:05:04,286 --> 00:05:11,129
+comes before Java Puzzlers.
+Let's see what happens if we do that
+
+62
+00:05:11,129 --> 00:05:16,540
+change.
+So we say b1.title < b2.title.
+
+63
+00:05:18,200 --> 00:05:22,333
+And what we get ready is indeed just a
+single author,
+
+64
+00:05:22,333 --> 00:05:27,197
+But, are we done yet?
+A question for you. What happens if an
+
+65
+00:05:27,197 --> 00:05:33,033
+author has published three books?
+Is the author still printed once, as we
+
+66
+00:05:33,033 --> 00:05:39,355
+desire, or is it printed twice, or maybe
+three times, or maybe the author is not
+
+67
+00:05:39,355 --> 00:05:41,949
+printed at all?
+Make your choice.
+
+68
+00:05:41,949 --> 00:05:48,514
+To find out what the solution is, let's
+add a third book that's also published by
+
+69
+00:05:48,514 --> 00:05:55,658
+the same author,
+Effective Java two and see what would
+
+70
+00:05:55,658 --> 00:05:58,867
+happen.
+Well, we see that the same author is
+
+71
+00:05:58,867 --> 00:06:03,700
+printed three times.
+Why is that?
+
+72
+00:06:04,240 --> 00:06:11,624
+And obviously the problem now is that even
+with this added condition, we have three
+
+73
+00:06:11,624 --> 00:06:16,784
+possible pairs of books.
+So if we have a book B1, B2, B3 all
+
+74
+00:06:16,784 --> 00:06:23,118
+published by the same author, then you
+have three possible pairs of two books out
+
+75
+00:06:23,118 --> 00:06:28,399
+of these three, and for each of the three
+possibility the same author will be
+
+76
+00:06:28,399 --> 00:06:31,370
+printed,
+So the author is printed three times.
+
+77
+00:06:31,370 --> 00:06:35,233
+What can we do about this?
+How can we avoid printing the author
+
+78
+00:06:35,233 --> 00:06:38,361
+several times?
+Well, one solution would be to remove
+
+79
+00:06:38,361 --> 00:06:42,531
+duplicate authors who are in the result
+list twice or several times.
+
+80
+00:06:42,531 --> 00:06:45,536
+There's a function for this, it's called
+distinct,
+
+81
+00:06:45,536 --> 00:06:50,442
+It works on all sequences, and we will
+simply remove duplicate elements from the
+
+82
+00:06:50,442 --> 00:06:53,508
+sequence.
+Keep the first one, remove the other ones.
+
+83
+00:06:53,508 --> 00:06:58,598
+So, one thing we could do is we could take
+the query that we've seen here, put it in
+
+84
+00:06:58,598 --> 00:07:04,164
+braces or parentheses, and call distinct
+on the result set and that would do the
+
+85
+00:07:04,164 --> 00:07:05,910
+trick.
+On the other hand,
+
+86
+00:07:05,910 --> 00:07:11,852
+Maybe this these problems are a sign that
+we have started off with the wrong data
+
+87
+00:07:11,852 --> 00:07:13,181
+structure.
+Remember,
+
+88
+00:07:13,181 --> 00:07:16,983
+That we have written a database as a list
+of books.
+
+89
+00:07:16,983 --> 00:07:23,606
+In actual databases, actually the order in
+which the rows the books appear shouldn't
+
+90
+00:07:23,606 --> 00:07:27,185
+matter.
+So databases are much more sets of rows
+
+91
+00:07:27,185 --> 00:07:33,123
+than lists of rows and sets have the
+advantage that duplicates are eliminated
+
+92
+00:07:33,123 --> 00:07:35,255
+by design.
+So, let's try this.
+
+93
+00:07:35,255 --> 00:07:41,346
+Let's make books a set of rows and then,
+yes, indeed you will see that the result
+
+94
+00:07:41,346 --> 00:07:46,980
+set consists again of a set of just the
+single author like what we wanted.
+
+95
+00:07:49,060 --> 00:07:50,438
+Okay. Good.

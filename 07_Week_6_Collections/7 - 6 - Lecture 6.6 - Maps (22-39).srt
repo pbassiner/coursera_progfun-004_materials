@@ -1,0 +1,1283 @@
+1
+00:00:00,000 --> 00:00:05,326
+In this session, we're going to look at
+another fundamental class of collections,
+
+2
+00:00:05,326 --> 00:00:08,988
+associative maps.
+Maps are special in Scala in the sense
+
+3
+00:00:08,988 --> 00:00:12,117
+that they are both are iterables and
+functions.
+
+4
+00:00:12,117 --> 00:00:17,311
+We're going to explore the fundamental
+operations of on maps and are going to
+
+5
+00:00:17,311 --> 00:00:22,438
+apply them to somewhat larger example.
+Another fundamental collection type in
+
+6
+00:00:22,438 --> 00:00:26,128
+Scala is the map.
+Maps have two type parameters, one
+
+7
+00:00:26,128 --> 00:00:31,021
+represents the key of the map, and the
+other, the value of the map.
+
+8
+00:00:31,021 --> 00:00:36,891
+So, it's essentially, a data structure
+that associates key of the key type with
+
+9
+00:00:36,891 --> 00:00:41,859
+values of the value type.
+Here are two examples. The first is a map
+
+10
+00:00:41,859 --> 00:00:47,955
+of Roman numerals that associates strings
+I, V, X with the numeric values one, five,
+
+11
+00:00:47,955 --> 00:00:53,751
+and ten, and the other is a map of
+countries, which associates countries with
+
+12
+00:00:53,751 --> 00:00:57,805
+their capitals.
+So, let's see this in the worksheet.
+
+13
+00:00:57,805 --> 00:01:02,318
+If I evaluate this, then what I get is two
+im map.
+
+14
+00:01:02,318 --> 00:01:07,332
+The first from char to int, the second
+from string to string.
+
+15
+00:01:07,332 --> 00:01:12,180
+And it, they have the values that I have
+entered into that.
+
+16
+00:01:12,180 --> 00:01:18,532
+So, the first map that I have to find
+would have to be of type map of string
+
+17
+00:01:18,532 --> 00:01:22,612
+int,
+Int associates and int value with a string
+
+18
+00:01:22,612 --> 00:01:27,809
+key and the second map would be of type
+map string to string.
+
+19
+00:01:27,809 --> 00:01:34,538
+It associates of string representing your
+country with a string representing its
+
+20
+00:01:34,538 --> 00:01:37,058
+capital.
+So, maps are iterables.
+
+21
+00:01:37,058 --> 00:01:43,992
+But, in fact, maps are also functions, and
+that's because the class map key and value
+
+22
+00:01:43,992 --> 00:01:48,170
+also extend the function type from keys to
+values.
+
+23
+00:01:48,170 --> 00:01:51,950
+That means maps can be used every where
+functions can.
+
+24
+00:01:51,950 --> 00:01:57,501
+In particular, maps can be applied to some
+arguments, so for instance, capital of a
+
+25
+00:01:57,501 --> 00:02:02,590
+country, of US, is a well-formed
+application, looks likes a function call
+
+26
+00:02:02,590 --> 00:02:06,790
+but maps are function, so that would give
+us back Washington.
+
+27
+00:02:06,790 --> 00:02:12,460
+But what would happen if we apply to the
+function, to a value that is not a key on
+
+28
+00:02:12,460 --> 00:02:15,470
+the map?
+So, for instance, capital of country,
+
+29
+00:02:15,470 --> 00:02:18,340
+Andorra.
+Well, let's try out.
+
+30
+00:02:28,404 --> 00:02:34,649
+So, what we get is, not surprising, an
+exception.
+
+31
+00:02:34,857 --> 00:02:41,240
+It reads, no such element exception.
+The key Andorra was not found in the map.
+
+32
+00:02:41,240 --> 00:02:47,973
+So, what do, can we do to query a map
+without knowing whether it contains a
+
+33
+00:02:47,973 --> 00:02:52,683
+given key or not.
+In fact, what we do here is instead of
+
+34
+00:02:52,683 --> 00:02:59,260
+having a simple function application, we
+can call, a get method on the map. So, if
+
+35
+00:02:59,260 --> 00:03:05,919
+we do that, then what we get here is, a
+so-called option value, and it reads none,
+
+36
+00:03:05,919 --> 00:03:12,163
+so it would say, well, it hasn't found
+anything that matches, Andorra. Whereas,
+
+37
+00:03:12,163 --> 00:03:15,660
+if we wrote, say, capitol of country get
+US,
+
+38
+00:03:15,960 --> 00:03:21,926
+We would get another option value which
+now read, some(Washington).
+
+39
+00:03:21,930 --> 00:03:26,200
+So, it's time to have a closer look at
+what these option values are.
+
+40
+00:03:26,200 --> 00:03:31,702
+So, in fact, option is another standard
+type in the Scala libraries.
+
+41
+00:03:31,702 --> 00:03:36,805
+Here, is its complete definition.
+Option is a trait, it has a type
+
+42
+00:03:36,805 --> 00:03:42,068
+parameter, and there is one case class and
+one object that both extended.
+
+43
+00:03:42,068 --> 00:03:47,483
+So, the case class is called some.
+And it takes a value and if this is, is an
+
+44
+00:03:47,483 --> 00:03:51,669
+extension of option A and non-extends
+option of nothing.
+
+45
+00:03:51,669 --> 00:03:56,075
+So, that means that an option value can be
+one of two things.
+
+46
+00:03:56,075 --> 00:04:02,317
+It can be a none which means nothing was
+found or it can be a some(x) where x is of
+
+47
+00:04:02,317 --> 00:04:08,485
+type A here and that means that something
+was found and the thing that was found is
+
+48
+00:04:08,485 --> 00:04:14,843
+the x here. Since options are defined as
+case classes, they can be decomposed using
+
+49
+00:04:14,843 --> 00:04:18,367
+pattern matching.
+So, if we wanted, let's say, to show the
+
+50
+00:04:18,367 --> 00:04:23,695
+capital of a country without throwing a
+keynote found exception, we could do
+
+51
+00:04:23,695 --> 00:04:27,826
+something like this.
+We could get the country in, from the map
+
+52
+00:04:27,826 --> 00:04:31,732
+capital of country.
+And then, we could match the resulting
+
+53
+00:04:31,732 --> 00:04:35,021
+option value.
+If it's some capital, we return the
+
+54
+00:04:35,021 --> 00:04:38,379
+capital.
+If it's none, we return the string called
+
+55
+00:04:38,379 --> 00:04:41,665
+missing data.
+And then if we do showCapital of US,
+
+56
+00:04:41,665 --> 00:04:45,635
+We would get back Washington.
+Whereas, if we did show capital of
+
+57
+00:04:45,635 --> 00:04:50,174
+Andorra, we would get back missing data.
+Options also support quite a few
+
+58
+00:04:50,174 --> 00:04:54,901
+operations of the other collections.
+In particular, they support map, flatMap,
+
+59
+00:04:54,901 --> 00:04:58,178
+and filter so you can run for-expressions
+over them.
+
+60
+00:04:58,178 --> 00:05:02,780
+And I invite you to play with them and try
+out what you can do with them.
+
+61
+00:05:03,040 --> 00:05:09,338
+For the examples that follow, we need two
+more operations on collections that both
+
+62
+00:05:09,338 --> 00:05:15,098
+have analogs in query. SQL, these
+operations would be called groupBy and
+
+63
+00:05:15,098 --> 00:05:18,401
+orderBy.
+Orderby orders the elements of a
+
+64
+00:05:18,401 --> 00:05:23,556
+collection, according to some criteria
+that can be expressed in the Scala
+
+65
+00:05:23,556 --> 00:05:26,750
+libraries with methods called sortWith or
+sorted.
+
+66
+00:05:26,750 --> 00:05:29,369
+So, let's say, we have a list of fruit
+here.
+
+67
+00:05:29,369 --> 00:05:34,608
+And we, we want to sort it such that fruit
+with shorter names, appear before fruits
+
+68
+00:05:34,608 --> 00:05:38,505
+with longer names.
+So, that we could write fruit sortwith and
+
+69
+00:05:38,505 --> 00:05:43,744
+then our criterion is that the length of
+the first fruit must be smaller than the
+
+70
+00:05:43,744 --> 00:05:48,059
+length of the second fruit.
+So, that's would lead to the following
+
+71
+00:05:48,059 --> 00:05:50,509
+result, pear, apple, orange, and
+pineapple.
+
+72
+00:05:50,509 --> 00:05:54,342
+Or we could just sort the collection with
+a natural ordering.
+
+73
+00:05:54,342 --> 00:05:59,683
+That's called sorted natural ordering here
+is lexical graphics so that would lead to
+
+74
+00:05:59,683 --> 00:06:04,422
+the list that you see here.
+The other operation, I want to cover is,
+
+75
+00:06:04,422 --> 00:06:09,181
+groupBy, which is directly available on
+Scala collections.
+
+76
+00:06:09,181 --> 00:06:14,955
+What it does is that it partitions a
+collection into a map of collections
+
+77
+00:06:14,955 --> 00:06:21,275
+according to some discriminator function.
+That's best seen by an example. So, let's
+
+78
+00:06:21,275 --> 00:06:24,863
+take my fruit list and let's group it by
+head.
+
+79
+00:06:24,863 --> 00:06:31,105
+So, head would the character that appears
+first in each of these strings. So, what
+
+80
+00:06:31,105 --> 00:06:35,870
+that gives me is a map that associates
+each head character.
+
+81
+00:06:35,870 --> 00:06:38,417
+So, p, a, and o,
+That's the three,
+
+82
+00:06:38,417 --> 00:06:44,953
+With internal list of all those fruit that
+have that character as their head.
+
+83
+00:06:44,953 --> 00:06:49,112
+So, p would now map to list of pear and
+pineapple,
+
+84
+00:06:49,112 --> 00:06:54,460
+A would map to list of apple,
+And o would map to list of orange.
+
+85
+00:06:54,460 --> 00:06:58,216
+So, let's do a more involved example using
+maps.
+
+86
+00:06:58,216 --> 00:07:04,449
+What I want to do is look at polynomials.
+A polynomial can be seen as a map from
+
+87
+00:07:04,449 --> 00:07:10,375
+exponents to coefficients.
+For example, the polynomial x^3 - 2x + 2x
+
+88
+00:07:10,375 --> 00:07:17,504
++ five could be represented with a map
+that says, at exponent zero, we have a
+
+89
+00:07:17,504 --> 00:07:23,400
+five, At exponent one, we have a -two, and
+exponent three, we have a one.
+
+90
+00:07:24,040 --> 00:07:30,516
+Based on this observation, let's design a
+class polynom that represents polynomials
+
+91
+00:07:30,516 --> 00:07:34,140
+as maps.
+So, what I have here is a new worksheet.
+
+92
+00:07:34,140 --> 00:07:39,383
+I've already given the rough framework of
+this class of polynomials.
+
+93
+00:07:39,383 --> 00:07:44,857
+So, it would say, each of polynomials
+should take, as a parameter and field a
+
+94
+00:07:44,857 --> 00:07:51,103
+map from exponent into coefficient double.
+And what I want to implement is a plus
+
+95
+00:07:51,103 --> 00:07:54,650
+operation on polynomial.
+So, let's turn to that.
+
+96
+00:07:54,650 --> 00:08:00,447
+How would, could a, add, let's say, two
+polynomials like this one here and this
+
+97
+00:08:00,447 --> 00:08:04,338
+one here?
+So, what we need to do is we need to merge
+
+98
+00:08:04,338 --> 00:08:10,136
+coefficients that have the same exponents.
+So, what we would expect here is a
+
+99
+00:08:10,136 --> 00:08:16,239
+polynomial where we said zero was mapped
+to three, one was mapped to two, three was
+
+100
+00:08:16,239 --> 00:08:22,342
+mapped to the sum of four and seven, so
+that would be eleven, And five was mapped
+
+101
+00:08:22,342 --> 00:08:24,860
+to 6.2.
+So, how can I achieve that?
+
+102
+00:08:24,860 --> 00:08:30,562
+Well, one idea would be I take one of the
+maps, and then I add the adjusted
+
+103
+00:08:30,562 --> 00:08:34,029
+coefficient of each of the second maps to
+it.
+
+104
+00:08:34,029 --> 00:08:39,808
+Adding means replacing the binding of the
+same coefficient in the left map.
+
+105
+00:08:39,808 --> 00:08:46,124
+So, to define addition of two polynomials,
+what I can do is I can take the first map
+
+106
+00:08:46,124 --> 00:08:50,205
+and try to add all the elements of the
+second map to it.
+
+107
+00:08:50,205 --> 00:08:55,670
+Let's see how, how I would do that.
+Type the first map, so that's terms, and I
+
+108
+00:08:55,670 --> 00:09:05,088
+will try to achieve with concatenation.
+So, I would take the terms of the other.
+
+109
+00:09:05,088 --> 00:09:12,700
+And that would give me a new map, and I
+just have to wrap that in a polygon.
+
+110
+00:09:15,220 --> 00:09:21,539
+Let's see what that would give.
+Well, not much yet, because my map doesn't
+
+111
+00:09:21,539 --> 00:09:26,692
+really print very well.
+You just get the default output, which
+
+112
+00:09:26,692 --> 00:09:31,404
+just says, it's a polynomial.
+So, maybe let's work first on a good
+
+113
+00:09:31,404 --> 00:09:36,704
+two-string function of polynomial.
+We'll get back to addition afterwards.
+
+114
+00:09:36,704 --> 00:09:40,680
+So, to turn a polynomial into a string,
+what could I do?
+
+115
+00:09:42,500 --> 00:09:50,444
+Well, one thing to do it is I can take all
+the terms that I have and I convert each
+
+116
+00:09:50,444 --> 00:09:55,802
+term into a nice expression with
+coeffecient and exponent.
+
+117
+00:09:55,802 --> 00:10:01,714
+So, let's try to do that.
+I would have a for-expression that takes
+
+118
+00:10:01,714 --> 00:10:07,164
+the exponent and coeffecient of each term
+in my terms list.
+
+119
+00:10:07,164 --> 00:10:15,537
+And it would yield the coefficient,
+followed by an x, that's my variable,
+
+120
+00:10:15,537 --> 00:10:24,500
+followed by an up arrow representing
+exponent followed by the exponent.
+
+121
+00:10:24,960 --> 00:10:34,500
+And then, I just have to concatenate all
+these elements together with a plus in the
+
+122
+00:10:34,500 --> 00:10:37,511
+middle.
+So, let's see how we're doing.
+
+123
+00:10:37,511 --> 00:10:43,199
+Now, we get something nicer.
+We get polynomials that we can read here.
+
+124
+00:10:43,450 --> 00:10:47,265
+one thing we notice it, that they are not
+yet sorted.
+
+125
+00:10:47,265 --> 00:10:52,106
+They can appear in any order.
+For instance, the last one starts one,
+
+126
+00:10:52,106 --> 00:10:56,249
+three, five, zero.
+So, we would like to have the terms in
+
+127
+00:10:56,249 --> 00:10:59,831
+sorted order with the highest coming
+first.
+
+128
+00:10:59,831 --> 00:11:06,162
+So, one idea here would be to say, well,
+take the terms, convert them to a list
+
+129
+00:11:06,162 --> 00:11:10,994
+because we need a sequence to sort them
+sort them, sort them.
+
+130
+00:11:10,994 --> 00:11:16,076
+So, that goes from small to large and
+reverse them in the end.
+
+131
+00:11:16,076 --> 00:11:20,907
+So, terms, toList, sorted, reverse.
+Let's see what we get now.
+
+132
+00:11:20,907 --> 00:11:23,973
+So now, the things are nicely sorted five,
+three, one, zero.
+
+133
+00:11:23,990 --> 00:11:29,265
+On the other hand, unfortunately, the
+result is far from being correct.
+
+134
+00:11:29,265 --> 00:11:34,541
+Let's see what we did here.
+We have the first exponent from the first
+
+135
+00:11:34,541 --> 00:11:40,811
+polynomial that's fine, then we have the
+cubed term from the second polynomial, but
+
+136
+00:11:40,811 --> 00:11:47,311
+in fact, what we really need is the sum of
+the two cubed terms in both polynomials.
+
+137
+00:11:47,311 --> 00:11:53,256
+So, what happened here is, with the,
+operation ++, what we did really was just
+
+138
+00:11:53,256 --> 00:11:58,444
+to essentially superimpose the terms of
+the other polynomial on top of this one.
+
+139
+00:11:58,444 --> 00:12:03,892
+So, if the left polynomial didn't have a
+term with a given exponent, that was okay.
+
+140
+00:12:04,087 --> 00:12:08,108
+We would just take the term of others and
+it would be correct.
+
+141
+00:12:08,108 --> 00:12:12,973
+But if it did have a term with the same
+polynomial, that term would be lost.
+
+142
+00:12:12,973 --> 00:12:17,399
+What we need to do in,
+Instead, is have a function that, in that
+
+143
+00:12:17,399 --> 00:12:20,332
+case, would add together the two
+coefficents.
+
+144
+00:12:20,332 --> 00:12:24,998
+So, how would we go about doing that?
+Well, the best, way to do it, almost
+
+145
+00:12:24,998 --> 00:12:30,063
+always in function programming, is break
+it out into its own simple function.
+
+146
+00:12:30,063 --> 00:12:35,129
+So, we would say, well, let's go over the
+other terms, and essentially map,
+
+147
+00:12:35,129 --> 00:12:39,239
+Call this adjust for adjusting the
+coefficient.
+
+148
+00:12:39,239 --> 00:12:43,000
+And that's a function we'll have to
+define.
+
+149
+00:12:43,900 --> 00:12:51,977
+So, we define adjust, and that takes a
+term so that would be a term and that's a
+
+150
+00:12:51,977 --> 00:12:59,860
+pair of an int and a double.
+And we wanted to return the adjusted term,
+
+151
+00:12:59,860 --> 00:13:06,890
+Again, a pair of an int and of a double.
+So, what do we need to do here?
+
+152
+00:13:06,890 --> 00:13:13,143
+Well, we need to see whether the key of
+the term is already in the left map.
+
+153
+00:13:13,143 --> 00:13:19,654
+So, let's maybe pull out the key, so we
+say val exponent coeffecient equals term,
+
+154
+00:13:19,654 --> 00:13:25,588
+so now, we have a nicely the two sides, in
+variables each by themselves.
+
+155
+00:13:25,588 --> 00:13:31,934
+So, what we must do now is, find out
+whether, the existing terms have already a
+
+156
+00:13:31,934 --> 00:13:38,445
+coefficient that matches exponents So
+let's do that and say, terms get exponent
+
+157
+00:13:38,445 --> 00:13:45,548
+match.
+In the case where this is,
+
+158
+00:13:45,548 --> 00:13:52,424
+some(coefficient) one, say,
+We return a pair or a binding, that goes
+
+159
+00:13:52,424 --> 00:13:57,510
+from the exponent to coefficient plus
+coefficient one.
+
+160
+00:13:57,510 --> 00:14:04,856
+And, if there was nothing in the map, then
+we return the binding that goes from
+
+161
+00:14:04,856 --> 00:14:09,660
+exponent to just the coefficient of the
+second map.
+
+162
+00:14:12,340 --> 00:14:19,021
+What we did here is that the arrow and the
+plus have the same precedents, but we need
+
+163
+00:14:19,021 --> 00:14:25,623
+to put the parenthesis here, like that,
+because of course we, we want to have the
+
+164
+00:14:25,623 --> 00:14:29,680
+exponent mapped to the sum of the two
+coefficients.
+
+165
+00:14:30,300 --> 00:14:38,282
+Okay, so now, what we see is that the cube
+coefficient here reads eleven, That's what
+
+166
+00:14:38,282 --> 00:14:39,407
+we need.
+Good.
+
+167
+00:14:39,407 --> 00:14:45,521
+So, we're done with the addition.
+But it felt kind ofheavy weight to do all
+
+168
+00:14:45,521 --> 00:14:48,781
+this computation.
+Is there a simpler way?
+
+169
+00:14:48,781 --> 00:14:53,102
+Well, indeed there is.
+So, far maps were always partial
+
+170
+00:14:53,102 --> 00:14:57,259
+functions.
+Applying a map to a key value could lead
+
+171
+00:14:57,259 --> 00:15:01,580
+to an exception if the key was not stored
+in the map.
+
+172
+00:15:01,580 --> 00:15:07,164
+What if we could make maps total functions
+that would never fail but would give us
+
+173
+00:15:07,164 --> 00:15:10,394
+back some default value if the key wasn't
+found.
+
+174
+00:15:10,394 --> 00:15:16,181
+There's an operation that does that, it's
+called withDefaultValue and that operation
+
+175
+00:15:16,181 --> 00:15:21,093
+turns a map into a total function.
+So, if you had written, for instance, cap1
+
+176
+00:15:21,362 --> 00:15:27,216
+= capitalOfCountry withDefaultValue
+unknown, then we could have safely applied
+
+177
+00:15:27,216 --> 00:15:32,330
+cap1 to Andorra and you would have gotten
+back unknown because that's the
+
+178
+00:15:32,750 --> 00:15:37,379
+withDefaultValue. No more keynote found
+exceptions.
+
+179
+00:15:37,379 --> 00:15:41,335
+So, let's apply this technique to our
+worksheet.
+
+180
+00:15:41,335 --> 00:15:47,142
+What I will do is that I will,
+Instead of having a terms field, I just
+
+181
+00:15:47,142 --> 00:15:53,202
+call this a term zero parameter.
+Then we'll create a new field, terms which
+
+182
+00:15:53,202 --> 00:16:09,715
+is terms0 withDefaultValue 0.0. So now,
+all my polynomials are have maps that have
+
+183
+00:16:09,715 --> 00:16:15,372
+a default value.
+We can try to test that by create, calling
+
+184
+00:16:15,372 --> 00:16:21,613
+p1, first polynomial dot terms of some
+exponent that's missing.
+
+185
+00:16:21,613 --> 00:16:29,707
+And we would get back a 00 instead of the
+exception that we would have expected to
+
+186
+00:16:29,707 --> 00:16:34,320
+see before.
+With the new map withDefaultValues, we can
+
+187
+00:16:34,320 --> 00:16:40,517
+greatly simplify the adjust function.
+We don't, we need no longer test whether
+
+188
+00:16:40,517 --> 00:16:46,553
+terms contain the given exponent or not,
+we can delete all that, and replace it
+
+189
+00:16:46,553 --> 00:16:52,360
+with a simple return expression that says,
+well, given the exponent, I associate it
+
+190
+00:16:52,360 --> 00:16:57,948
+with the coefficient of my second map,
+plus whatever the coefficient was in my
+
+191
+00:16:57,948 --> 00:17:01,371
+first map,
+And that would be just in terms of the
+
+192
+00:17:01,371 --> 00:17:06,632
+exponent.
+And I get back the same polynomials as
+
+193
+00:17:06,632 --> 00:17:10,317
+before.
+So, you see there's great power in working
+
+194
+00:17:10,317 --> 00:17:15,957
+with maps that have default values.
+Often, the code that deals with them can
+
+195
+00:17:15,957 --> 00:17:18,740
+be greatly simplified.
+So far, so good.
+
+196
+00:17:18,740 --> 00:17:24,077
+But there's still something slightly
+unnice about that, and that's the way we
+
+197
+00:17:24,077 --> 00:17:28,319
+have to create polygons.
+We wrote new poly, and then we have to
+
+198
+00:17:28,319 --> 00:17:33,246
+pass some map into each polygon.
+Is there a nicer way that ideally would
+
+199
+00:17:33,246 --> 00:17:36,635
+let us avoid the intermediary data
+structure?
+
+200
+00:17:36,635 --> 00:17:42,658
+So, ideally, we could just write, poly of
+one to two, zero, three to four, zero,
+
+201
+00:17:42,658 --> 00:17:46,727
+five to six, two.
+Well, for the moment, of course, that
+
+202
+00:17:46,727 --> 00:17:52,607
+doesn't work, because poly takes a map as
+parameters and here, we have what?
+
+203
+00:17:52,607 --> 00:17:56,740
+Well, we have three pairs of int and
+double elements.
+
+204
+00:17:56,740 --> 00:18:02,134
+The problem, of course, is that we could
+have three but we could have also four or
+
+205
+00:18:02,134 --> 00:18:06,197
+any other number of pairs that we pass as
+parameters to poly.
+
+206
+00:18:06,197 --> 00:18:11,326
+So, we need a way to pass a varying number
+of parameters to the same function.
+
+207
+00:18:11,326 --> 00:18:16,654
+In fact, Scala does offer that ability
+with its use of repeated parameters.
+
+208
+00:18:16,654 --> 00:18:21,063
+So, let's show this with an auxiliary
+constructor in class poly.
+
+209
+00:18:21,063 --> 00:18:25,846
+You haven't seen them since week three, so
+it's a good time to refresh.
+
+210
+00:18:25,846 --> 00:18:31,381
+So, the auxiliary constructor would take a
+sequence of bindings, each binding is a
+
+211
+00:18:31,381 --> 00:18:35,481
+pair of int and double.
+And the fact that it's a sequence is
+
+212
+00:18:35,481 --> 00:18:39,650
+expressed by the star here.
+So, the star means it's a repeated
+
+213
+00:18:39,650 --> 00:18:42,793
+parameter.
+That means, we can pass an arbitrary
+
+214
+00:18:42,793 --> 00:18:47,535
+number of concrete arguments for this a
+form of parameter here.
+
+215
+00:18:47,535 --> 00:18:52,057
+Internally all the arguments are
+represented as a sequence.
+
+216
+00:18:52,057 --> 00:18:57,805
+So, that means, that if we call now the
+primary constructor, what we can pass
+
+217
+00:18:57,805 --> 00:19:02,480
+along as arguments is simply the sequence
+converted to a map.
+
+218
+00:19:02,940 --> 00:19:08,264
+So, if you do that, then the spreadsheet
+compiles again, and we get the same
+
+219
+00:19:08,264 --> 00:19:12,678
+polynomials as before.
+We can also get rid of the map, of course,
+
+220
+00:19:12,678 --> 00:19:18,121
+in the other course to polynomial.
+So, here is the final implementation of
+
+221
+00:19:18,121 --> 00:19:22,296
+polynomials.
+As an exercise, I would like you to tweak
+
+222
+00:19:22,296 --> 00:19:26,872
+this a little bit.
+So here, we have expressed the addition
+
+223
+00:19:26,872 --> 00:19:32,974
+operation with a concatenation of the
+terms of the two maps, where the second
+
+224
+00:19:32,974 --> 00:19:37,791
+terms were adjusted.
+It is also possible to express the same
+
+225
+00:19:37,791 --> 00:19:43,553
+operation with a foldleft. And I'd like
+you to do that in the exercise.
+
+226
+00:19:43,553 --> 00:19:47,544
+So, what I'd like you to do is write plus
+as follows.
+
+227
+00:19:47,544 --> 00:19:53,495
+It takes another polynomial and creates a
+new polynomial where the you apply a
+
+228
+00:19:53,495 --> 00:20:00,098
+foldLeft operation to the other terms as a
+collection and you have to figure out what
+
+229
+00:20:00,098 --> 00:20:05,328
+the unit element here is, with an
+operation addTerm as the combining
+
+230
+00:20:05,328 --> 00:20:09,042
+operation,
+And again, addTerm I would like you to
+
+231
+00:20:09,042 --> 00:20:12,589
+implement.
+Once you've done that, you are able to
+
+232
+00:20:12,589 --> 00:20:18,021
+answer the following question.
+Which of the two versions you believe is
+
+233
+00:20:18,021 --> 00:20:22,719
+more efficient?
+The version using ++ or the version using
+
+234
+00:20:22,719 --> 00:20:28,444
+foldLeft? So, let's see how we will solve
+this problem in the worksheet here.
+
+235
+00:20:28,444 --> 00:20:32,848
+So, I'm going to start to work on the
+implementation of plus.
+
+236
+00:20:32,848 --> 00:20:39,967
+We said it should have been other terms,
+FoldLeft with some zero element, so what
+
+237
+00:20:39,967 --> 00:20:44,273
+would that be?
+Well, I'm going to argue it must be terms
+
+238
+00:20:44,273 --> 00:20:49,988
+because if other terms is empty, then we
+clearly want to return terms.
+
+239
+00:20:49,988 --> 00:20:56,778
+So, the zero element will be terms here
+and the combining operation will be called
+
+240
+00:20:56,778 --> 00:21:00,340
+add term.
+So, I have to work on this one now.
+
+241
+00:21:01,240 --> 00:21:09,274
+So, addTerm takes now a zero element so
+that's terms, a map of int and double.
+
+242
+00:21:09,274 --> 00:21:17,817
+And it takes a term that's taken from the
+other terms list here, it is a pair of int
+
+243
+00:21:17,817 --> 00:21:23,920
+of double and again it returns another map
+of int in double.
+
+244
+00:21:25,020 --> 00:21:30,442
+So, what would it's implementation be?
+Well, In fact, we don't need to change
+
+245
+00:21:30,442 --> 00:21:35,177
+much from what it was.
+So, all we need to do is that instead of
+
+246
+00:21:35,177 --> 00:21:41,439
+returning a single binding, we immediately
+add this binding to the given terms map.
+
+247
+00:21:41,439 --> 00:21:46,480
+So, we would return terms plus the binding
+that you have seen here.
+
+248
+00:21:47,720 --> 00:21:55,490
+And that helps them and that does it.
+So, everything compiles and we get the
+
+249
+00:21:55,490 --> 00:22:00,121
+same results as before.
+So now, to answer the question, which of
+
+250
+00:22:00,121 --> 00:22:06,670
+the two versions is more efficient?
+So, I would argue the one with foldLeft is
+
+251
+00:22:06,670 --> 00:22:12,909
+more efficient because what happens here
+is that each of these bindings will be
+
+252
+00:22:12,909 --> 00:22:18,757
+immediately added to our terms maps so we
+built up the result directly whereas,
+
+253
+00:22:18,757 --> 00:22:25,207
+before we would create an another list of
+terms that contain the adjusted terms, and
+
+254
+00:22:25,207 --> 00:22:29,094
+then we would concatenate this list to the
+original one.
+
+255
+00:22:29,094 --> 00:22:34,786
+So, the version with foldLeft avoids this
+creation of the intermediate list data
+
+256
+00:22:34,786 --> 00:22:39,021
+structure. So, in that sense, it looks
+like it's more efficient.
+
+257
+00:22:39,021 --> 00:22:41,520
+So, I would vote here for foldLeft.

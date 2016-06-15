@@ -1,0 +1,1244 @@
+1
+00:00:00,000 --> 00:00:04,304
+So far the only collection type we've
+dealt with was the list.
+
+2
+00:00:04,304 --> 00:00:09,858
+In this session we are going to make a
+tour of other kinds of collections which
+
+3
+00:00:09,858 --> 00:00:14,648
+differ from lists, both in the
+functionality and in their performance
+
+4
+00:00:14,648 --> 00:00:18,050
+profile.
+One thing will stay the same, however, all
+
+5
+00:00:18,050 --> 00:00:23,465
+the collections that we are going to study
+in depth are going to be immutable.
+
+6
+00:00:23,465 --> 00:00:29,020
+We're going to start in this session by
+looking at different kinds of sequences.
+
+7
+00:00:29,020 --> 00:00:33,738
+We've seen that lists are linear.
+Access to the first element is much faster
+
+8
+00:00:33,738 --> 00:00:36,408
+than access to the middle or end of a
+list.
+
+9
+00:00:36,408 --> 00:00:41,500
+Scala library also defines an alternative
+sequence implementation called a vector.
+
+10
+00:00:41,500 --> 00:00:45,990
+This one has a much more evenly balanced
+access pad on the list.
+
+11
+00:00:45,990 --> 00:00:50,410
+Vectors are essentially represented as
+very, very shallow trees.
+
+12
+00:00:50,620 --> 00:00:54,830
+To see how that works in detail, let's
+make a little drawing.
+
+13
+00:00:54,830 --> 00:01:02,187
+So, a vector of up to 32 elements is just
+an array, where the elements are stored in
+
+14
+00:01:02,187 --> 00:01:06,443
+sequence.
+Here, only draw four for simplicity, but
+
+15
+00:01:06,443 --> 00:01:12,826
+in practice, it would go up to 32.
+Now, if a vector becomes larger then 32
+
+16
+00:01:12,826 --> 00:01:19,297
+elements, its representation changes.
+What you do then is you would have a
+
+17
+00:01:19,297 --> 00:01:23,420
+vector is 32.
+Two arrays of 32 elements.
+
+18
+00:01:24,620 --> 00:01:29,920
+So again, I only always abbreviate to
+four.
+
+19
+00:01:32,520 --> 00:01:38,064
+And once that is exhausted.
+So once we have 32 times 32.
+
+20
+00:01:38,064 --> 00:01:45,424
+So that would be two to the tenth, 1024
+elements full, then the representation
+
+21
+00:01:45,424 --> 00:01:53,669
+changes again, and it would then become a
+vector of Pointers to pointers to arrays
+
+22
+00:01:53,669 --> 00:01:58,940
+of 32 elements, so everything would become
+one level deeper.
+
+23
+00:02:04,340 --> 00:02:09,512
+You see what the principle is.
+So a vector with three levels then would,
+
+24
+00:02:09,730 --> 00:02:13,008
+would go up to two to the fifteenth
+elements.
+
+25
+00:02:13,008 --> 00:02:16,214
+A vector of four level two to the
+twentieth.
+
+26
+00:02:16,214 --> 00:02:22,042
+Five level would give you two to the
+twenty fifth and six levels would give you
+
+27
+00:02:22,042 --> 00:02:26,340
+two to the thirtieth.
+That is a billion elements and that's
+
+28
+00:02:26,558 --> 00:02:32,033
+about a far as it can go.
+So let's analyze how much time would it
+
+29
+00:02:32,033 --> 00:02:36,157
+take to retrieve an element at some index
+in that vector.
+
+30
+00:02:36,157 --> 00:02:41,076
+We've seen for lists, it real, very much
+depends on what the index is.
+
+31
+00:02:41,076 --> 00:02:46,357
+Fast for zero, slow, linearly slow for
+indices towards the end of the list.
+
+32
+00:02:46,357 --> 00:02:51,999
+For vector, vectors are much better
+behaved here, because, to get an index of
+
+33
+00:02:51,999 --> 00:02:55,399
+vector of length 32, it's a single index
+access.
+
+34
+00:02:55,616 --> 00:03:01,476
+If the vector has size up to about 1000,
+then it's just two accesses, so generally,
+
+35
+00:03:01,476 --> 00:03:05,381
+the number of accesses.
+Is our, the depth of the vector.
+
+36
+00:03:05,381 --> 00:03:08,844
+And we'll see that, that depth.
+Goes very slowly.
+
+37
+00:03:09,073 --> 00:03:12,423
+A depth of six gives you a billion
+elements.
+
+38
+00:03:12,423 --> 00:03:18,516
+So, generally, the formula would be that
+the depth of the vector is locked to the
+
+39
+00:03:18,516 --> 00:03:22,846
+bases of 32.
+Of N, where N is the size of the vector.
+
+40
+00:03:22,846 --> 00:03:29,505
+So we've seen that log to the base of 32
+is a function that grows very, very
+
+41
+00:03:29,505 --> 00:03:33,623
+slowly.
+That's why vectors have a pretty decent
+
+42
+00:03:33,623 --> 00:03:37,381
+random access.
+Performance profile, much, much better
+
+43
+00:03:37,381 --> 00:03:41,075
+than lists.
+Another advantage of lectures is that they
+
+44
+00:03:41,075 --> 00:03:45,453
+are fairly good for bulk operations that
+traverse a sequence.
+
+45
+00:03:45,453 --> 00:03:50,858
+So such bulk operations could be for
+instance a map that applies a function to
+
+46
+00:03:50,858 --> 00:03:55,988
+every element or a fold that reduces
+aviation elements with an operator.
+
+47
+00:03:55,988 --> 00:04:00,982
+For a vector then you can do that in
+chunks of 32 and that happens to be
+
+48
+00:04:00,982 --> 00:04:05,703
+coincide fairly closely to a size of a
+cash line in modern processes.
+
+49
+00:04:05,703 --> 00:04:08,850
+So it means that all the 32 aviation
+elements.
+
+50
+00:04:08,850 --> 00:04:13,192
+Will be in a single cache line and that
+accesses will be fairly fast.
+
+51
+00:04:13,192 --> 00:04:18,227
+For lists, on the other hand, you have
+this recursive structure where essentially
+
+52
+00:04:18,227 --> 00:04:22,895
+every list element is in a console.
+There's just one element in the pointer to
+
+53
+00:04:22,895 --> 00:04:27,596
+the rest and you have no guarantee that
+these con cells are anywhere near to each
+
+54
+00:04:27,596 --> 00:04:30,347
+other.
+They might be in different cache lines, in
+
+55
+00:04:30,347 --> 00:04:33,730
+different pages.
+So the locality for list accesses could be
+
+56
+00:04:33,730 --> 00:04:36,310
+much worse than locality for vector
+accesses.
+
+57
+00:04:36,310 --> 00:04:41,077
+So you could ask, if vectors are so much
+better, why, keep lists at all?
+
+58
+00:04:41,077 --> 00:04:46,640
+But it turns out that if your operations
+fit nicely into, the model that you take
+
+59
+00:04:46,640 --> 00:04:51,805
+the head of the recursive data structure.
+That's a constant time operation for
+
+60
+00:04:51,805 --> 00:04:54,851
+lists.
+Whereas, for vectors you have to go down
+
+61
+00:04:54,851 --> 00:04:59,883
+potentially several lev-, layers.
+And then to take the tail to, process the
+
+62
+00:04:59,883 --> 00:05:02,996
+rest.
+Again a constant type operation for lists.
+
+63
+00:05:02,996 --> 00:05:06,572
+Whereas, for vectors, it would be much
+more complicated.
+
+64
+00:05:06,572 --> 00:05:11,631
+In that case, definitely if your access
+patterns have these recursive structures,
+
+65
+00:05:11,631 --> 00:05:14,410
+lists are better.
+If your access patterns are.
+
+66
+00:05:14,410 --> 00:05:21,996
+Typically bulk operations, such as Map, or
+Forte, or Filter, then a vector would be
+
+67
+00:05:21,996 --> 00:05:25,977
+preferable.
+Fortunately it's easy to change between
+
+68
+00:05:25,977 --> 00:05:31,116
+vectors and lists in your program because
+the two are quite analogous.
+
+69
+00:05:31,116 --> 00:05:37,211
+So we create vectors just like we create
+lists only we would be write vector where
+
+70
+00:05:37,211 --> 00:05:41,763
+we had written lists.
+And we can apply all the same operations
+
+71
+00:05:41,763 --> 00:05:46,830
+of lists also to vectors, map, fault,
+head, tail and so on except for.
+
+72
+00:05:46,830 --> 00:05:52,481
+Cons, because cons in a list, that's the
+primitive thing that builds a list and
+
+73
+00:05:52,481 --> 00:05:58,422
+let, lets us parametric against the list.
+Instead of a cons, vectors have operations
+
+74
+00:05:58,640 --> 00:06:04,362
+Plus column, which adds a new element to
+the left of the list, and column plus,
+
+75
+00:06:04,362 --> 00:06:07,855
+which adds an element to the right of the
+list.
+
+76
+00:06:07,855 --> 00:06:12,276
+So you see these here.
+X plus colon XS creates a new vector with
+
+77
+00:06:12,276 --> 00:06:15,528
+leading element X, followed by all
+elements of XS.
+
+78
+00:06:15,528 --> 00:06:20,703
+And XS colon plus X squared is a new
+vector with trailing element X, proceeded
+
+79
+00:06:20,703 --> 00:06:24,817
+by all elements of XS.
+So note that the colon always points to
+
+80
+00:06:24,817 --> 00:06:27,870
+where the collection is, where the
+sequence is.
+
+81
+00:06:27,870 --> 00:06:32,843
+So let's see what it would take to append
+an element to a vector.
+
+82
+00:06:32,843 --> 00:06:38,428
+Again, vectors like lists, are immutable.
+I can't touch the existing vector.
+
+83
+00:06:38,428 --> 00:06:44,549
+I have to create a new data structure.
+So what I would do is, I would take the
+
+84
+00:06:44,549 --> 00:06:49,603
+last array here and create a new one.
+Which contains, the given element.
+
+85
+00:06:49,603 --> 00:06:54,995
+If the vector is completley full I had, I
+would have to create a new level, but I
+
+86
+00:06:54,995 --> 00:06:58,701
+would assume there's still space left, in,
+in the arrays.
+
+87
+00:06:58,701 --> 00:07:03,621
+So that gives me a new array of 32
+elements, which I then have to combine,
+
+88
+00:07:03,621 --> 00:07:08,540
+somehow, with the original vector.
+I can't change the pointer from the
+
+89
+00:07:08,540 --> 00:07:14,066
+original, root to this array, because that
+of course would change, the old vector.
+
+90
+00:07:14,066 --> 00:07:18,110
+So what I do instead is I cree, cre,
+create another copy here.
+
+91
+00:07:18,110 --> 00:07:27,097
+That points to this new element and it
+also points to the other elements that my
+
+92
+00:07:27,097 --> 00:07:32,694
+previous copy pointed to.
+And that then would replace this one here.
+
+93
+00:07:32,694 --> 00:07:40,113
+And finally I need to create another root
+which points to my new copy, and to the
+
+94
+00:07:40,113 --> 00:07:44,060
+other immediate descendants of the root,
+and.
+
+95
+00:07:44,060 --> 00:07:47,193
+That, finally would complete the
+construction.
+
+96
+00:07:47,193 --> 00:07:52,206
+So the new vector now is in red.
+Where as the blue one wasn't touched at
+
+97
+00:07:52,206 --> 00:07:55,339
+all.
+So if you analyze the complexity of that,
+
+98
+00:07:55,339 --> 00:08:01,048
+then we see that we have to create a new
+object, 32 bit or, 32 element array, for
+
+99
+00:08:01,048 --> 00:08:04,877
+every level of the vector, where we did
+the change here.
+
+100
+00:08:04,877 --> 00:08:08,985
+So in our case here, three of these arrays
+would be created.
+
+101
+00:08:08,985 --> 00:08:14,346
+Not as efficient as changing a thing in
+place, but we get something in return.
+
+102
+00:08:14,346 --> 00:08:20,975
+We get really two copies of the vector,
+that are both completely functional, and
+
+103
+00:08:20,975 --> 00:08:24,697
+they don't, they are not in each other's
+ways.
+
+104
+00:08:24,697 --> 00:08:29,990
+So the complexity again is here if you
+analyse it, again log 32N.
+
+105
+00:08:29,990 --> 00:08:35,806
+But now, it's object creation.
+So we create as many objects of, with 32
+
+106
+00:08:35,806 --> 00:08:40,779
+as we have levels in the tree.
+So vectors and lists are two
+
+107
+00:08:40,779 --> 00:08:47,523
+implementations of a concept of sequence.
+Which is represented, in fact, as a base
+
+108
+00:08:47,523 --> 00:08:53,760
+class of list and vector.So if you do a
+diagram of the collection classes.
+
+109
+00:08:53,760 --> 00:08:58,228
+Then what we would have here, here we have
+class list.
+
+110
+00:08:58,228 --> 00:09:06,464
+Here we have class vector.
+And the two are sub-classes of a class
+
+111
+00:09:06,464 --> 00:09:11,899
+called sequence.
+Now other collections in the Scala library
+
+112
+00:09:11,899 --> 00:09:15,492
+as well.
+So besides sequences we would also have
+
+113
+00:09:15,492 --> 00:09:21,332
+sets which very much resemble the sets
+that you had looked at in your various
+
+114
+00:09:21,332 --> 00:09:27,322
+homeworks with a bit more functionality.
+And we'll also see, a structure called a
+
+115
+00:09:27,322 --> 00:09:30,915
+map so these will be covered in future
+sessions.
+
+116
+00:09:30,915 --> 00:09:36,980
+Sequences sets and maps are all instances
+of a common base class called Iterable.
+
+117
+00:09:41,800 --> 00:09:46,900
+So that's the start of the hierarchy of
+Scalar collections.
+
+118
+00:09:46,900 --> 00:09:52,064
+In fact there are also some other things
+in the Scalar library that look like a
+
+119
+00:09:52,064 --> 00:09:55,332
+sequence.
+Arrays and strings both support the same
+
+120
+00:09:55,332 --> 00:10:00,562
+operations as sequences, and they can be
+implicitly converted to sequences where
+
+121
+00:10:00,562 --> 00:10:03,543
+needed.
+So to demonstrate that, let's go in the
+
+122
+00:10:03,543 --> 00:10:05,614
+worksheet.
+I've defined an array.
+
+123
+00:10:05,614 --> 00:10:09,368
+Again, analogous.
+I have just written array instead of list.
+
+124
+00:10:09,368 --> 00:10:14,674
+And if I do that, then the worksheet would
+respond that I have defined an array of
+
+125
+00:10:14,674 --> 00:10:17,651
+int.
+And, here are the elements of the array.
+
+126
+00:10:17,651 --> 00:10:21,664
+What I can then do.
+I can, for instance, apply a map function
+
+127
+00:10:21,664 --> 00:10:26,517
+just like I did apply a map for lists.
+And I would get the array with every,
+
+128
+00:10:27,682 --> 00:10:31,112
+element doubled.
+Another sequence like structure is a
+
+129
+00:10:31,112 --> 00:10:32,860
+string.
+So let's define one.
+
+130
+00:10:35,760 --> 00:10:44,798
+And we can then apply for instance, an
+operation like filter, which gives us All
+
+131
+00:10:44,798 --> 00:10:50,635
+the uppercase characters in the string.
+So this would give us just HW.
+
+132
+00:10:50,635 --> 00:10:57,403
+So you see that the usual operations on
+sequences like map, or filter, or fold, or
+
+133
+00:10:57,403 --> 00:11:03,494
+head, or tail, or take while, and so on.
+They all also work for a raise and
+
+134
+00:11:03,494 --> 00:11:10,008
+strings, which is quite handy sometimes.
+So going back to our diagram, we would
+
+135
+00:11:10,008 --> 00:11:19,657
+then have string.
+And array as further sequence-like
+
+136
+00:11:19,657 --> 00:11:22,991
+structures.
+I draw a dotted line because they're not
+
+137
+00:11:22,991 --> 00:11:27,480
+really subclasses of sequence.
+They cannot be that because both string
+
+138
+00:11:27,480 --> 00:11:32,609
+and the ray come from the Java universe.
+And, of course, a Java class that doesn't
+
+139
+00:11:32,609 --> 00:11:37,482
+know that at some future time somebody
+would define a class called Scalar of
+
+140
+00:11:37,482 --> 00:11:41,309
+sequence.
+Another simple and useful kind of sequence
+
+141
+00:11:41,309 --> 00:11:45,315
+is the range.
+A range simply represents a sequence of
+
+142
+00:11:45,315 --> 00:11:50,077
+evenly spaced integers.
+The three common operators to construct
+
+143
+00:11:50,077 --> 00:11:53,100
+ranges.
+I can write one, two, five and that would
+
+144
+00:11:53,100 --> 00:11:57,478
+give the range of elements one two, three,
+four, five.
+
+145
+00:11:57,478 --> 00:12:04,441
+I can also use one until five until
+operator is exclusive in the upper bound
+
+146
+00:12:04,441 --> 00:12:08,601
+so the sequence will only go from one to
+four.
+
+147
+00:12:08,601 --> 00:12:13,574
+And I can also vary the step value by the
+buy operator.
+
+148
+00:12:13,574 --> 00:12:20,628
+So, I could write one through ten by
+three, and that would give me the range of
+
+149
+00:12:20,628 --> 00:12:26,824
+one, four, seven, ten Or the step could
+also be negative.
+
+150
+00:12:26,824 --> 00:12:33,590
+So six to one pi minus two would give me
+the sequence six, four, two.
+
+151
+00:12:36,120 --> 00:12:41,564
+Of course, ranges are not represented like
+a rays or vectors as sequences of
+
+152
+00:12:41,564 --> 00:12:44,115
+elements.
+There's a much more compact
+
+153
+00:12:44,115 --> 00:12:47,905
+representation.
+All we need to store for a range is the
+
+154
+00:12:47,905 --> 00:12:53,350
+lower bound, the upper bound, and the step
+value, and these three values are just
+
+155
+00:12:53,350 --> 00:12:59,140
+stored as fields in a single range object.
+So coming back to my diagram then, I would
+
+156
+00:12:59,140 --> 00:13:03,000
+have one more implementation of sequence
+called a range.
+
+157
+00:13:04,020 --> 00:13:10,161
+So now that we have sequences, its time to
+look at some more operations that exist
+
+158
+00:13:10,161 --> 00:13:15,180
+uniformly for all sequences including
+lists and vectors and ranges.
+
+159
+00:13:15,404 --> 00:13:21,546
+The first operation is, exists so, excess
+exists with a private KP gives us true if
+
+160
+00:13:21,546 --> 00:13:27,089
+there is an element in the sequence
+excess, such that the private KP of its
+
+161
+00:13:27,089 --> 00:13:29,935
+host.
+Otherwise, it would give us false.
+
+162
+00:13:29,935 --> 00:13:36,077
+The dual exists for all, so that one would
+return true, if P holds for all elements
+
+163
+00:13:36,077 --> 00:13:41,588
+in the sequence excess.
+So if you look at the worksheet for
+
+164
+00:13:41,588 --> 00:13:44,640
+instance S exists,
+C is upper.
+
+165
+00:13:45,140 --> 00:13:51,101
+Would return true because in fact there
+are true upper case characters in the
+
+166
+00:13:51,101 --> 00:13:54,235
+string.
+Whereas if we ask whether for all
+
+167
+00:13:54,235 --> 00:13:59,967
+elements, character is an upper case
+character we would expect to see, false.
+
+168
+00:13:59,967 --> 00:14:04,400
+Because there're also lower case
+characters, in the string.
+
+169
+00:14:04,400 --> 00:14:11,049
+Another useful operation on sequences is
+one that takes two sequences and returns a
+
+170
+00:14:11,049 --> 00:14:16,187
+single sequence of pairs.
+Pairs of corresponding elements of the two
+
+171
+00:14:16,187 --> 00:14:19,114
+sequences.
+That operation is called Zip.
+
+172
+00:14:19,339 --> 00:14:25,418
+Like the zipper that takes two single
+strands and combines them into a strand of
+
+173
+00:14:25,418 --> 00:14:28,720
+pairs.
+So to try that out, lets create one
+
+174
+00:14:28,720 --> 00:14:30,672
+sequence.
+Val pairs, equals.
+
+175
+00:14:30,672 --> 00:14:36,819
+Let's create, lets say, a list of 123 zip
+well let's take our string S.
+
+176
+00:14:36,819 --> 00:14:42,378
+What would we get here?
+How we would get a list of integers and
+
+177
+00:14:42,378 --> 00:14:47,093
+characters that contains the three
+elements 1H, 2E, 3L.
+
+178
+00:14:47,093 --> 00:14:54,387
+So we have taken corresponding elements
+from the two sequences and put them in to
+
+179
+00:14:54,387 --> 00:14:59,725
+pairs of result list.
+The dual of zip is unzip so, if we do a
+
+180
+00:14:59,725 --> 00:15:05,921
+pair, a pairs that unzip.
+But what we will see now is a pair of two
+
+181
+00:15:05,921 --> 00:15:09,379
+lists.
+The first list contains the first half of
+
+182
+00:15:09,379 --> 00:15:14,349
+the pairs that we've seen, one, two, three
+and the second list contains the
+
+183
+00:15:14,349 --> 00:15:17,590
+characters from the second half of the
+pairs.
+
+184
+00:15:17,590 --> 00:15:20,682
+Good.
+So we've seen exist to unzip The next
+
+185
+00:15:20,682 --> 00:15:26,319
+useful function is called flat map, it
+takes a collection excess, and a function
+
+186
+00:15:26,319 --> 00:15:30,671
+F that maps each element of excess to a
+collection by itself.
+
+187
+00:15:30,671 --> 00:15:35,880
+And we would then concatenate all the
+results, collections into one large
+
+188
+00:15:35,880 --> 00:15:39,162
+collection.
+So let's see that an action on the
+
+189
+00:15:39,162 --> 00:15:45,085
+worksheet we could apply foreign flat map
+over a string, so it takes a character in
+
+190
+00:15:45,085 --> 00:15:51,079
+the string, and it would give us back lets
+say a period, followed by the character.
+
+191
+00:15:51,079 --> 00:15:54,210
+So each character in the string gets
+mapped to a list.
+
+192
+00:15:54,210 --> 00:15:58,961
+The flat map would then concatenate all of
+the list in the result collection.
+
+193
+00:15:58,961 --> 00:16:02,910
+Let's see how that would work.
+So what we end up with is, in fact,
+
+194
+00:16:02,910 --> 00:16:07,908
+another string that now has a period in
+front of every character of the original
+
+195
+00:16:07,908 --> 00:16:10,877
+string.
+The last group of operations I want to
+
+196
+00:16:10,877 --> 00:16:14,782
+cover are some utilities for ordered or
+numeric collections.
+
+197
+00:16:14,782 --> 00:16:20,117
+So if you have a collection of numbers, we
+can take the sum of the product of that
+
+198
+00:16:20,117 --> 00:16:23,436
+collection.
+And if you have a collection of ordered
+
+199
+00:16:23,436 --> 00:16:26,560
+elements, we can take the maximum or the
+minimum.
+
+200
+00:16:26,560 --> 00:16:30,700
+A quick test here.
+So excess.sum.
+
+201
+00:16:31,700 --> 00:16:38,710
+Would give us 50, and XS.max.
+Would give us 44 as expected.
+
+202
+00:16:38,710 --> 00:16:42,677
+So let's apply these new operations to
+some examples.
+
+203
+00:16:42,677 --> 00:16:48,890
+The first thing I want to do is I want to
+list all combinations of numbers x and y
+
+204
+00:16:48,890 --> 00:16:54,729
+where x is draw from one interval let's
+say from one to n and y is drawn from
+
+205
+00:16:54,729 --> 00:16:58,022
+another.
+So what I would do is I would cycle
+
+206
+00:16:58,022 --> 00:17:04,310
+through the list one to n and I would do a
+flat map with what would I have to do
+
+207
+00:17:04,310 --> 00:17:07,828
+here.
+Well it would be, I have to go now through
+
+208
+00:17:07,828 --> 00:17:15,523
+the second list one to n.
+And I need a map, so for every element in
+
+209
+00:17:15,523 --> 00:17:24,429
+one to N, I return a pair that consisting
+of X and Y, where X is drawn from the
+
+210
+00:17:24,429 --> 00:17:28,813
+first range and Y is drawn on the second
+range.
+
+211
+00:17:28,813 --> 00:17:33,484
+So the next example to look at is scalar
+product.
+
+212
+00:17:33,484 --> 00:17:40,728
+So, the scalar product of two vectors is
+sum of the product of corresponding
+
+213
+00:17:40,728 --> 00:17:46,697
+elements xi and yi of the two vectors.
+And we can take the mathematical
+
+214
+00:17:46,697 --> 00:17:52,600
+definition and map it directly to code, so
+what we do is we first zip up the excess
+
+215
+00:17:52,600 --> 00:17:57,152
+into y s, that brings corresponding
+elements together into pairs.
+
+216
+00:17:57,152 --> 00:18:02,059
+And then we have a map that performs the
+multiplication on each pair.
+
+217
+00:18:02,059 --> 00:18:07,465
+So we have a pair, xy, we pull out the
+first path, we pull out the second path,
+
+218
+00:18:07,465 --> 00:18:11,590
+and we multiply it.
+And finally, we need to take the sum of
+
+219
+00:18:11,590 --> 00:18:17,017
+the results of the multiplications.
+There's actually another way we can write
+
+220
+00:18:17,017 --> 00:18:20,165
+that using a pattern matching function
+value.
+
+221
+00:18:20,165 --> 00:18:25,890
+So instead of pulling out the elements of
+the pair with the selectors <u>one and <u>two.</u></u>
+
+222
+00:18:25,901 --> 00:18:29,049
+I can also do, use pattern matching on a
+pair.
+
+223
+00:18:29,049 --> 00:18:34,295
+So here's how that would be written.
+I have, again the excess zip ys.
+
+224
+00:18:34,295 --> 00:18:39,612
+But then I map with a function that reads
+in braces, simply case xy.
+
+225
+00:18:39,612 --> 00:18:45,422
+So it's a pattern match against the pair.
+Which will always succeed by the way,
+
+226
+00:18:45,422 --> 00:18:50,670
+because I know that I get a pair.
+And then simply return X times Y.
+
+227
+00:18:50,670 --> 00:18:55,270
+So that shorthand is.
+So that generally is a short hand for a
+
+228
+00:18:55,270 --> 00:18:59,594
+match expression.
+So the function value that consist of one
+
+229
+00:18:59,594 --> 00:19:05,089
+or more cases in braces is actually
+exactly the same as the function value
+
+230
+00:19:05,089 --> 00:19:10,072
+that takes the parameter.
+And then matches on the parameter with the
+
+231
+00:19:10,072 --> 00:19:14,981
+cases as they are given.
+Of course the first version is shorter and
+
+232
+00:19:14,981 --> 00:19:19,379
+also clearer than the second one.
+So here's an exercise for you.
+
+233
+00:19:19,379 --> 00:19:24,592
+You know that a number is prime if the
+only divisors of the number are one and
+
+234
+00:19:24,592 --> 00:19:28,419
+the number itself.
+What's a good high level way to write a
+
+235
+00:19:28,419 --> 00:19:33,631
+test whether number is a prime number.
+For once I want you to value conciseness
+
+236
+00:19:33,631 --> 00:19:39,174
+over efficiency, so I want to express the
+test in the most abstract and mathematical
+
+237
+00:19:39,174 --> 00:19:42,407
+manner possible.
+Don't worry about its efficiency.
+
+238
+00:19:42,407 --> 00:19:48,082
+So you would have a test is prime it takes
+an int and returns a boolean and how would
+
+239
+00:19:48,082 --> 00:19:51,881
+we define it.
+So to answer that quiz, simply look at the
+
+240
+00:19:51,881 --> 00:19:56,152
+mathematical definition and translate it
+directly in to code.
+
+241
+00:19:56,152 --> 00:20:01,404
+So if a number is prime if the only
+divisors of the number are one and the
+
+242
+00:20:01,404 --> 00:20:05,256
+number itself.
+That means for all other numbers between
+
+243
+00:20:05,256 --> 00:20:08,337
+one and N that number is not a divisor of
+N.
+
+244
+00:20:08,337 --> 00:20:14,009
+So lets just express that here so all
+other numbers between one and N that would
+
+245
+00:20:14,009 --> 00:20:19,675
+be the range two until N.
+And then there's the for all.
+
+246
+00:20:19,675 --> 00:20:27,139
+That should hold for all of these numbers,
+aah, give it a name what's call it D.
+
+247
+00:20:27,139 --> 00:20:35,465
+So what should hold is that end modular D
+leaves a rest which is different from
+
+248
+00:20:35,465 --> 00:20:39,868
+zero.
+So that's a very high level and short
+
+249
+00:20:39,868 --> 00:20:44,940
+definition of what it means for a number
+to be a prime number.

@@ -1,0 +1,834 @@
+1
+00:00:00,000 --> 00:00:05,493
+In this session, we are going to look at
+the question of how to handle nested
+
+2
+00:00:05,493 --> 00:00:08,703
+sequences in common notarial search
+problems.
+
+3
+00:00:08,703 --> 00:00:14,197
+We're going to explore a handy new
+notation for this kind of problems namely,
+
+4
+00:00:14,197 --> 00:00:18,477
+for-expressions.
+High-order functions and collections often
+
+5
+00:00:18,477 --> 00:00:24,391
+replace loops and imperative languages.
+Programs that use many nested loops then
+
+6
+00:00:24,391 --> 00:00:29,355
+can be expressed often with combinations
+of these high-order functions.
+
+7
+00:00:29,355 --> 00:00:35,312
+I will now show you that with an example.
+So, the task is that we want to find all
+
+8
+00:00:35,312 --> 00:00:41,116
+pairs of positive integers i and j,
+Such that j is less than i and that i is
+
+9
+00:00:41,116 --> 00:00:45,470
+bounded by some positive integer n, and i
+plus j is prime.
+
+10
+00:00:45,470 --> 00:00:52,155
+So, for instance, if n = seven, the pairs
+we want to find are two, one, three, two,
+
+11
+00:00:52,155 --> 00:00:58,107
+four, one, four, three and so on.
+Because the sum of i and j in each case is
+
+12
+00:00:58,107 --> 00:01:01,754
+a prime number.
+So, in imperative programming language, I
+
+13
+00:01:01,754 --> 00:01:06,906
+probably would use two nested loops, one
+for the i's, one for the j's together with
+
+14
+00:01:06,906 --> 00:01:11,755
+a test whether the sum of i plus j is a
+prime number, and some sort of buffer to
+
+15
+00:01:11,755 --> 00:01:15,514
+collect the results.
+But what would be a purely functional way
+
+16
+00:01:15,514 --> 00:01:19,809
+to achieve the same thing?
+So, a natural functional way to do this
+
+17
+00:01:19,809 --> 00:01:25,604
+would be to generate data structures bit
+by bit until we have generated the data
+
+18
+00:01:25,604 --> 00:01:28,753
+structure that we need for the final
+result.
+
+19
+00:01:28,753 --> 00:01:34,477
+So, the first data structure that we want
+to generate is the sequence of all the
+
+20
+00:01:34,477 --> 00:01:40,416
+pairs of integers i, j such that the j and
+the i are with in the bounds that we have
+
+21
+00:01:40,416 --> 00:01:43,922
+specified.
+And then, once we have that sequence, we
+
+22
+00:01:43,922 --> 00:01:49,932
+can filter it to keep only those pairs for
+which the sum i + j is prime and then,
+
+23
+00:01:49,932 --> 00:01:54,198
+we're done.
+So, we're left with a problem how to
+
+24
+00:01:54,198 --> 00:01:57,788
+generate this sequence of pairs of
+integers.
+
+25
+00:01:57,788 --> 00:02:04,236
+And there, the natural way to do this
+would be to first generate the integers i
+
+26
+00:02:04,236 --> 00:02:10,112
+between one and n and excluded.
+And then, for each integer i, generate the
+
+27
+00:02:10,112 --> 00:02:14,178
+list of pairs,
+(I,1), (i,2), and so on, until (i,i-1).
+
+28
+00:02:14,180 --> 00:02:17,900
+So, once we have that, we can put it into
+code.
+
+29
+00:02:17,900 --> 00:02:22,281
+The last bit can be achieved combining
+until and map.
+
+30
+00:02:22,281 --> 00:02:28,482
+So, it would write one until n, so that
+gives us the list of i from one to n
+
+31
+00:02:28,482 --> 00:02:33,029
+excluded. And then for each of these
+integers, we map it,
+
+32
+00:02:33,029 --> 00:02:37,989
+Call it i to a range that goes from one
+until i, i excluded.
+
+33
+00:02:37,989 --> 00:02:43,859
+Call the index here, j, and for each
+combination of i and j that we have
+
+34
+00:02:43,859 --> 00:02:50,266
+produced that way, we return the pair i
+and j So, let's do that in the worksheet.
+
+35
+00:02:50,266 --> 00:02:56,343
+I have a new worksheet called pairs.
+I set the value of n to be seven, and I
+
+36
+00:02:56,343 --> 00:03:02,680
+copy the expression that we've seen last
+in the, on the slide.
+
+37
+00:03:03,120 --> 00:03:07,899
+So, let's do that in the worksheet.
+I've opened a new worksheet, call it
+
+38
+00:03:07,899 --> 00:03:10,835
+pairs.
+And I want to try out to build these
+
+39
+00:03:10,835 --> 00:03:14,727
+sequence of pairs.
+The first thing to do is set the upper
+
+40
+00:03:14,727 --> 00:03:19,439
+limit, let's say n = seven.
+And then, I copy this expression that I
+
+41
+00:03:19,439 --> 00:03:22,727
+had on the slide.
+So, what did I get here?
+
+42
+00:03:22,727 --> 00:03:27,382
+Well if I have a look at the right, then I
+get a vector of vectors.
+
+43
+00:03:27,382 --> 00:03:33,613
+And each element of the vector is indeed
+an i with a j less than the i and both are
+
+44
+00:03:33,613 --> 00:03:37,982
+greater or equal to one.
+So, I get the pairs that I wanted to
+
+45
+00:03:37,982 --> 00:03:41,420
+produce.
+You might ask, well, why did I get back a
+
+46
+00:03:41,420 --> 00:03:45,677
+vector of vectors?
+Well, if you look at the class hierarchy
+
+47
+00:03:45,677 --> 00:03:51,390
+that we have seen in the last session,
+then you will see that range is a subtype
+
+48
+00:03:51,755 --> 00:03:55,191
+of sequence.
+Now, the, a range that we started with,
+
+49
+00:03:55,191 --> 00:04:00,892
+one until n, got transformed with a map.
+And that map produced a sequence of, of
+
+50
+00:04:00,892 --> 00:04:04,328
+pairs.
+And, of course, sequences of pairs are not
+
+51
+00:04:04,328 --> 00:04:08,640
+elemental of ranges so I needed some other
+representations.
+
+52
+00:04:08,640 --> 00:04:14,927
+The representation I got was, in fact, a
+type that sits between sequence and range.
+
+53
+00:04:14,927 --> 00:04:20,175
+It's called an index sequence.
+So, that's essentially a sequence that
+
+54
+00:04:20,430 --> 00:04:28,544
+uses random access and the prototypical
+default implementation of an index
+
+55
+00:04:28,544 --> 00:04:32,915
+sequence is just a vector.
+So, what the type inference decided was to
+
+56
+00:04:32,915 --> 00:04:36,706
+say, well, I can't do with ranges,
+Ranges can't contain pairs.
+
+57
+00:04:36,706 --> 00:04:41,976
+So, I go up the hierarchy and I take the
+next best type that happen to be an index
+
+58
+00:04:41,976 --> 00:04:45,961
+sequence and I take the canonical
+implementation of that type,
+
+59
+00:04:45,961 --> 00:04:50,653
+And that happened to be a vector.
+So, that's how you ended up with vectors
+
+60
+00:04:50,653 --> 00:04:53,910
+of vectors.
+But we have seen that's still not the
+
+61
+00:04:53,910 --> 00:04:57,401
+right thing to do.
+We want to generate just a single
+
+62
+00:04:57,401 --> 00:05:00,623
+collection of pairs, not a collection of
+vectors.
+
+63
+00:05:00,623 --> 00:05:05,791
+So, what we need to do is we need to
+concatenate all the element vectors into
+
+64
+00:05:05,791 --> 00:05:10,454
+one single list of pairs.
+So, let's see how that can be done.
+
+65
+00:05:10,454 --> 00:05:17,475
+We can combine all the sub-sequences in,
+or sequence of vectors of pairs using a
+
+66
+00:05:17,475 --> 00:05:21,687
+foldRight with concatenation as the
+operation.
+
+67
+00:05:21,687 --> 00:05:28,340
+So, if you have a vector of sequences,
+That should,
+
+68
+00:05:30,380 --> 00:05:38,220
+And what we do is we, combine them all
+using ++, the concatenation operation.
+
+69
+00:05:38,800 --> 00:05:44,160
+And on the right-hand side, you would have
+the empty vector.
+
+70
+00:05:44,440 --> 00:05:48,688
+So, that would work, that would give us a
+single sequence of pairs.
+
+71
+00:05:48,688 --> 00:05:53,786
+There is also another method here that p
+is useful. This is called xss.flatten.
+
+72
+00:05:53,786 --> 00:05:58,884
+So, flatten does essentially the same
+thing as concat it takes a collection of
+
+73
+00:05:58,884 --> 00:06:03,786
+collections and returns a single
+collection containing all the elements in
+
+74
+00:06:03,786 --> 00:06:08,035
+the sub, sub-collections and if the
+collection is a sequence, then the
+
+75
+00:06:08,035 --> 00:06:12,480
+combination will be just the concatenation
+of these sub-collections.
+
+76
+00:06:12,480 --> 00:06:18,649
+So, a simpler way to express what we want
+is our path generating expression and then
+
+77
+00:06:18,649 --> 00:06:24,199
+we just follow that by flatten.. We're not
+done yet because we can still apply a
+
+78
+00:06:24,199 --> 00:06:27,488
+useful law.
+Remember, the flatMap function that we've
+
+79
+00:06:27,488 --> 00:06:32,267
+seen in the last session, it takes a
+collection valued function f and applies
+
+80
+00:06:32,267 --> 00:06:36,240
+to each element of the list xs and then
+combines the result.
+
+81
+00:06:36,240 --> 00:06:41,515
+So, flatMap is actually exactly the same
+thing as mapping f, so that would give us
+
+82
+00:06:41,515 --> 00:06:44,990
+a collection of collections, and then
+applying flatten.
+
+83
+00:06:44,990 --> 00:06:50,309
+And map followed by flatten is exactly the
+pattern that we've seen here.
+
+84
+00:06:50,309 --> 00:06:55,925
+So, it's a map here, followed by flatten.
+So, we can, we can contract the two to
+
+85
+00:06:55,925 --> 00:07:00,506
+just use a flatMap here.
+So, would have one until n, flatMap to
+
+86
+00:07:00,506 --> 00:07:05,900
+function that goes through each interval
+from one to i and forms the pen.
+
+87
+00:07:05,900 --> 00:07:10,735
+Now, we have generated all the possible
+pairs, we still need to filter them.
+
+88
+00:07:10,735 --> 00:07:13,937
+That's fairly simple.
+So, we follow it by a filter.
+
+89
+00:07:13,937 --> 00:07:19,230
+It takes a pair, and it asks whether the
+sum of the two elements of the pair is a
+
+90
+00:07:19,230 --> 00:07:22,039
+prime number.
+And that works.
+
+91
+00:07:22,039 --> 00:07:27,509
+But it must be said that it makes most
+peoples head hurt, an expression like
+
+92
+00:07:27,509 --> 00:07:30,604
+that.
+Question is, is there a simpler way to
+
+93
+00:07:30,604 --> 00:07:35,067
+express the same expression?
+So, let's do that in the worksheet.
+
+94
+00:07:35,067 --> 00:07:38,090
+Let's replace the called map here by
+flatMap,
+
+95
+00:07:38,090 --> 00:07:43,137
+And we would get what we want here in flat
+sequence of pairs.
+
+96
+00:07:43,137 --> 00:07:49,592
+Now, what we still need to do is we need
+to filter that sequence according to the
+
+97
+00:07:49,592 --> 00:07:54,888
+criterion that the sum of the two elements
+of the pair is prime.
+
+98
+00:07:54,888 --> 00:08:00,847
+So, let's do that, let's follow the
+expression with a filter, takes a pair,
+
+99
+00:08:00,847 --> 00:08:04,405
+and it asks whether the following is
+prime.
+
+100
+00:08:04,405 --> 00:08:10,280
+The pair's first element plus the pair's
+second element.
+
+101
+00:08:13,180 --> 00:08:19,031
+And if we do that, then indeed, we get the
+sequence we wanted sequence of pairs of
+
+102
+00:08:19,031 --> 00:08:23,712
+elements which sum is prime.
+So, here the sum is five, seven, seven,
+
+103
+00:08:23,712 --> 00:08:29,351
+seven, eleven, all prime numbers.
+So, this works but it's fair to say that
+
+104
+00:08:29,351 --> 00:08:34,917
+it makes most people's head hurt.
+Is there a simpler way to organize this
+
+105
+00:08:34,917 --> 00:08:38,080
+expression.
+That makes it more understandable. Well,
+
+106
+00:08:38,080 --> 00:08:42,499
+one thing we definitely could try to do is
+name the intermediate results.
+
+107
+00:08:42,499 --> 00:08:46,676
+So, split out enlarged expression like
+that into several smaller ones.
+
+108
+00:08:46,676 --> 00:08:50,854
+That's generally always a good move.
+But it turns out there is a more
+
+109
+00:08:50,854 --> 00:08:55,576
+fundamental way how we can express
+problems like this in a more high level
+
+110
+00:08:55,576 --> 00:08:59,390
+notation that's simpler to understand.
+We will get to that next.
+
+111
+00:08:59,390 --> 00:09:03,668
+So, we've seen that high-order order
+functions such as map, flatMap, or filter
+
+112
+00:09:03,668 --> 00:09:08,067
+provide powerful constructs for
+manipulating lists and data collections.
+
+113
+00:09:08,067 --> 00:09:12,767
+But we've also seen that sometimes the
+level of obstruction required by these
+
+114
+00:09:12,767 --> 00:09:15,780
+functions, make the program hard to
+understand.
+
+115
+00:09:15,780 --> 00:09:19,927
+In this case, there's a notation in Scala
+that can help.
+
+116
+00:09:19,927 --> 00:09:25,330
+It's called a for-expression.
+So, let's introduce for-expressions by an
+
+117
+00:09:25,330 --> 00:09:29,389
+example.
+We start with the class of person that we
+
+118
+00:09:29,389 --> 00:09:33,524
+seen before.
+A person has a name, which is a string and
+
+119
+00:09:33,524 --> 00:09:38,349
+then H, which is an int.
+To obtain the names of all persons over
+
+120
+00:09:38,349 --> 00:09:44,572
+twenty years, you could write, for p left
+arrow, that gets spelled taken from
+
+121
+00:09:44,572 --> 00:09:51,538
+persons, if p.age greatertwenty yield
+p.name. And, in fact, that expression is
+
+122
+00:09:51,538 --> 00:09:57,937
+equivalent to the expression, persons
+filter such that the person p, has an age
+
+123
+00:09:57,937 --> 00:10:04,493
+greater, greater than twenty, and then map
+the filter expression, such that for every
+
+124
+00:10:04,493 --> 00:10:10,812
+person, p, we get back its name The two
+expressions are, have about the same size,
+
+125
+00:10:10,812 --> 00:10:17,290
+but I would argue that this one is simply
+to read and understand what it produces.
+
+126
+00:10:17,290 --> 00:10:22,700
+For-expressions like this are similar to
+for loops in imperative languages,
+
+127
+00:10:22,700 --> 00:10:28,111
+But there's an important difference.
+A for loops operates with a side effect,
+
+128
+00:10:28,111 --> 00:10:31,413
+it changes something.
+A for-expression doesn't.
+
+129
+00:10:31,413 --> 00:10:37,526
+Instead, a for-expression produces a new
+result, and essentially, each element of
+
+130
+00:10:37,526 --> 00:10:41,040
+the result is produced by a yield
+expression here.
+
+131
+00:10:42,500 --> 00:10:47,076
+So, if you look at the syntax of four
+expressions then, here it is.
+
+132
+00:10:47,076 --> 00:10:52,920
+So, they are of the form four and then
+comes a sequence of generators or filters
+
+133
+00:10:52,920 --> 00:10:56,933
+in parenthesis,
+And then comes a yield, and then comes the
+
+134
+00:10:56,933 --> 00:11:00,524
+expression that produces the final result
+elements.
+
+135
+00:11:00,524 --> 00:11:05,875
+So, the sequence S can consist of
+generators and filters and generator is of
+
+136
+00:11:05,875 --> 00:11:10,944
+the form p left arrow e, where p is a
+variable or more generally, a whole
+
+137
+00:11:10,944 --> 00:11:14,464
+pattern,
+And e can be an expression, whose value is
+
+138
+00:11:14,464 --> 00:11:18,658
+a collection.
+The idea is that we would let p range over
+
+139
+00:11:18,658 --> 00:11:24,301
+all elements of the collection e.
+And a filter is of the form if f, where f
+
+140
+00:11:24,301 --> 00:11:30,325
+is a Boolean expression, and the idea here
+is that the filter would remove from
+
+141
+00:11:30,325 --> 00:11:33,680
+consideration, all elements where f is
+false.
+
+142
+00:11:33,680 --> 00:11:38,066
+The sequence must always start with a
+generator and if there's several
+
+143
+00:11:38,066 --> 00:11:42,637
+generators in the sequence, the last
+generators very faster than the first.
+
+144
+00:11:42,637 --> 00:11:47,703
+So the first one steps through more slowly
+and then, for each element of the first,
+
+145
+00:11:47,703 --> 00:11:50,730
+the second generator will be traversed and
+so on.
+
+146
+00:11:50,730 --> 00:11:55,855
+There is a minor variation in the syntax,
+we can also write praises around the
+
+147
+00:11:55,855 --> 00:12:00,981
+sequence of generators and filters and
+then the generators and filters can be
+
+148
+00:12:00,981 --> 00:12:04,661
+written on multiple lines without
+requiring semicolons.
+
+149
+00:12:04,661 --> 00:12:09,984
+If you write it with a parenthesis, then
+if we have several generators, we need to
+
+150
+00:12:09,984 --> 00:12:14,681
+put a semicolon between them.
+Now, let's see this with two examples.
+
+151
+00:12:14,681 --> 00:12:21,133
+The first example is our expression that
+gave us all pairs whose sum were prime
+
+152
+00:12:21,133 --> 00:12:26,105
+numbers so that could be expressed simply
+like, what you see here.
+
+153
+00:12:26,105 --> 00:12:31,231
+Will it i range from one until end, will a
+j range from one until i?
+
+154
+00:12:31,231 --> 00:12:37,886
+We demand that the sum from i + j must be
+a prime number and then, we yield the pair
+
+155
+00:12:37,886 --> 00:12:43,547
+of i and j. I think there's no contest
+which one is clearer, so this one is
+
+156
+00:12:43,547 --> 00:12:48,520
+rather crystal clear whereas, the other
+one was quite convoluted.
+
+157
+00:12:49,100 --> 00:12:55,346
+The second example I want you to do as an
+excercise, remember, scalar product from
+
+158
+00:12:55,346 --> 00:13:01,052
+last session, so that was the function
+that took two vectors of doubles,
+
+159
+00:13:01,052 --> 00:13:05,757
+multiplied corresponding elements and then
+summed the result.
+
+160
+00:13:05,757 --> 00:13:11,772
+Can you write a version of scalar product
+that makes use of a for-expression?
+
+161
+00:13:11,772 --> 00:13:15,627
+So, let's see how we would solve it.
+Not solve this.
+
+162
+00:13:16,244 --> 00:13:21,720
+So, let's see how we would solve this.
+So, I write a for-expression, for.
+
+163
+00:13:21,720 --> 00:13:32,524
+What I want to do is I want to let x and y
+range over the result of zipping the two
+
+164
+00:13:32,524 --> 00:13:42,415
+vectors, xs and ys.
+And then, I want to return, in each case,
+
+165
+00:13:42,415 --> 00:13:48,466
+the multiplication between x and y.
+So, that would give me the multiplication
+
+166
+00:13:48,466 --> 00:13:54,756
+of corresponding elements in xs and ys.
+And then, all I have to do in the end is
+
+167
+00:13:54,756 --> 00:13:58,340
+sum it up.
+So, for the sum of the whole vector.

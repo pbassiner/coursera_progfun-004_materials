@@ -1,0 +1,694 @@
+1
+00:00:00,000 --> 00:00:04,687
+In this session, we look at the
+implementation of for-expressions.
+
+2
+00:00:04,687 --> 00:00:09,587
+It turns out that there is a systematic
+translation scheme that maps
+
+3
+00:00:09,587 --> 00:00:14,203
+for-expressions to certain combinations of
+higher-order functions.
+
+4
+00:00:14,203 --> 00:00:19,671
+So, we're going to see in this session
+that the syntax of for-expressions is
+
+5
+00:00:19,671 --> 00:00:22,938
+closely related to three higher-order
+functions,
+
+6
+00:00:22,938 --> 00:00:27,516
+Namely map, flatMap, and filter.
+The first observation is that all of these
+
+7
+00:00:27,516 --> 00:00:32,508
+functions can be defined in terms of for.
+So for instance, to have a functioned like
+
+8
+00:00:32,508 --> 00:00:34,885
+map,
+I call it the mapFun that applies a
+
+9
+00:00:34,885 --> 00:00:37,678
+function f to every element on the list
+xs.
+
+10
+00:00:37,678 --> 00:00:41,177
+We could write for x taken from xs yield
+f(x).
+
+11
+00:00:41,178 --> 00:00:45,264
+That's the same thing what that map is
+usually.
+
+12
+00:00:45,264 --> 00:00:52,399
+Flatmap would be for x taken from the
+first list, and y taken from the result of
+
+13
+00:00:52,399 --> 00:00:57,320
+applying f to each element of the first
+list, yield y.
+
+14
+00:00:57,320 --> 00:01:02,342
+So, that's a flatMap.
+And filter finally can be expressed as a
+
+15
+00:01:02,342 --> 00:01:08,822
+for like this, for x taken from xs, if the
+predicate p is true at x, then yield x.
+
+16
+00:01:08,822 --> 00:01:14,330
+So, map, flatMap, and filter can all be
+expressed as for-expressions.
+
+17
+00:01:14,330 --> 00:01:20,005
+But in reality it goes the other way.
+What the Scala compiler will do is it will
+
+18
+00:01:20,005 --> 00:01:25,680
+translate for-expressions to combinations
+of map, flatMap, and a lazy variant of
+
+19
+00:01:25,680 --> 00:01:28,973
+filter.
+So, we're going to see now the former of
+
+20
+00:01:28,973 --> 00:01:32,897
+translation scheme.
+For simplicity we limit ourselves to
+
+21
+00:01:32,897 --> 00:01:37,661
+simple variables and generators.
+So, I'm going to talk only about simple
+
+22
+00:01:37,661 --> 00:01:43,126
+variables x on the left-hand side of the
+generator where, of course, in general,
+
+23
+00:01:43,126 --> 00:01:46,840
+you could have an arbitrary pattern in
+this position.
+
+24
+00:01:46,840 --> 00:01:53,406
+So, lets look first that a simple
+for-expression that consist of just one
+
+25
+00:01:53,406 --> 00:01:59,796
+generator for x taken from e1 yield e2,
+for arbitrate expressions e1 and e2.
+
+26
+00:01:59,796 --> 00:02:07,161
+So, that would be translated by the Scalar
+compiler to an application of map, namely
+
+27
+00:02:07,161 --> 00:02:11,510
+e1 map the function that takes an x and
+returns e2.
+
+28
+00:02:11,510 --> 00:02:15,871
+The two are the same thing.
+Now, that we've treated for-expressions
+
+29
+00:02:15,871 --> 00:02:19,596
+with a simple generator, let's look at
+more complicated ones.
+
+30
+00:02:19,596 --> 00:02:24,501
+The first form that we want to look at is
+a for-expression that consists of a
+
+31
+00:02:24,501 --> 00:02:29,033
+generator, followed by a filter,
+Possibly followed by other generators and
+
+32
+00:02:29,033 --> 00:02:33,044
+filters.
+That for-expression would be translated to
+
+33
+00:02:33,044 --> 00:02:38,846
+the one that you see down here.
+So, it's again, a for, but the filter has
+
+34
+00:02:38,846 --> 00:02:43,096
+been eliminated.
+Instead, we pull the filter into the
+
+35
+00:02:43,096 --> 00:02:46,774
+generator.
+So, we let x range over e1, and then
+
+36
+00:02:46,774 --> 00:02:53,290
+there's an application of with filter,
+which takes the function value x to f. So,
+
+37
+00:02:53,290 --> 00:03:00,044
+what happens with, with filter is that the
+expression e1, the collection that gets
+
+38
+00:03:00,044 --> 00:03:04,130
+returned from e1 is filtered with that
+predicate.
+
+39
+00:03:04,130 --> 00:03:09,662
+Now, that we've looked at for-expressions
+consisting only of a single generator,
+
+40
+00:03:09,662 --> 00:03:14,849
+let's look at more complicated ones.
+The first for-expressions that we are
+
+41
+00:03:14,849 --> 00:03:20,520
+going to look at would have a generator,
+its taken from e1 followed by a filter f,
+
+42
+00:03:20,520 --> 00:03:25,776
+and that in turn could be followed by
+further generators or filters, which are
+
+43
+00:03:25,776 --> 00:03:30,500
+here subsumed by d.
+That for-expression can be rewritten to
+
+44
+00:03:30,500 --> 00:03:35,324
+the following one.
+Another for-expression that contains a
+
+45
+00:03:35,324 --> 00:03:39,649
+generator.
+And the filter has been absorbed into the
+
+46
+00:03:39,649 --> 00:03:44,057
+generator.
+So, the generator now reads x taken from
+
+47
+00:03:44,057 --> 00:03:48,881
+e1 withFilter,
+The anonymous function that takes an x and
+
+48
+00:03:48,881 --> 00:03:55,160
+gives us back the expression f.
+With filter, as a first approximation you
+
+49
+00:03:55,160 --> 00:03:59,555
+can read it like filter.
+So, what happens here, is that the
+
+50
+00:03:59,555 --> 00:04:05,260
+generator will be reduced to all those
+elements that pass the condition f.
+
+51
+00:04:05,260 --> 00:04:10,930
+In fact, withFilter is a lazy variant of
+filter that means it doesn't immediately
+
+52
+00:04:10,930 --> 00:04:16,600
+produce a new data structure of all the
+filtered elements that would be wasteful.
+
+53
+00:04:16,600 --> 00:04:22,410
+What it does instead is it remembers that
+any following call to map or flatMap has
+
+54
+00:04:22,410 --> 00:04:27,590
+to be filtered by the function f.
+So, it's essentially a smarter version of
+
+55
+00:04:27,590 --> 00:04:31,301
+filter.
+The third and last form of for-expressions
+
+56
+00:04:31,301 --> 00:04:37,306
+that we need to cover is the one where, a
+leading generator is followed now, not by
+
+57
+00:04:37,306 --> 00:04:42,651
+a filter, but by another generator, and
+that in turn, can be followed by an
+
+58
+00:04:42,651 --> 00:04:46,093
+arbitrary sequence of filters and
+generators s.
+
+59
+00:04:46,093 --> 00:04:52,243
+That for-expression will be translated
+into a call of flatMap so the idea here is
+
+60
+00:04:52,243 --> 00:04:59,385
+that, if we take the for-expression that
+takes all the remaining computations,
+
+61
+00:04:59,385 --> 00:05:03,759
+So we generate a y from e2,
+Then we do something more and then we
+
+62
+00:05:03,759 --> 00:05:07,257
+yield e3.
+That will be a collection valued operation
+
+63
+00:05:07,257 --> 00:05:12,303
+because we have a generator here.
+And what we need to do is we need to take
+
+64
+00:05:12,303 --> 00:05:16,609
+everything that comes out of this
+for-expression and flatMap it.
+
+65
+00:05:16,609 --> 00:05:21,925
+That means concatenate it all into the
+result list. That's precisely what happens
+
+66
+00:05:21,925 --> 00:05:24,862
+here.
+So, we do, do an e1 flatMap. with a
+
+67
+00:05:24,862 --> 00:05:31,513
+function that takes an x, and gives us
+back a for-expression that has now one
+
+68
+00:05:31,513 --> 00:05:36,170
+fewer generator.
+So, it starts with the generator y taken
+
+69
+00:05:36,170 --> 00:05:42,273
+from e2 and s, and then we get back e3.
+So, what happened in the first case was a
+
+70
+00:05:42,273 --> 00:05:47,514
+direct translation into a map.
+What happened in the second and third case
+
+71
+00:05:47,514 --> 00:05:53,330
+was that we translated a for-expression
+into one that has one less element, so it
+
+72
+00:05:53,330 --> 00:05:56,992
+either has one fewer filter or one fewer
+generator.
+
+73
+00:05:56,992 --> 00:06:01,300
+This one here had one fewer filter.
+The filter here has gone.
+
+74
+00:06:01,300 --> 00:06:06,153
+Whereas, this one here has a
+for-expression, a nested for-expression,
+
+75
+00:06:06,153 --> 00:06:11,731
+that now lacks the first generator.
+So, each of these translation steps can be
+
+76
+00:06:11,731 --> 00:06:17,236
+repeated, yielding simpler and simpler
+for-expressions, until finally, we must
+
+77
+00:06:17,236 --> 00:06:21,800
+hit the simplest case, and that, then,
+would translate into a map.
+
+78
+00:06:22,180 --> 00:06:25,364
+So, that's how the translation scheme
+works.
+
+79
+00:06:25,364 --> 00:06:30,623
+Let's see it as, in an example.
+Let's take our for-expression that looks
+
+80
+00:06:30,623 --> 00:06:34,030
+at the pairs of indices whose sum is
+prime.
+
+81
+00:06:34,030 --> 00:06:38,919
+So, that was our for-expression.
+If we apply our translation scheme
+
+82
+00:06:38,919 --> 00:06:43,363
+mechanically, we would be left with this
+for-expression here.
+
+83
+00:06:43,363 --> 00:06:48,177
+So, the first one here, we have i until n,
+That's what you see here.
+
+84
+00:06:48,177 --> 00:06:54,221
+It's a generator followed by a generator,
+so I have a flatMap. the method
+
+85
+00:06:54,221 --> 00:07:01,396
+for-expression would take the generator
+one until i, that's the one here that is
+
+86
+00:07:01,396 --> 00:07:06,011
+followed by a filter,
+So we have a filter here, with a call to
+
+87
+00:07:06,011 --> 00:07:09,870
+withFilter, and the call to the isPrime
+predicate.
+
+88
+00:07:09,870 --> 00:07:15,620
+And finally the whole thing gets mapped to
+a map where we form the paths.
+
+89
+00:07:15,620 --> 00:07:20,866
+What's noteworthy is that this is almost
+exactly the expression we came up with
+
+90
+00:07:20,866 --> 00:07:24,079
+first.
+If you compare notes to what we had in the
+
+91
+00:07:24,079 --> 00:07:27,096
+last session, you'll find only two
+differences.
+
+92
+00:07:27,096 --> 00:07:30,310
+One was we use now withFilter instead of
+filter.
+
+93
+00:07:30,310 --> 00:07:34,499
+We've explained that already.
+It's just to save on allocations of
+
+94
+00:07:34,499 --> 00:07:38,688
+intermediary data structures.
+And the second one is, we do the filter
+
+95
+00:07:38,688 --> 00:07:42,384
+slightly earlier.
+We do it as soon as we generate the second
+
+96
+00:07:42,384 --> 00:07:46,204
+index whereas, before we did it, once we
+had generated the pair.
+
+97
+00:07:46,204 --> 00:07:49,407
+But that's just a minor transposition of
+operations.
+
+98
+00:07:49,407 --> 00:07:52,180
+The end result, of course, is exactly the
+same.
+
+99
+00:07:52,980 --> 00:07:58,174
+So, here is an exercise for you.
+Remember, the queries we had on the books
+
+100
+00:07:58,174 --> 00:08:04,017
+data base, one of them was give me the
+title of all books that have author with a
+
+101
+00:08:04,017 --> 00:08:07,552
+certain name.
+Your task is to take this query and
+
+102
+00:08:07,552 --> 00:08:13,035
+translate it to a query that does not use
+the for-expression, but only uses
+
+103
+00:08:13,035 --> 00:08:17,075
+higher-order functions.
+So, how would you solve that exercise?
+
+104
+00:08:17,075 --> 00:08:21,187
+Well, let's follow the schema that we have
+seen previously.
+
+105
+00:08:21,187 --> 00:08:27,742
+So, we would start with books.
+And we have two leading generators so that
+
+106
+00:08:27,742 --> 00:08:35,650
+it would lead to a flatMap where our
+function takes the variable to the left of
+
+107
+00:08:35,650 --> 00:08:42,563
+the generator, and we follow with a
+for-expression that contains the rest.
+
+108
+00:08:42,563 --> 00:08:58,752
+So, that would be for a followed by
+b.authors if a starts with Bird yield
+
+109
+00:08:58,752 --> 00:09:08,783
+b.title. But now, we have to take this
+second for-expression here and translate
+
+110
+00:09:08,783 --> 00:09:13,751
+in term, I will, for the moment, just
+write the result underneath.
+
+111
+00:09:13,751 --> 00:09:19,586
+So, what we see is it's a generator
+followed by a filter, so that means you
+
+112
+00:09:19,586 --> 00:09:28,320
+pull the filter in to the generator, so
+that would be for A, a taken from
+
+113
+00:09:28,320 --> 00:09:40,111
+b.authors withFilter and then we take the
+a again,
+
+114
+00:09:40,111 --> 00:09:58,230
+A a.startswith Bird and we yield b.title.
+Then, remove the first one.
+
+115
+00:09:58,230 --> 00:10:01,559
+So, we still have a for-expression to
+translate.
+
+116
+00:10:01,559 --> 00:10:06,658
+This one here now has a signal generator,
+so it would translate to a map.
+
+117
+00:10:06,658 --> 00:10:10,411
+So, let's do that.
+We take the generator, that would be
+
+118
+00:10:10,411 --> 00:10:32,382
+b.authors withFilter a, a startswith Bird.
+And now, we take this one here, and map
+
+119
+00:10:32,382 --> 00:10:43,862
+it, if the function y and return y.title.
+So, that's the end result.
+
+120
+00:10:43,862 --> 00:10:50,014
+It's a flatMap followed by a map of a
+generator that contains a withFilter.
+
+121
+00:10:50,014 --> 00:10:55,781
+Interestingly, the translation of for is
+not just limited to just lists or
+
+122
+00:10:55,781 --> 00:11:01,395
+sequences or even collections.
+All that we needed for the translation was
+
+123
+00:11:01,395 --> 00:11:07,777
+the presence of methods map, flatMap, and
+withFilter because that, that was what we
+
+124
+00:11:07,777 --> 00:11:11,699
+translated into.
+So, that means that you can use the
+
+125
+00:11:11,699 --> 00:11:15,160
+for-expression index for your types as
+well.
+
+126
+00:11:15,160 --> 00:11:20,870
+All you need is to define map, flatMap,
+and withFilter for a type on which you
+
+127
+00:11:20,870 --> 00:11:25,582
+want to use for-expressions.
+And there actually a lot of types for
+
+128
+00:11:25,582 --> 00:11:31,650
+which this is useful what comes to mind is
+kinds of collections such as arrays or
+
+129
+00:11:31,650 --> 00:11:37,075
+iterators, databases, XML data, optional
+values, for-expressions are defined on
+
+130
+00:11:37,075 --> 00:11:40,430
+option as well, parses, and many others as
+well.
+
+131
+00:11:40,430 --> 00:11:45,927
+So, to stay with database, for example,
+books might not be a list or set but a
+
+132
+00:11:45,927 --> 00:11:51,685
+database stored of some server with data
+kept on disc as long as the client
+
+133
+00:11:51,685 --> 00:11:56,815
+interface to the database defines methods
+map, flatMap, and withFilter.
+
+134
+00:11:56,815 --> 00:12:00,236
+You can use for syntax for querying the
+database.
+
+135
+00:12:00,236 --> 00:12:05,572
+And that's the basis of some popular
+database connection frameworks for Scala,
+
+136
+00:12:05,572 --> 00:12:11,250
+which are called ScalaQuery and Slick.
+And similar ideas also underly Microsoft's
+
+137
+00:12:11,250 --> 00:12:16,927
+LINQ, language integrated query framework,
+Which lets you write expressions close to
+
+138
+00:12:16,927 --> 00:12:20,485
+for-expressions,
+The C# versions of them is slightly
+
+139
+00:12:20,485 --> 00:12:22,948
+different,
+And map them to databases.
