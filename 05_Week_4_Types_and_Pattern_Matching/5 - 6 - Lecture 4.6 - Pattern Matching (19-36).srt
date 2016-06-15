@@ -1,0 +1,1129 @@
+1
+00:00:00,000 --> 00:00:04,875
+We've seen in the previous session that
+all our attempts of decomposition were
+
+2
+00:00:04,875 --> 00:00:10,001
+failing because of one reason or another.
+In this session we are going to introduce
+
+3
+00:00:10,001 --> 00:00:13,940
+a new tool in the functional program as
+tool box pattern matching.
+
+4
+00:00:13,940 --> 00:00:18,815
+We will show how pattern matching is a
+good fit for the problem of decomposition.
+
+5
+00:00:18,815 --> 00:00:23,691
+So remember the task we were trying to
+solve is find the general and convenient
+
+6
+00:00:23,691 --> 00:00:27,130
+way to access objects in an extensible
+class hierarchy.
+
+7
+00:00:27,130 --> 00:00:32,330
+The class hierarchy we were looking at was
+those of arithmetic expressions.
+
+8
+00:00:32,330 --> 00:00:40,000
+We had a base trait expression.
+And then we had sub-classes for number and
+
+9
+00:00:40,000 --> 00:00:49,334
+sum. Then later on we also added
+sub-classes for product and variable to
+
+10
+00:00:49,334 --> 00:00:53,374
+that.
+And in terms of methods, we were looking
+
+11
+00:00:53,374 --> 00:00:58,913
+at eval, that would evaluate one of these
+expression trees using its results.
+
+12
+00:00:58,913 --> 00:01:04,670
+As well as show, that would show a string
+representation of the expression tree.
+
+13
+00:01:04,670 --> 00:01:10,354
+And then finally simplify, which would do
+some algebraic simplifications of an
+
+14
+00:01:10,354 --> 00:01:14,425
+expression tree.
+We've, we've seen three attempts
+
+15
+00:01:14,425 --> 00:01:17,459
+previously and they all had some yes
+comings.
+
+16
+00:01:17,459 --> 00:01:22,365
+The first one was the classification and
+access methods, there we observed a
+
+17
+00:01:22,365 --> 00:01:25,657
+quadratic explosion of the methods we had
+to write.
+
+18
+00:01:25,657 --> 00:01:30,305
+In this class hierarchy here there were 40
+methods that we had to write.
+
+19
+00:01:30,305 --> 00:01:35,210
+The second one was type tests and type
+casts, that did the job but it was unsize
+
+20
+00:01:35,210 --> 00:01:38,505
+at low level.
+And the third one was object oriented
+
+21
+00:01:38,505 --> 00:01:41,737
+decomposition.
+That worked great for evaluation.
+
+22
+00:01:41,737 --> 00:01:46,972
+Worked, worked also great for show, except
+that we had to touch all the classes to
+
+23
+00:01:46,972 --> 00:01:52,271
+add a new method, but it didn't work for
+methods such as simplify, that require non
+
+24
+00:01:52,271 --> 00:01:55,180
+local knowledge, of the, of the, of the
+tree.
+
+25
+00:01:55,860 --> 00:02:02,103
+In this session, we will see a new way to
+decompose objects using pattern matching.
+
+26
+00:02:02,103 --> 00:02:07,965
+An important observation here is that the
+sole purpose of test and access of
+
+27
+00:02:07,965 --> 00:02:11,772
+functions was to reverse the construction
+process.
+
+28
+00:02:11,772 --> 00:02:19,494
+That means when we construct a node such
+as, new sum of e1 and e2, where e1 and e2
+
+29
+00:02:19,494 --> 00:02:23,455
+are expressions.
+Then we pick a particular class of nodes
+
+30
+00:02:23,455 --> 00:02:28,249
+sum, and we pick the arguments.
+And the purpose of decomposition is to
+
+31
+00:02:28,249 --> 00:02:32,000
+recover what kind of constructor we used
+for the note.
+
+32
+00:02:32,000 --> 00:02:37,072
+That it, whether it was a sum or a number,
+say, and what the arguments were.
+
+33
+00:02:37,072 --> 00:02:41,102
+And that situation is, in fact, very
+fundamental and common.
+
+34
+00:02:41,102 --> 00:02:45,827
+It's so common that many functional
+languages, Scala included automate it.
+
+35
+00:02:45,827 --> 00:02:50,760
+And the technical term for this automated
+solution is pattern matching.
+
+36
+00:02:52,160 --> 00:02:56,912
+So we get pattern matching and Scala by
+way of case classes.
+
+37
+00:02:56,912 --> 00:03:02,569
+A case class definition is essentially
+just like a normal class definition,
+
+38
+00:03:02,569 --> 00:03:06,190
+except that it's proceeded by the modifier
+case.
+
+39
+00:03:06,190 --> 00:03:10,640
+So we write case, class, number, instead
+of just class, number.
+
+40
+00:03:10,640 --> 00:03:16,750
+As before, this defines a trait expression
+and two concrete subclasses, number, and
+
+41
+00:03:16,750 --> 00:03:19,994
+sum.
+But we get some added functionality by
+
+42
+00:03:19,994 --> 00:03:26,203
+adding the modifier case.
+The first thing we get is that the Scala
+
+43
+00:03:26,203 --> 00:03:30,766
+compiler will implicity and automatically
+add companion objects.
+
+44
+00:03:30,980 --> 00:03:36,114
+One for number and one for sum.
+And those companion objects will contain
+
+45
+00:03:36,114 --> 00:03:40,677
+factory methods that construct numbers or
+sum elements directly.
+
+46
+00:03:40,677 --> 00:03:46,738
+You've seen last week that you can create
+factory methods like that simply by adding
+
+47
+00:03:46,738 --> 00:03:52,228
+an apply function to an object. Because
+that will let you then write something
+
+48
+00:03:52,228 --> 00:03:58,324
+like, for instance, number of two. We've
+seen last week that this term actually
+
+49
+00:03:58,324 --> 00:04:07,966
+expands into number..apply Apply of two.
+So it will invoke the apply method that we
+
+50
+00:04:07,966 --> 00:04:13,259
+have defined in this object.
+The gist of it is that you can then now
+
+51
+00:04:13,259 --> 00:04:19,408
+construct objects simply by naming the
+class and the arguments, whereas the new
+
+52
+00:04:19,408 --> 00:04:24,390
+keyword here you can drop.
+So, that's a syntactic convenience, but
+
+53
+00:04:24,390 --> 00:04:28,594
+the orchard classes that we have here are
+now all empty.
+
+54
+00:04:28,594 --> 00:04:34,125
+So, how can we access their components?
+And that's what we need pattern matching
+
+55
+00:04:34,125 --> 00:04:37,149
+for.
+So, one way to see pattern matching is as
+
+56
+00:04:37,149 --> 00:04:41,280
+a generalization of the switch statement
+from C or Java.
+
+57
+00:04:41,280 --> 00:04:46,826
+In C or Java, a switch can only be applied
+to numbers, now we can apply to whole
+
+58
+00:04:46,826 --> 00:04:50,937
+class heirarchies.
+In Scala, we use a slightly different some
+
+59
+00:04:50,688 --> 00:04:54,128
+text,.
+Instead of switch e we write e match, and
+
+60
+00:04:54,128 --> 00:04:59,114
+then come a number of cases.
+But to express Eval using pattern matching
+
+61
+00:04:59,114 --> 00:05:04,380
+in Scala, what you would do is we would
+say, well, match the given expression.
+
+62
+00:05:04,380 --> 00:05:09,974
+With a number of patterns, the first
+pattern will say well if it's a number of
+
+63
+00:05:09,974 --> 00:05:15,784
+some given value n, then return that value
+the second expression would say well if
+
+64
+00:05:15,784 --> 00:05:21,595
+it's a sum with sum operand e1 and then
+another operand e2 then evaluate the two
+
+65
+00:05:21,595 --> 00:05:25,760
+operands and form the sum.
+So it's quite legible.
+
+66
+00:05:25,760 --> 00:05:31,542
+So the general form of a pattern-matching
+expression is as follows: We'd start with
+
+67
+00:05:31,542 --> 00:05:36,977
+a selector () expression e, then comes the
+keyword match''' and then come a sequence
+
+68
+00:05:36,977 --> 00:05:40,530
+of cases.
+Each case starts with the keyword'case', a
+
+69
+00:05:40,530 --> 00:05:58,117
+pattern, a right arrow and an expression.
+And the meaning of such an expression
+
+70
+00:05:58,117 --> 00:06:03,192
+would be that we select the expression e
+is matched against all the pattern.
+
+71
+00:06:03,192 --> 00:06:08,868
+The first pattern that matches would then
+lead to the corresponding expression being
+
+72
+00:06:08,868 --> 00:06:14,077
+evaluated, and if none of the pattern
+matches, you would get an exception, which
+
+73
+00:06:14,077 --> 00:06:21,674
+is called a match error.
+So what are patterns built from.
+
+74
+00:06:21,674 --> 00:06:30,708
+One pattern we've seen was number of N so
+that consisted of a constructor that
+
+75
+00:06:30,708 --> 00:06:37,325
+indicated a class and a variable that
+indicated the argument to that class.
+
+76
+00:06:37,325 --> 00:06:43,059
+And in that case the argument to that
+class could be any integer we can't
+
+77
+00:06:43,059 --> 00:06:49,500
+restrict that in the pattern.
+We could also write number of underscore.
+
+78
+00:06:49,960 --> 00:06:56,944
+That would match the same things as the
+number of n but we wouldn't care what the
+
+79
+00:06:56,944 --> 00:07:00,624
+argument was.
+Where as in the number of n the name n
+
+80
+00:07:00,624 --> 00:07:07,421
+then serves to give us the numeric value
+of that number and underscore just means
+
+81
+00:07:07,421 --> 00:07:11,679
+it's a don't care.
+You cannot refer to it later on.
+
+82
+00:07:11,679 --> 00:07:16,620
+Patterns can also be constants such as one
+or true or abc.
+
+83
+00:07:17,720 --> 00:07:23,974
+Or there could also be a constant set,
+let's say N, where N was, like, defined as
+
+84
+00:07:23,974 --> 00:07:29,186
+well, N=2.2.so So we can use name
+constants as well as constant literals.
+
+85
+00:07:29,186 --> 00:07:35,440
+And then you can take these building
+blocks, and compose com-, more complicated
+
+86
+00:07:35,440 --> 00:07:40,732
+map- patterns from them.
+So one example for that would be a pattern
+
+87
+00:07:40,732 --> 00:07:50,643
+that reads a sum of, let's say number one
+and the second operand would be a variable
+
+88
+00:07:50,643 --> 00:07:56,833
+x. So that would match objects which are
+sums with their left operant that is a
+
+89
+00:07:56,833 --> 00:08:00,378
+number.
+And the number needs to have a numeric
+
+90
+00:08:00,378 --> 00:08:04,385
+value one.
+And the right operand of the sum needs to
+
+91
+00:08:04,385 --> 00:08:08,931
+be a node of type Var.
+And the name field of the Var can be
+
+92
+00:08:08,931 --> 00:08:14,787
+anything but after the pattern in the
+right-hand side where we then use the
+
+93
+00:08:14,787 --> 00:08:19,257
+expression we can refer to x as the name
+of that variable.
+
+94
+00:08:19,257 --> 00:08:26,530
+We'll see an example in a minute.
+So here's some of the fine print.
+
+95
+00:08:26,530 --> 00:08:33,728
+One tricky bit is how to distinguish a
+variable such as N which can match
+
+96
+00:08:33,728 --> 00:08:38,290
+anything from a constant.
+Such as N,
+
+97
+00:08:38,290 --> 00:08:42,592
+Which, in this case, matches just the
+number two and nothing else.
+
+98
+00:08:42,592 --> 00:08:47,297
+Syntactically, we need to find a way to
+distinguish one from the other.
+
+99
+00:08:47,297 --> 00:08:52,876
+So the convention Scala uses here is that
+variables always must begin with a lower
+
+100
+00:08:52,876 --> 00:08:56,237
+case letter.
+Whereas, constants should begin with a
+
+101
+00:08:56,237 --> 00:09:00,069
+capital letter.
+The only exceptions here are the reserved
+
+102
+00:09:00,069 --> 00:09:04,573
+words, null, true, and false.
+But these are literals that the compiler
+
+103
+00:09:04,573 --> 00:09:08,327
+knows about.
+There's another restriction on variables,
+
+104
+00:09:08,327 --> 00:09:13,574
+and that's that the same variable name can
+only appear once in a pattern.
+
+105
+00:09:13,574 --> 00:09:19,110
+So for instance, sum of x,x is not a legal
+pattern, you have to write sum of x,y
+
+106
+00:09:19,110 --> 00:09:25,343
+instead.
+So now we know what the form of match
+
+107
+00:09:25,343 --> 00:09:30,109
+expressions and patterns is.
+The question is how are they evaluated.
+
+108
+00:09:30,109 --> 00:09:36,013
+So let's take an expression of the form
+that we've seen that would match the value
+
+109
+00:09:36,013 --> 00:09:41,277
+of the selector E with the patterns P1 to
+PN in the order they're written.
+
+110
+00:09:41,277 --> 00:09:46,968
+On the next slide, we'll see what that
+means exactly, matching an expression with
+
+111
+00:09:46,968 --> 00:09:50,792
+a pattern.
+If a pattern matches, then the whole
+
+112
+00:09:50,792 --> 00:09:56,940
+expression is rewritten to the right hand
+side of the first pattern that matches.
+
+113
+00:09:56,940 --> 00:10:03,393
+And when we do that, the reference is to
+pattern variables in the pattern here out
+
+114
+00:10:03,393 --> 00:10:06,687
+of place by corresponding parts and the
+selector.
+
+115
+00:10:06,687 --> 00:10:10,990
+But what does, does it mean that a pattern
+matches an expression?
+
+116
+00:10:10,990 --> 00:10:15,360
+Well, we look at the possible forms of
+patterns to determine that.
+
+117
+00:10:15,360 --> 00:10:20,334
+Let's say we have a constructive pattern.
+So, there's a class name and some
+
+118
+00:10:20,334 --> 00:10:25,981
+arguments that would match all values of
+type C or a sub type of type C that's also
+
+119
+00:10:25,981 --> 00:10:29,276
+legal.
+That have been constructed with arguments
+
+120
+00:10:29,276 --> 00:10:35,313
+that, in turn.
+Match the patterns P1 one to Pn. If, if
+
+121
+00:10:35,313 --> 00:10:40,282
+the pattern is a variable pattern, x, and
+that matches any value.
+
+122
+00:10:40,282 --> 00:10:45,251
+And it also will bind the name of the
+variable x to this value.
+
+123
+00:10:45,251 --> 00:10:51,324
+So, in the, in the associated expression
+we can then use x as the name for the
+
+124
+00:10:51,324 --> 00:10:55,804
+value that is matched.
+And the third case was a constant pattern
+
+125
+00:10:55,804 --> 00:11:01,032
+C, so this one matches any value that is
+equal to C, where equality is understood
+
+126
+00:11:01,032 --> 00:11:05,737
+in the sense of equal sequels.
+So these rules might have sounded dry and
+
+127
+00:11:05,737 --> 00:11:09,920
+difficult but it will all become clear if
+we look at an example.
+
+128
+00:11:09,920 --> 00:11:15,651
+So let's look at an application of our
+evaluation function which I have put up
+
+129
+00:11:15,651 --> 00:11:21,019
+here on the side with a trade sum of
+number one, number two as an argument.
+
+130
+00:11:21,019 --> 00:11:26,968
+Well the first thing that we would do as
+usual is rewrite that application by the
+
+131
+00:11:26,968 --> 00:11:31,973
+body of Eval, where the actual argument
+replaces the former parameter.
+
+132
+00:11:31,973 --> 00:11:37,777
+So the result is this expression here.
+The E variable here gets substituted with
+
+133
+00:11:37,777 --> 00:11:41,840
+the actual argument sum of number one, sum
+of number two.
+
+134
+00:11:42,180 --> 00:11:46,152
+The next step is, we have to evaluate the
+match expression.
+
+135
+00:11:46,152 --> 00:11:51,838
+What we need to do here is we have to
+match the selector expression against all
+
+136
+00:11:51,838 --> 00:11:55,674
+the patterns.
+The first one doesn't match, because the
+
+137
+00:11:55,674 --> 00:11:59,030
+constructor is different.
+The second one does match,
+
+138
+00:11:59,030 --> 00:12:02,935
+Sum matches sum.
+And that means that the two variables, e1
+
+139
+00:12:02,935 --> 00:12:06,350
+and e2 will be bound to number one and
+number two.
+
+140
+00:12:06,350 --> 00:12:11,876
+And after that, the expression, all
+expression will rewrite to the right hand
+
+141
+00:12:11,876 --> 00:12:15,982
+side expression here, which is Eval one
+plus Eval two.
+
+142
+00:12:15,995 --> 00:12:21,791
+So that means we're left with Eval. Now,
+instead of e1 we use, we would use number
+
+143
+00:12:21,791 --> 00:12:22,350
+one.
+We,
+
+144
+00:12:22,350 --> 00:12:24,553
+We would use number one.
+The, value that was bound to the variable
+
+145
+00:12:24,294 --> 00:12:26,948
+and instead.instead Of e2, we use number
+two.
+
+146
+00:12:26,951 --> 00:12:32,136
+So, the next step, then, would be that we
+have to rewrite the function application
+
+147
+00:12:32,136 --> 00:12:35,765
+on the left here.
+So what we get here is this expression
+
+148
+00:12:35,765 --> 00:12:38,746
+here.
+We have a selector of number one and the
+
+149
+00:12:38,746 --> 00:12:42,246
+match expression, which is the right hand
+side of eval.
+
+150
+00:12:42,246 --> 00:12:46,070
+And then that's the rest that we have to
+add to the result.
+
+151
+00:12:46,070 --> 00:12:51,634
+If we look at the match expression then
+now we see the first pattern is the one
+
+152
+00:12:51,634 --> 00:12:54,902
+that matches, the number is the same thing
+here.
+
+153
+00:12:54,902 --> 00:13:00,606
+The variable end that's bound to one and
+that's the thing we return so one is the
+
+154
+00:13:00,606 --> 00:13:06,448
+number we return and afterwards we need to
+do an eval of number which will give two
+
+155
+00:13:06,448 --> 00:13:10,273
+as by the same reasoning as what we have
+seen just now.
+
+156
+00:13:10,273 --> 00:13:15,083
+So, there always have to three.
+So far all our pattern matching methods
+
+157
+00:13:15,083 --> 00:13:20,190
+were defined outside of the class
+hierarchy, so where there was decomposing
+
+158
+00:13:20,190 --> 00:13:24,684
+classes from the outside.
+But it's also perfectly possible to have
+
+159
+00:13:24,684 --> 00:13:30,063
+pattern matching methods inside the class
+hierarchy as methods of base classes
+
+160
+00:13:30,063 --> 00:13:33,672
+themselves.
+Such as the Eval method that you see here.
+
+161
+00:13:33,672 --> 00:13:39,119
+So that is just the same as the previous
+eval method except now we match on the
+
+162
+00:13:39,119 --> 00:13:43,000
+receiver object itself.
+So you see how this stuff match.
+
+163
+00:13:43,000 --> 00:13:46,392
+And instead of writing eval of e what,
+Of e here.
+
+164
+00:13:46,392 --> 00:13:53,285
+It would be e1.eval because eval is now a
+method of, of, the trait expression.
+
+165
+00:13:53,285 --> 00:13:59,759
+Either one is perfectly acceptable.
+Once you've done that you might also ask
+
+166
+00:13:59,759 --> 00:14:06,110
+well what are the trade-offs to do it this
+way or with the previous object-oriented
+
+167
+00:14:06,110 --> 00:14:12,234
+decompositions solution we've seen, where
+we had essentially be the base trait exper
+
+168
+00:14:12,234 --> 00:14:17,980
+and the def eval, which was empty and then
+in some, there would be a def Eval,
+
+169
+00:14:17,980 --> 00:14:23,220
+Which was concrete and in number there
+would be another.
+
+170
+00:14:28,400 --> 00:14:33,888
+Both of these designs are perfectly fine
+and choosing between them is sometimes a
+
+171
+00:14:33,888 --> 00:14:38,640
+matter of style, but then nevertheless
+there are some criteria that are
+
+172
+00:14:38,640 --> 00:14:42,256
+important.
+One criteria could be, are you more often
+
+173
+00:14:42,256 --> 00:14:48,150
+creating new sub-classes of expression or
+are you more often creating new methods?
+
+174
+00:14:48,150 --> 00:14:53,613
+So it's a criterion that looks at the
+future extensibility and the possible
+
+175
+00:14:53,613 --> 00:14:58,387
+extension pass of your system.
+If what you do is mostly creating new
+
+176
+00:14:58,387 --> 00:15:03,622
+subclasses, then actually the object
+oriented decomposition solution has the
+
+177
+00:15:03,622 --> 00:15:07,136
+upper hand.
+The reason is that it's very easy and a
+
+178
+00:15:07,136 --> 00:15:12,647
+very local change to just create a new
+subclass with an eval method, where as in
+
+179
+00:15:12,647 --> 00:15:18,295
+the functional solution, you'd have to go
+back and change the code inside the eval
+
+180
+00:15:18,295 --> 00:15:24,268
+method and add a new case to it.
+On the other hand, if what you do will be
+
+181
+00:15:24,268 --> 00:15:28,911
+create lots of new methods.
+But the class hierarchy itself will be
+
+182
+00:15:28,911 --> 00:15:32,747
+kept relatively stable.
+Then pattern matching is actually
+
+183
+00:15:32,747 --> 00:15:36,111
+advantageous.
+Because, again, each new method in the
+
+184
+00:15:36,111 --> 00:15:41,494
+pattern matching solution is just a local
+change, whether you put it in the base
+
+185
+00:15:41,494 --> 00:15:44,724
+class, or maybe even outside the class
+hierarchy.
+
+186
+00:15:44,724 --> 00:15:49,906
+Whereas a new method such as show in the
+object oriented decomposition would
+
+187
+00:15:49,906 --> 00:15:53,068
+require a new incrementation is each sub
+class.
+
+188
+00:15:53,068 --> 00:15:56,450
+So there would be more parts,
+That you have to touch.
+
+189
+00:15:56,450 --> 00:16:02,227
+So the problematic of this extensibility
+in two dimensions, where you might want to
+
+190
+00:16:02,227 --> 00:16:07,586
+add new classes to a hierarchy, or you
+might want to add new methods, or maybe
+
+191
+00:16:07,586 --> 00:16:10,580
+both, has been named the expression
+problem.
+
+192
+00:16:11,120 --> 00:16:16,991
+The name actually comes from this very
+example of arithmetic expression, which
+
+193
+00:16:16,991 --> 00:16:22,411
+served as a case study for the discussion.
+Let's finish with an exercise.
+
+194
+00:16:22,637 --> 00:16:27,906
+We've talked about the show function, I
+would like you to implement it.
+
+195
+00:16:28,132 --> 00:16:34,531
+So what I'm after is a show function that
+takes an expression and gives you a string
+
+196
+00:16:34,531 --> 00:16:41,699
+that represents that expression.
+Okay.
+
+197
+00:16:41,699 --> 00:16:47,927
+So let's see how we would do that.
+What I've given you here is, the hierarchy
+
+198
+00:16:47,927 --> 00:16:54,914
+consisting of the trait expression and the
+two case classes number and sum that we've
+
+199
+00:16:54,914 --> 00:17:00,002
+seen in the course before.
+What we're going to do is a worksheet in
+
+200
+00:17:00,002 --> 00:17:03,799
+which we are going to implement the show
+function.
+
+201
+00:17:03,799 --> 00:17:09,039
+So what should show be like?
+Well, we would want to do a pattern match
+
+202
+00:17:09,039 --> 00:17:13,140
+on the expression.
+And then we would have two patterns.
+
+203
+00:17:13,140 --> 00:17:17,251
+One was number.
+It could be any number x, and the other
+
+204
+00:17:17,251 --> 00:17:23,650
+one would be some, call it left and right.
+And, In each case, we have to decide what
+
+205
+00:17:23,650 --> 00:17:28,069
+we want to return.
+In the first case, we would just convert
+
+206
+00:17:28,069 --> 00:17:33,706
+the number X to a string, and in the
+second case, we would just concatenate,
+
+207
+00:17:33,935 --> 00:17:41,536
+the result of showing the left hand
+operand with a plus in the middle and the
+
+208
+00:17:41,536 --> 00:17:48,910
+result of showing the right hand operand.
+So, if you show expression itself, we'd
+
+209
+00:17:48,910 --> 00:17:58,834
+have type, we can type string.
+So let's test the function with some
+
+210
+00:17:58,834 --> 00:18:06,605
+argument tree as expression.
+So, I would do show of, let's say, the sum
+
+211
+00:18:06,605 --> 00:18:16,083
+of, number of one and number of 44.
+What would we get, are, we would get the
+
+212
+00:18:16,083 --> 00:18:21,666
+string one plus 44 as expected.
+So if you haven't had enough of it yet,
+
+213
+00:18:21,666 --> 00:18:27,911
+then here is another exercise for you,
+which is optional and much harder than the
+
+214
+00:18:27,911 --> 00:18:31,766
+first one.
+The question is, if you add case classes
+
+215
+00:18:31,766 --> 00:18:37,471
+Var for variables and prod for products,
+how would you have to change your
+
+216
+00:18:37,471 --> 00:18:42,097
+definition of show?
+The challenge here is to get parentheses
+
+217
+00:18:42,097 --> 00:18:45,797
+right.
+So let's say we have a tree such as a sum
+
+218
+00:18:45,797 --> 00:18:50,142
+of a product.
+Of, a number two and a variable X.
+
+219
+00:18:50,142 --> 00:18:55,975
+I'm not gonna bother to write numbers and
+variables in, in, the, the tree form.
+
+220
+00:18:55,975 --> 00:19:01,962
+Then, what you would expect is that you
+could print that just like two times x
+
+221
+00:19:01,962 --> 00:19:11,600
+plus y Whereas, if you reversed it, and
+you had a product of sum of 2x and y.
+
+222
+00:19:12,920 --> 00:19:16,937
+Then what you'd want to see is two + x in
+parentheses times y.
+
+223
+00:19:16,937 --> 00:19:22,245
+Because otherwise, if you would just write
+two times x plus y, that wouldn't reflect
+
+224
+00:19:22,245 --> 00:19:27,554
+the structure of this tree.
+So the challenge is to put in the right
+
+225
+00:19:27,554 --> 00:19:33,365
+number of parentheses, the minimal number
+of parentheses, so that the structure of
+
+226
+00:19:33,365 --> 00:19:36,450
+the tree is reflected in the output
+stream.

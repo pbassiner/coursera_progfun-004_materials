@@ -1,0 +1,1098 @@
+1
+00:00:00,000 --> 00:00:05,642
+To recap, the fundamental types you've
+seen in the previous sessions were
+
+2
+00:00:05,642 --> 00:00:11,657
+primitive types, functions and classes.
+It's fair to ask whether these three forms
+
+3
+00:00:11,657 --> 00:00:17,097
+of types are necessary or whether we could
+express maybe our types as classes?
+
+4
+00:00:17,097 --> 00:00:21,463
+We'll discuss that question in this
+section and the next one.
+
+5
+00:00:21,463 --> 00:00:26,903
+First in this session we'll look at
+primitive types and see how they can be
+
+6
+00:00:26,903 --> 00:00:30,949
+represented as classes.
+So, so far we've seen Scala as a
+
+7
+00:00:30,949 --> 00:00:36,122
+functional programming language.
+I'm now going to argue that Scala is
+
+8
+00:00:36,122 --> 00:00:40,620
+actually also object oriented, and that
+it's object oriented and that it's object
+
+9
+00:00:40,620 --> 00:00:45,167
+oriented in a very pure form.
+So a pure object oriented language, the
+
+10
+00:00:45,167 --> 00:00:50,871
+definition would be one in which every
+value is an object, and also every
+
+11
+00:00:50,871 --> 00:00:55,481
+operation is then essentially a method
+call on some object.
+
+12
+00:00:55,481 --> 00:01:02,044
+If the language is based on classes this
+means that the type of each value would be
+
+13
+00:01:02,044 --> 00:01:05,336
+a class.
+So now lets ask ourselves, is color pure
+
+14
+00:01:05,336 --> 00:01:09,535
+object oriented language?
+At first glance there seemed to be some
+
+15
+00:01:09,535 --> 00:01:13,068
+exceptions.
+For instance we have seem primitive types
+
+16
+00:01:13,068 --> 00:01:16,267
+such as [UNKNWON] and double of these
+objects.
+
+17
+00:01:16,267 --> 00:01:20,533
+We've also seen functions.
+They don't look like objects at first
+
+18
+00:01:20,533 --> 00:01:27,532
+glance, but lets look somewhat closer.
+Let's look at the primitive types first.
+
+19
+00:01:27,532 --> 00:01:32,904
+So the standard classes such as Int or
+booleans conceptually they actually don't
+
+20
+00:01:32,904 --> 00:01:38,343
+receive any special treatment in Scala.
+You can treat them just like other classes
+
+21
+00:01:38,343 --> 00:01:42,190
+you find in the packaged Scala subclasses
+of class eneval.
+
+22
+00:01:42,190 --> 00:01:47,743
+It's true that for reasons of efficiency
+in the Int this scala compiler will
+
+23
+00:01:47,743 --> 00:01:53,730
+represent the values of types scala Int
+say by 32-bit integers, the values of type
+
+24
+00:01:53,730 --> 00:01:59,455
+scala booleans by java booleans and so on.
+But that, you could treat simply as an
+
+25
+00:01:59,455 --> 00:02:05,199
+optimization and as a measure to improve
+the interoperability between Scala code
+
+26
+00:02:05,199 --> 00:02:09,100
+and Java code.
+Conceptually, these things can be treated
+
+27
+00:02:09,100 --> 00:02:13,923
+just like normal classes.
+And instances of integer can, or Boolean
+
+28
+00:02:13,923 --> 00:02:20,173
+can be treated just like normal objects.
+So let's see how this could be done.
+
+29
+00:02:20,173 --> 00:02:25,012
+You know that the Boolean type maps to the
+JVMs primitive type Boolean.
+
+30
+00:02:25,012 --> 00:02:30,532
+But one can define it as a class without
+any changes in the user code from first
+
+31
+00:02:30,532 --> 00:02:33,803
+principles without resort to primitive
+Booleans.
+
+32
+00:02:33,803 --> 00:02:38,710
+Here's how this could be done.
+We put it in a package idealized Scala to
+
+33
+00:02:38,710 --> 00:02:43,889
+make clear that's actually, the class
+Boolean that is not the same as the
+
+34
+00:02:43,889 --> 00:02:46,820
+primitive type that we use in normal
+Scala.
+
+35
+00:02:46,820 --> 00:02:52,359
+That class Boolean here, then.
+It would have one abstract method which we
+
+36
+00:02:52,359 --> 00:02:55,745
+call ifThenElse. It's a parameterized
+method.
+
+37
+00:02:55,745 --> 00:02:59,592
+It, it contains a type parameter T and the
+then part,
+
+38
+00:02:59,592 --> 00:03:04,285
+Which I- I'm calling here simply T, and an
+Else part.
+
+39
+00:03:04,285 --> 00:03:09,209
+Both the Then part and the Else part take
+an expression of type T.
+
+40
+00:03:09,209 --> 00:03:12,980
+And the result of the ifThenElse, then,
+would be T.
+
+41
+00:03:12,980 --> 00:03:19,951
+So the idea would be that I would write,
+instead of if some condition, Boolean
+
+42
+00:03:19,951 --> 00:03:24,478
+condition.
+And then some then expression Else, Else
+
+43
+00:03:24,478 --> 00:03:29,367
+expression.
+I would translate that to the if then else
+
+44
+00:03:29,367 --> 00:03:34,800
+method call of my condition,
+So it would be condition.ifThenElse,
+
+45
+00:03:35,049 --> 00:03:40,293
+Then whatever type t-e and e-e would have
+I'm leaving that out.
+
+46
+00:03:40,293 --> 00:03:46,369
+And I'll pass t-e and e-e as the two
+arguments to the ifThenElse method.
+
+47
+00:03:46,369 --> 00:03:50,780
+That will be the translation for
+simulating Booleans.
+
+48
+00:03:50,780 --> 00:03:57,131
+Now once I have ifThenElse, how would I
+define the other operators on Booleans
+
+49
+00:03:57,131 --> 00:04:01,547
+like the conjunction and disjunction,
+double am- ampersand.
+
+50
+00:04:01,547 --> 00:04:07,668
+Actually turns out that all the other
+operations on Booleans can be defined in
+
+51
+00:04:07,668 --> 00:04:12,240
+terms of ifThenElse.
+So let's look at && for instance.
+
+52
+00:04:12,560 --> 00:04:18,473
+The & operation would take another
+boolean, or rather an expression of type
+
+53
+00:04:18,473 --> 00:04:24,770
+boolean, because we know that it will be
+evaluated in a short-circuited fashion.
+
+54
+00:04:24,770 --> 00:04:28,840
+And it would then call ifThenElse with x
+and false.
+
+55
+00:04:28,840 --> 00:04:36,048
+So what this means is that, if the Boolean
+itself is true, then you would return the
+
+56
+00:04:36,048 --> 00:04:39,435
+second argument,
+The Boolean argument x.
+
+57
+00:04:39,435 --> 00:04:46,036
+On the other hand, if the left hand
+operant, the Boolean here itself is false,
+
+58
+00:04:46,036 --> 00:04:51,513
+then the result is immediately false.
+And the same tricks you can also apply to
+
+59
+00:04:51,513 --> 00:04:56,101
+all the other methods on Booleans.
+So for instance, for the disjunction here,
+
+60
+00:04:56,101 --> 00:05:00,261
+you'd again take the call by name
+parameter x, that's the right hand
+
+61
+00:05:00,261 --> 00:05:03,137
+operand.
+And it says, well, if the Boolean itself
+
+62
+00:05:03,137 --> 00:05:05,828
+is true, then the result is immediately
+true.
+
+63
+00:05:05,828 --> 00:05:10,417
+Whereas if the, the boolean itself is
+false, then the result is whatever the
+
+64
+00:05:10,417 --> 00:05:15,198
+right hand side argument is.
+The third one would be the not-negational
+
+65
+00:05:15,198 --> 00:05:18,340
+operation, which we write here as
+unary-not.
+
+66
+00:05:18,340 --> 00:05:24,257
+So unary-not would simply be implemented
+as ifThenElse false, true, that means if
+
+67
+00:05:24,257 --> 00:05:27,399
+the Boolean itself is true, we return
+false.
+
+68
+00:05:27,399 --> 00:05:30,760
+If the Boolean itself is false, we return
+true.
+
+69
+00:05:31,540 --> 00:05:34,911
+Let's look at the equality and disequality
+next.
+
+70
+00:05:34,911 --> 00:05:40,602
+We would say well, if, to find out whether
+two Booleans are equal, we can go to the
+
+71
+00:05:40,602 --> 00:05:44,676
+ifThenElse method.
+And say, well, if the Boolean itself is
+
+72
+00:05:44,676 --> 00:05:48,118
+true, then the result is whatever the
+argument is.
+
+73
+00:05:48,118 --> 00:05:52,474
+So, if the argument is also true, then the
+result would be true.
+
+74
+00:05:52,474 --> 00:05:56,759
+If the argument is false, then the equals
+test would be false.
+
+75
+00:05:56,759 --> 00:06:01,887
+So the result of the equals test is
+exactly the same as the value of the
+
+76
+00:06:01,887 --> 00:06:05,775
+argument.
+On the other hand, if the current Boolean
+
+77
+00:06:05,775 --> 00:06:10,659
+is false then the result would be the
+negation of the argument.
+
+78
+00:06:10,659 --> 00:06:14,380
+Let's again go through the, the
+possibilities.
+
+79
+00:06:14,380 --> 00:06:20,814
+So we say the current Boolean is false,
+the argument is false then the equality
+
+80
+00:06:20,814 --> 00:06:25,470
+test should give true.
+And, here we would have the negation
+
+81
+00:06:25,470 --> 00:06:30,962
+operator on the argument false, so we
+would get true, that's correct.
+
+82
+00:06:30,962 --> 00:06:36,946
+If the argument on the other hand is TRUE,
+the, the result should be FALSE.
+
+83
+00:06:36,946 --> 00:06:43,011
+False equals to TRUE get FALSE and again,
+here TRUE.unary bang gives FALSE.
+
+84
+00:06:43,011 --> 00:06:46,700
+And, for not equal, it is completely
+analogous.
+
+85
+00:06:47,280 --> 00:06:52,600
+So once we have that outline, we still
+have to define the Boolean constants false
+
+86
+00:06:52,600 --> 00:06:56,016
+and true.
+By now, it should be clear that the, this
+
+87
+00:06:56,016 --> 00:06:59,761
+false and this true.
+They can't be the primitive Booleans.
+
+88
+00:06:59,761 --> 00:07:04,819
+Because we passed them to an ifThenElse
+together with one of our idealized
+
+89
+00:07:04,819 --> 00:07:07,841
+Booleans.
+So false and true must themselves be
+
+90
+00:07:07,841 --> 00:07:14,437
+constants of type idealized Scala Boolean.
+So here's how we would define them.
+
+91
+00:07:14,707 --> 00:07:22,194
+Each of those of would be an object, and
+for the true constants, the only thing I
+
+92
+00:07:22,194 --> 00:07:29,862
+need to do is define what the definition
+of ifThenElse should be for that constant.
+
+93
+00:07:29,862 --> 00:07:36,124
+So what is the definition of if , true,
+then.then Expression Else, Else
+
+94
+00:07:36,124 --> 00:07:39,322
+expression.
+Well, we've seen the rewrite tool.
+
+95
+00:07:39,322 --> 00:07:42,592
+We've decided that would be then, Then
+expressions..
+
+96
+00:07:42,592 --> 00:07:47,970
+So what you see here is precisely the
+implementation of that rewrite tool.
+
+97
+00:07:47,970 --> 00:07:53,930
+We say ifThenElse so for Then expression
+and then Else expression gives us the Then
+
+98
+00:07:53,930 --> 00:07:57,346
+part.
+And conversely ifThenElse of a Then part
+
+99
+00:07:57,346 --> 00:08:02,070
+and an Else part in the false constant
+would give us the Else part.
+
+100
+00:08:02,070 --> 00:08:06,796
+That's all there is to it.
+So, let's do an exercise.
+
+101
+00:08:06,796 --> 00:08:13,071
+Let's complete the definition of Booleans
+with a, a comparison operator that shows
+
+102
+00:08:13,071 --> 00:08:17,739
+how we would compare two Booleans with a
+less than operation.
+
+103
+00:08:17,739 --> 00:08:24,244
+And we assume for this that, the order is
+that false, the value false would be less
+
+104
+00:08:24,244 --> 00:08:28,376
+than the value true.
+So, let's see how we would do that.
+
+105
+00:08:28,376 --> 00:08:31,820
+So what we are after is in our class
+Boolean.
+
+106
+00:08:35,180 --> 00:08:44,943
+You want to define to a method def less,
+which takes an x of type Boolean And which
+
+107
+00:08:44,943 --> 00:08:53,226
+calls if ifThenElse because that's all we
+ever can do with some arguments.
+
+108
+00:08:53,226 --> 00:08:58,505
+So what should the arguments be?
+Well, lets go through the motions if the
+
+109
+00:08:58,505 --> 00:09:02,318
+current Boolean is true then we go in the
+Then part.
+
+110
+00:09:02,538 --> 00:09:08,037
+So the left-hand side is true then
+obviously the left-hand side can never be
+
+111
+00:09:08,037 --> 00:09:11,630
+less than the other one.
+So we would return false.
+
+112
+00:09:11,630 --> 00:09:17,875
+On the other hand, if the current Boolean
+is false, then the less operation yields
+
+113
+00:09:17,875 --> 00:09:21,267
+true.
+If the argument is true, false if it is
+
+114
+00:09:21,267 --> 00:09:24,352
+false.
+So it is the same as the argument
+
+115
+00:09:24,352 --> 00:09:28,284
+expression, x.
+So here, you have the solution for the
+
+116
+00:09:28,284 --> 00:09:32,447
+less operation.
+And of course, all the other comparison
+
+117
+00:09:32,447 --> 00:09:38,153
+operators less than or = is greater than
+or equals greater would behave in
+
+118
+00:09:38,153 --> 00:09:42,160
+analogous ways.
+But now that we have boolean, let's look
+
+119
+00:09:42,160 --> 00:09:45,651
+at class int.
+Don't worry, I won't give you a full
+
+120
+00:09:45,651 --> 00:09:49,926
+implementation of class int that will be a
+bit too involved.
+
+121
+00:09:49,926 --> 00:09:55,128
+But here's at least what's a partial
+specification what methods it would
+
+122
+00:09:55,128 --> 00:09:57,265
+support.
+Let's start with plus.
+
+123
+00:09:57,265 --> 00:10:03,251
+So, the int class would have a method plus
+that takes an other int and yields an int.
+
+124
+00:10:03,251 --> 00:10:07,740
+But actually, you can also write an
+expression such as one + 2.0.
+
+125
+00:10:08,220 --> 00:10:11,577
+And you would expect the result to be a
+double.
+
+126
+00:10:11,577 --> 00:10:17,362
+So there's another operation that takes a
+double, and yields a double end for the
+
+127
+00:10:17,362 --> 00:10:20,648
+motor operations, for floats and longs as
+well.
+
+128
+00:10:20,648 --> 00:10:26,291
+In each case, the result type is the high,
+the, the greater type of the left hand
+
+129
+00:10:26,291 --> 00:10:32,140
+operand, or the right hand operand.
+So, now we have plus and you do exactly
+
+130
+00:10:32,140 --> 00:10:36,764
+the same thing for minus for
+multiplication, for division and modulo.
+
+131
+00:10:36,764 --> 00:10:41,910
+The one thing I haven't said explicitly
+yet is that Scala has overloading very
+
+132
+00:10:41,910 --> 00:10:46,144
+similar to what Java had.
+So, it's perfectly possible to have four
+
+133
+00:10:46,144 --> 00:10:50,182
+versions of the plus method that all take
+different arguments.
+
+134
+00:10:50,182 --> 00:10:55,523
+The Scala compiler would then figure out
+what method to, to call based on the type
+
+135
+00:10:55,523 --> 00:10:58,780
+of the actual arguments in the method
+call.
+
+136
+00:10:58,780 --> 00:11:04,409
+Other operations we see on this slide are
+the left shift operation, which takes
+
+137
+00:11:04,409 --> 00:11:10,181
+shift count and gives you back an int, and
+bit wise and operations that work with
+
+138
+00:11:10,181 --> 00:11:16,594
+either long arguments or int arguments.
+And finally, there are equality operations
+
+139
+00:11:16,594 --> 00:11:22,526
+that would also then take a range of
+arguments like ints, doubles, floats, and
+
+140
+00:11:22,526 --> 00:11:28,328
+longs, and give us Boolean results.
+So you see that all the operations on ints
+
+141
+00:11:28,328 --> 00:11:33,088
+can be expressed as methods, if you just
+look at the signatures.
+
+142
+00:11:33,088 --> 00:11:38,603
+But, the question remains, can we also
+implement them without resorting to
+
+143
+00:11:38,603 --> 00:11:43,891
+primitive integers, to primitive types.
+So, the question is, can we maybe
+
+144
+00:11:43,891 --> 00:11:48,575
+implement all of programming using just
+objects and functions?
+
+145
+00:11:48,575 --> 00:11:54,256
+No primitive types at all.
+So we want to do that for class int but as
+
+146
+00:11:54,256 --> 00:11:59,924
+an exercise I would like you to try that
+for something slightly simpler a class of
+
+147
+00:11:59,924 --> 00:12:03,953
+natural numbers.
+So that's just integers starting from zero
+
+148
+00:12:03,953 --> 00:12:09,348
+and positive integers but not negative
+integers and I also assume that in this
+
+149
+00:12:09,348 --> 00:12:14,470
+class has only a sub-set of the operations
+that you would assume for int's.
+
+150
+00:12:14,470 --> 00:12:18,184
+So, the methods I'd like you to implement
+are five.
+
+151
+00:12:18,184 --> 00:12:23,830
+The first is, the test is zero, which
+tests whether a given natural number is
+
+152
+00:12:23,830 --> 00:12:27,099
+zero.
+The second is predecessor, which should
+
+153
+00:12:27,099 --> 00:12:32,819
+return for a positive natural number, the
+one before that, and should throw an
+
+154
+00:12:32,819 --> 00:12:38,706
+exception if the natural number is zero.
+The successor, which gives you the next
+
+155
+00:12:38,706 --> 00:12:42,369
+natural number after the current natural
+number.
+
+156
+00:12:42,369 --> 00:12:47,482
+And finally, addition and subtraction
+operations on natural numbers.
+
+157
+00:12:47,482 --> 00:12:53,052
+Again, for the subtraction, you, I would
+assume that the code will throw an
+
+158
+00:12:53,052 --> 00:12:59,767
+exception if the result is negative.
+So, you should not use the standard
+
+159
+00:12:59,767 --> 00:13:05,760
+primitive classes in your implementation
+neither int nor any other primitive class.
+
+160
+00:13:05,760 --> 00:13:09,948
+Instead you should implement a sub object
+in the subclass.
+
+161
+00:13:09,948 --> 00:13:14,714
+Call it zero and successor.
+So, the zero object would represent the
+
+162
+00:13:14,714 --> 00:13:20,636
+number zero, where is the successor of n
+would represent the natural number that's
+
+163
+00:13:20,636 --> 00:13:25,885
+one bigger than the argument and here.
+I should say that this quiz is quite a bit
+
+164
+00:13:25,885 --> 00:13:30,370
+more involved than previous quizzes.
+So, you'll need some time to get it right.
+
+165
+00:13:30,370 --> 00:13:34,740
+But, it's worth it for, I believe for the
+insight that you will gain from it.
+
+166
+00:13:36,660 --> 00:13:40,407
+So let's see how we would solve this
+problem.
+
+167
+00:13:40,407 --> 00:13:47,069
+I've already, created a class net with the
+signatures that we've discussed in
+
+168
+00:13:47,069 --> 00:13:51,067
+Eclipse.
+And all we need to do now is create the
+
+169
+00:13:51,067 --> 00:13:57,063
+zero object and the successor class.
+Let's start with the zero object, so.
+
+170
+00:13:57,063 --> 00:14:03,225
+So the zero object would extend not.
+And we need to implement all our five
+
+171
+00:14:03,225 --> 00:14:07,140
+operation,
+Iszero obviously would return true.
+
+172
+00:14:13,120 --> 00:14:21,277
+Predecessor for the zero object that
+doesn't exist so we throw an exception.
+
+173
+00:14:21,277 --> 00:14:28,682
+If you don't know which exception to throw
+we can always throw error,
+
+174
+00:14:29,004 --> 00:14:35,059
+Which says maybe 0.predecessor. Successor,
+Would be.
+
+175
+00:14:35,059 --> 00:14:42,334
+Well, you will need the second class,
+which is called successor off the current
+
+176
+00:14:42,334 --> 00:14:43,360
+value.
+This.
+
+177
+00:14:46,260 --> 00:14:59,048
+And then we have plus and minus.
+And I leave that out for the moment.
+
+178
+00:14:59,048 --> 00:15:05,990
+Let's turn to the class successor.
+So it takes a given, natural number.
+
+179
+00:15:05,990 --> 00:15:11,120
+That's the predecessor, and it's also an
+extension of Not.
+
+180
+00:15:12,120 --> 00:15:20,758
+So we need to implement its operations.
+Is zero, obviously is false The
+
+181
+00:15:20,758 --> 00:15:24,288
+predecessor of the current number would
+be.
+
+182
+00:15:24,288 --> 00:15:31,265
+Well, it would be the number that we pass
+into, the successor because the successor
+
+183
+00:15:31,265 --> 00:15:35,206
+represents the number one plus the given
+number here.
+
+184
+00:15:35,206 --> 00:15:40,542
+So it's predecessor is N.
+The successor would be new successor of
+
+185
+00:15:40,542 --> 00:15:43,990
+this.
+That's just like in the empty number.
+
+186
+00:15:43,990 --> 00:15:48,910
+So what we see here is that actually, we
+have some duplication where we say.
+
+187
+00:15:48,910 --> 00:15:54,290
+No matter whether the number is zero or
+successor, the successor of this number is
+
+188
+00:15:54,290 --> 00:15:58,949
+always new successor of this.
+So what we can do is, we can actually do a
+
+189
+00:15:58,949 --> 00:16:04,887
+refactoring, and move that up here.
+In the base class, because it holds
+
+190
+00:16:04,887 --> 00:16:12,749
+uniformly for both of the subclasses.
+So let's see whether we can do the same
+
+191
+00:16:12,749 --> 00:16:17,020
+thing for plus and minus.
+So let's turn to addition.
+
+192
+00:16:17,440 --> 00:16:24,649
+Zero plus some natural number would be,
+well, just the natural number we pass
+
+193
+00:16:24,649 --> 00:16:26,525
+here.
+That was easy.
+
+194
+00:16:26,525 --> 00:16:33,537
+Let's try to do the same thing for
+successor zero plus some natural number
+
+195
+00:16:33,537 --> 00:16:38,280
+Not would be.
+Well what, what do we do in that case?
+
+196
+00:16:41,600 --> 00:16:48,380
+What we can do, is we can have a recursive
+call, N plus that.
+
+197
+00:16:48,380 --> 00:16:54,871
+And that would give us a number that was
+one smaller than the sum because our
+
+198
+00:16:54,871 --> 00:17:01,363
+current number is one larger than N.
+So all we need to do is we need to create
+
+199
+00:17:01,363 --> 00:17:05,607
+the successor of that.
+And that would be the result.
+
+200
+00:17:05,607 --> 00:17:12,182
+So let's turn to the minus operation.
+In the case of zero minus some natural
+
+201
+00:17:12,182 --> 00:17:16,760
+number, we would have two cases, if the
+argument is zero.
+
+202
+00:17:17,300 --> 00:17:23,256
+Then we return a zero, which is just in
+this case, the number itself, and
+
+203
+00:17:23,256 --> 00:17:29,380
+otherwise we would go in to the negatives
+so we can again throw an error.
+
+204
+00:17:40,820 --> 00:17:45,666
+Let's look at the case for minors in
+successor.
+
+205
+00:17:45,666 --> 00:17:54,263
+So how would we go about that well one
+tempting thing would be to do it as plus.
+
+206
+00:17:54,263 --> 00:17:59,798
+You say, well, it would be at the
+successor of N minus the natural number.
+
+207
+00:17:59,798 --> 00:18:06,102
+But that wouldn't be correct, because that
+would mean that we would essentially go
+
+208
+00:18:06,102 --> 00:18:11,098
+down here until we hit zero, but then we
+would throw an exception.
+
+209
+00:18:11,098 --> 00:18:17,325
+So, we need to find another way to do it.
+So the idea here is that we start with N,
+
+210
+00:18:17,325 --> 00:18:21,400
+and then we subtract the predecessor of
+the argument.
+
+211
+00:18:24,480 --> 00:18:29,586
+So that would work because now N is one
+smaller than the current natural number
+
+212
+00:18:29,586 --> 00:18:34,117
+here, where as that the previous asset is
+one smaller than the argument.
+
+213
+00:18:34,117 --> 00:18:39,287
+So we take one of both sides so the result
+of the subtraction is the same as the
+
+214
+00:18:39,287 --> 00:18:43,309
+original subtraction.
+You've seen that, that gives us a complete
+
+215
+00:18:43,309 --> 00:18:46,436
+and rather concise definition of natural
+numbers.
+
+216
+00:18:46,436 --> 00:18:50,266
+Form first principles, we didn't need
+anything else in there.
+
+217
+00:18:50,266 --> 00:18:53,840
+There's actually a technical term for this
+construction.
+
+218
+00:18:53,840 --> 00:18:59,247
+It's called piano numbers.
+And starting from these piano numbers we
+
+219
+00:18:59,247 --> 00:19:05,271
+could also implement and further the
+integers so including negative numbers and
+
+220
+00:19:05,271 --> 00:19:07,380
+even floating point numbers.

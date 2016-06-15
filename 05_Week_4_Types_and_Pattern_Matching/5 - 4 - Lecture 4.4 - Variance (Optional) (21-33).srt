@@ -1,0 +1,1214 @@
+1
+00:00:00,900 --> 00:00:06,139
+In this session, we're going to continue
+our exploration of subtyping and generics.
+
+2
+00:00:06,139 --> 00:00:11,378
+In particular, we're going to discuss the
+important and somewhat tricky concept of
+
+3
+00:00:11,378 --> 00:00:14,254
+variance,
+Which means how subtyping relates to
+
+4
+00:00:14,254 --> 00:00:17,512
+genericity.
+The material in this session might be a
+
+5
+00:00:17,512 --> 00:00:20,516
+little harder than what you've seen
+previously.
+
+6
+00:00:20,516 --> 00:00:25,372
+If you want to go fast, and you don't need
+to know things to the last detail.
+
+7
+00:00:25,372 --> 00:00:29,717
+Then it's perfectly fine if you just
+browse this session, or skip it
+
+8
+00:00:29,717 --> 00:00:32,778
+completely.
+On the other hand, if you want to go to
+
+9
+00:00:32,778 --> 00:00:37,313
+the roots, then this session is for you.
+As a bonus, we're going to develop a
+
+10
+00:00:37,313 --> 00:00:41,728
+completely satisfactory model of cons
+lists that doesn't have any of the
+
+11
+00:00:41,728 --> 00:00:44,510
+shortcomings that we have to deal with
+before.
+
+12
+00:00:45,500 --> 00:00:51,020
+You've seen in the previous session that
+some types such as lists should be
+
+13
+00:00:51,020 --> 00:00:56,014
+covariant.
+Whereas other types such as arrays should
+
+14
+00:00:56,014 --> 00:01:00,092
+be not covariant.
+What's the difference between the two?
+
+15
+00:01:00,092 --> 00:01:05,728
+Well roughly speaking the type list is
+immutable where as the type array is
+
+16
+00:01:05,728 --> 00:01:11,660
+mutable because we can update its elements
+and immutable types can typically be
+
+17
+00:01:11,660 --> 00:01:17,444
+covariant if some conditions or methods
+are met whereas mutable types can not.
+
+18
+00:01:17,444 --> 00:01:23,822
+In this session we will find out precisely
+what the conditions are so when types that
+
+19
+00:01:23,822 --> 00:01:31,003
+can be covariant and when they cannot.
+In fact, it's not just a binary choice
+
+20
+00:01:31,003 --> 00:01:36,379
+between variant or not.
+There are actually three possible
+
+21
+00:01:36,379 --> 00:01:43,829
+relationships between type instance c, of
+c and a, and c and b, where c of t is a
+
+22
+00:01:43,829 --> 00:01:49,299
+parameterized type.
+And a and b are types such that a is a
+
+23
+00:01:49,299 --> 00:02:02,404
+sub-type of b.
+So we could either determine that c of a
+
+24
+00:02:02,404 --> 00:02:09,218
+is a sub-type of c of b.
+Or we could determine the opposite
+
+25
+00:02:09,218 --> 00:02:16,011
+relationship, which would say that c of b
+is a subtype of c of a.
+
+26
+00:02:16,011 --> 00:02:22,132
+Or, we could have the relationship where
+neither of the three was true.
+
+27
+00:02:22,132 --> 00:02:28,953
+So neither c of a is a subtype of c of b,
+nor is c of b a subtype of the other.
+
+28
+00:02:28,953 --> 00:02:34,025
+So if c of a is a subtype of c of b, we
+say c is covariant.
+
+29
+00:02:34,025 --> 00:02:40,759
+If the opposite is true, so c of a is a
+super type of c of b, then we say c in
+
+30
+00:02:40,759 --> 00:02:45,481
+contravariant.
+And if neither of the two are true, then
+
+31
+00:02:45,481 --> 00:02:51,770
+we say c is nonvariant.
+Scala lets you declare the variance of a
+
+32
+00:02:51,770 --> 00:02:58,188
+type by annotating the type parameter.
+So you can determine that a class should
+
+33
+00:02:58,188 --> 00:03:03,793
+be covariant by writing a + in front of
+the type parameter, the a here.
+
+34
+00:03:03,793 --> 00:03:08,749
+Or you could determine that it's
+contravariant by writing a minus.
+
+35
+00:03:08,749 --> 00:03:15,166
+Or finally, if you write neither + or -,
+then the default is that C is non-variant.
+
+36
+00:03:15,166 --> 00:03:20,569
+So c of a and c of b are unrelated.
+So here's some food for thought.
+
+37
+00:03:20,569 --> 00:03:26,167
+Say you have two function types.
+The Type A is a function that takes IntSet
+
+38
+00:03:26,487 --> 00:03:33,205
+to NonEmpty set, and Type B is a type that
+takes non-empty sets to general int sets.
+
+39
+00:03:33,205 --> 00:03:39,682
+According to the Livka substitution
+principle that you've seen in the last
+
+40
+00:03:39,682 --> 00:03:43,361
+session, which of the following should be
+true?
+
+41
+00:03:43,361 --> 00:03:48,560
+Is A, a subtype of B, or B a subtype of A?
+Or are A and B unrelated?
+
+42
+00:03:51,160 --> 00:03:57,817
+So I will argue that type A is a subtype
+of type B Why?
+
+43
+00:03:57,817 --> 00:04:04,474
+Well, let's look.
+What can you do with a type b function
+
+44
+00:04:04,474 --> 00:04:10,447
+from non-empty to IntSet?
+While the thing you can do is you is you
+
+45
+00:04:10,447 --> 00:04:14,300
+park, can pass a non-empty IntSet, and
+receive an IntSet back.
+
+46
+00:04:14,300 --> 00:04:19,700
+Can you do the same thing with type A?
+Well, of course, if you pass a nonempty
+
+47
+00:04:19,700 --> 00:04:25,171
+IntSet to the type A, it expects just an
+IntSet, so a nonempty will do just fine,
+
+48
+00:04:25,171 --> 00:04:30,784
+and you will get back a nonempty IntSet,
+which of course is a special case for our
+
+49
+00:04:30,784 --> 00:04:34,621
+IntSet. So type A satisfies the same
+contract as type B.
+
+50
+00:04:34,621 --> 00:04:40,092
+If you give it a nonempty set, it will
+give you back an IntSet, but it actually
+
+51
+00:04:40,092 --> 00:04:49,989
+will satisfy more than B.
+So that's why A is a true subtype of B...
+
+52
+00:04:49,990 --> 00:04:54,864
+So let's generalize this to arbitrary
+function types.
+
+53
+00:04:54,864 --> 00:05:02,130
+So the rule we have is if we have two
+function types, A1 to B1 and A2 to B2, and
+
+54
+00:05:02,130 --> 00:05:09,042
+the first is a subtype of the second, if.
+First the result types, B1 and B2, are
+
+55
+00:05:09,042 --> 00:05:15,246
+subtypes, so they go in the same
+direction, but the argument types go in
+
+56
+00:05:15,246 --> 00:05:19,614
+the other direction.
+So A2 must be a subtype of A1.
+
+57
+00:05:19,614 --> 00:05:24,770
+So let's express that visually.
+So we have the supertype A2.
+
+58
+00:05:24,770 --> 00:05:32,813
+To B2 here.
+And the presumed subtype, A1 to B1.
+
+59
+00:05:32,813 --> 00:05:39,920
+So, what we say is that the A2 type is a
+subtype.
+
+60
+00:05:41,020 --> 00:05:49,820
+Of a one, and B1 is a subtype Of b too,
+and that would mean that this is a.
+
+61
+00:05:49,820 --> 00:05:54,120
+Especially the case of the a2 to b2
+function.
+
+62
+00:05:54,120 --> 00:05:56,331
+Why would that be?
+Let's see.
+
+63
+00:05:56,568 --> 00:06:03,125
+Lets look at the first functions, so all
+we could do is pass an argument of A2 into
+
+64
+00:06:03,125 --> 00:06:07,627
+this function.
+Because of this sub-typing relationship we
+
+65
+00:06:07,627 --> 00:06:13,078
+can pass the same argument also to A1
+because A2 is a sub-type of A1.
+
+66
+00:06:13,078 --> 00:06:17,491
+Then we apply the.
+Function a-1 to b-1, that gives us a b-1
+
+67
+00:06:17,491 --> 00:06:22,351
+and again because of sub-typing that
+actually qualifies as a b-2.
+
+68
+00:06:22,351 --> 00:06:28,408
+So we could easily instead of having used
+this function here, we could supply the
+
+69
+00:06:28,408 --> 00:06:32,141
+lower function.
+Over there, and the same argument types
+
+70
+00:06:32,141 --> 00:06:37,164
+would map to the same, result types.
+So what we've learned is that functions
+
+71
+00:06:37,164 --> 00:06:42,119
+are actually contravariant in their
+argument types, and covariant in their
+
+72
+00:06:42,119 --> 00:06:46,183
+result types.
+We can then express that code in Scholar,
+
+73
+00:06:46,183 --> 00:06:52,023
+and that leads us to the revised
+definition of the function one-trade that
+
+74
+00:06:52,023 --> 00:06:56,852
+you've seen before.
+So now I've added two variance annotations
+
+75
+00:06:56,852 --> 00:07:01,135
+to the parameters.
+The argument type t is contravariant.
+
+76
+00:07:01,135 --> 00:07:05,029
+It has a minus and the result type u is
+covariant.
+
+77
+00:07:05,029 --> 00:07:09,855
+It has a plus.
+Now, can we just sprinkle minuses and
+
+78
+00:07:09,855 --> 00:07:15,360
+pluses over classes as we please, to make
+them call a countervariant.
+
+79
+00:07:15,360 --> 00:07:20,936
+Well obviously not because otherwise, we
+could've done the same thing with array.
+
+80
+00:07:20,936 --> 00:07:27,071
+Make array for instance co-variant and run
+into to the problem the Java did.
+
+81
+00:07:27,071 --> 00:07:32,578
+So there are rules when we, when can we
+annotate a type parameter with plus and
+
+82
+00:07:32,578 --> 00:07:36,133
+with minus.
+So, to find out what the rules are, let's
+
+83
+00:07:36,133 --> 00:07:40,804
+look at ganity array example.
+So, I, now assume that array is a class
+
+84
+00:07:40,804 --> 00:07:45,614
+written like this one, array and update
+the updating functionality.
+
+85
+00:07:45,614 --> 00:07:49,100
+In array is, is captured as a method
+called update.
+
+86
+00:07:49,620 --> 00:07:55,752
+So the problematic combination was that
+the class was covariant, so the type
+
+87
+00:07:55,752 --> 00:08:01,643
+parameter T will have a plus here.
+Whereas update took a parameter of the
+
+88
+00:08:01,643 --> 00:08:05,919
+same type T.
+So a covariant type parameter T together
+
+89
+00:08:05,919 --> 00:08:12,455
+with a, a method that takes a parameter of
+that type will lead to problems or did
+
+90
+00:08:12,455 --> 00:08:20,044
+lead to problems in the array case.
+So the Scala compiler will actually check
+
+91
+00:08:20,044 --> 00:08:25,959
+that there are no problematic combinations
+when compiling a class with variant
+
+92
+00:08:25,959 --> 00:08:29,778
+annotations.
+Roughly, what it will do is, it will let
+
+93
+00:08:29,778 --> 00:08:33,971
+covariant type parameters only appear in
+method results.
+
+94
+00:08:33,971 --> 00:08:39,287
+Contravariant type parameters can only
+appear in method parameters, and
+
+95
+00:08:39,287 --> 00:08:44,828
+nonvariant, or invariant, that they are
+used as aliases, type parameters can
+
+96
+00:08:44,828 --> 00:08:49,150
+actually appear anywhere.
+The precise rules are a bit more involved.
+
+97
+00:08:49,150 --> 00:08:54,227
+But fortunately this Scala compiler will
+perform them for us, so we don't need to
+
+98
+00:08:54,227 --> 00:08:57,916
+memorize them or.
+If we go back to the function example, the
+
+99
+00:08:57,916 --> 00:09:03,440
+checks that this Scala compiler performer
+will perform here is that the T parameter
+
+100
+00:09:03,440 --> 00:09:07,452
+which is contravariant, is only used as a
+function parameter.
+
+101
+00:09:07,452 --> 00:09:11,069
+That's correct.
+And the U parameter, which is co-variant,
+
+102
+00:09:11,069 --> 00:09:14,751
+is only used as a function result, which
+is also correct.
+
+103
+00:09:14,751 --> 00:09:18,566
+So, function one checks out okay,
+according to these checks.
+
+104
+00:09:18,566 --> 00:09:24,024
+So now that we've seen variants, let's get
+back to the previous implementation that
+
+105
+00:09:24,024 --> 00:09:27,707
+we did of lists.
+One shortcoming there that was that nil
+
+106
+00:09:27,707 --> 00:09:31,562
+was modeled as a class.
+Whereas we would prefer it to be an
+
+107
+00:09:31,562 --> 00:09:34,490
+object, after all there's only one empty
+list.
+
+108
+00:09:34,490 --> 00:09:38,600
+Can we change that?
+Well, let's have a look at the.
+
+109
+00:09:39,520 --> 00:09:44,009
+Example.
+So I've brought up the, list hierarchy
+
+110
+00:09:44,009 --> 00:09:49,433
+that we've seen in previous sessions.
+What we would like to do is turn class nil
+
+111
+00:09:49,433 --> 00:09:53,230
+into an object.
+So let's just go right ahead and do that.
+
+112
+00:09:53,230 --> 00:09:58,654
+So objects can't have type parameters,
+because there's only a single instance of
+
+113
+00:09:58,654 --> 00:10:01,705
+them.
+So I will delete the type parameter for
+
+114
+00:10:01,705 --> 00:10:05,231
+the object.
+Then we get an error which says that the
+
+115
+00:10:05,231 --> 00:10:09,774
+Type T here is not found.
+That's true because T is not longer bound
+
+116
+00:10:09,774 --> 00:10:13,918
+as a type parameter.
+So we have to find another type In which
+
+117
+00:10:13,918 --> 00:10:17,838
+we, which we want to use as the argument
+type of typelist.
+
+118
+00:10:17,838 --> 00:10:22,170
+What will be a good type?
+Well, of course, we could write list of
+
+119
+00:10:22,170 --> 00:10:26,503
+string or list of object.
+But all of that would make nil only a
+
+120
+00:10:26,503 --> 00:10:29,460
+subtype of a partic-, specific kind of
+list.
+
+121
+00:10:29,460 --> 00:10:33,380
+So, what we will try instead is make it a
+list of nothing.
+
+122
+00:10:34,300 --> 00:10:39,967
+That's promising because, as we know,
+nothing is the bottom type, which is a
+
+123
+00:10:39,967 --> 00:10:44,332
+subtype of every other type, so it's in a
+sense, universal.
+
+124
+00:10:44,332 --> 00:10:48,467
+It can express everything else.
+But we're not done yet.
+
+125
+00:10:48,467 --> 00:10:51,760
+To see why, let's make a little test
+object.
+
+126
+00:10:51,760 --> 00:10:57,810
+And say, here I want to have a simple
+assignment, where I say Valex of type list
+
+127
+00:10:57,810 --> 00:11:01,180
+of string, and that should be the empty
+list.
+
+128
+00:11:05,260 --> 00:11:08,985
+We get an error which says it's a long
+error message.
+
+129
+00:11:08,985 --> 00:11:13,484
+Which says, well, it found a nil, and it
+required a list of string.
+
+130
+00:11:13,484 --> 00:11:17,139
+So obviously, nil is not a subtype of list
+of string.
+
+131
+00:11:17,139 --> 00:11:23,114
+And then it goes on, to say, you may wish
+to define the type parameter t of list as
+
+132
+00:11:23,114 --> 00:11:26,489
++t instead.
+So what the compiler suggests is that,
+
+133
+00:11:26,489 --> 00:11:32,011
+indeed, we should make list covariant.
+That we make by having a pipe parameter
+
+134
+00:11:32,011 --> 00:11:35,299
+here.
+If we do that, then everything will type
+
+135
+00:11:35,299 --> 00:11:39,243
+check correctly.
+So let's have a look at what happened
+
+136
+00:11:39,243 --> 00:11:42,822
+here.
+So List of string = nil type checks,
+
+137
+00:11:42,822 --> 00:11:48,228
+because nil is a list of nothing.
+Nothing is a subtype of string, and lists
+
+138
+00:11:48,228 --> 00:11:52,465
+are covariants.
+So that's why list of nothing is a subtype
+
+139
+00:11:52,465 --> 00:11:58,661
+of list of string.
+Another thing that works out very well
+
+140
+00:11:58,661 --> 00:12:04,769
+here, is that we have seen that in the
+object little head and tail already return
+
+141
+00:12:04,769 --> 00:12:10,920
+nothing, because they can't terminate.
+And that matches precisely the template of
+
+142
+00:12:10,920 --> 00:12:14,358
+list.
+Because we said for a list of t, a head
+
+143
+00:12:14,358 --> 00:12:18,500
+should return a t and tail should return a
+list of t.
+
+144
+00:12:18,500 --> 00:12:22,562
+Now head indeed does return the element
+type here, nothing.
+
+145
+00:12:22,562 --> 00:12:26,834
+Tail doesn't return a list of nothing but
+directly a nothing.
+
+146
+00:12:26,834 --> 00:12:31,807
+But that's actually something that's even
+a subtype of list of nothing.
+
+147
+00:12:31,807 --> 00:12:35,800
+So both types are very, very precise in
+what they express.
+
+148
+00:12:35,800 --> 00:12:40,523
+To complete this session, which was quite
+a bit harder than previous sessions, I
+
+149
+00:12:40,523 --> 00:12:45,067
+want to introduce one more thing.
+Sometimes we actually have to put in a bit
+
+150
+00:12:45,067 --> 00:12:49,888
+of work to make a class covariant.
+So to see an example is, let's say we want
+
+151
+00:12:49,888 --> 00:12:55,465
+to add a method prepend to our list class,
+which prepends a given element and yields
+
+152
+00:12:55,465 --> 00:12:58,718
+a new list.
+So prepend would be defined like this.
+
+153
+00:12:58,718 --> 00:13:04,096
+It would say, take an element of type T,
+the element type of the list, give me back
+
+154
+00:13:04,096 --> 00:13:09,540
+a list of T, and it would have the obvious
+implementation, would create a new count
+
+155
+00:13:09,540 --> 00:13:13,790
+cell with the given element, followed by
+the current list itself.
+
+156
+00:13:13,790 --> 00:13:19,611
+But that doesn't work.
+Why does it not work?
+
+157
+00:13:19,611 --> 00:13:23,012
+So.
+I leave this for you as an exercise.
+
+158
+00:13:23,012 --> 00:13:26,763
+Why does the following code not type
+check?
+
+159
+00:13:26,763 --> 00:13:30,862
+The Prepend method as before in a covarant
+list.
+
+160
+00:13:30,862 --> 00:13:37,229
+Possible answers are; Prepan turns list
+into a mutable class, Prepend fails
+
+161
+00:13:37,229 --> 00:13:43,160
+variance checking, or Prepend's right hand
+side contains a type error.
+
+162
+00:13:44,100 --> 00:13:53,294
+What do you think?
+One way to solve this is try it out.
+
+163
+00:13:53,294 --> 00:14:03,880
+Put Prepend, let's put Prepend into our
+worksheet and see what happens.
+
+164
+00:14:04,360 --> 00:14:10,089
+So what we get is an error, which says
+covariant type T occurs in contravariant
+
+165
+00:14:10,089 --> 00:14:15,536
+position in type T of value elem. What
+that says is that our co-variant type
+
+166
+00:14:15,536 --> 00:14:19,639
+parameter T appeared as a, the type of a
+method parameter.
+
+167
+00:14:19,639 --> 00:14:24,520
+And we've seen that, that actually
+violates the variant checking rule.
+
+168
+00:14:24,520 --> 00:14:30,971
+So the variance checking rule, which was
+actually invented to prevent mutable,
+
+169
+00:14:31,222 --> 00:14:36,836
+operations in covariant classes, also
+rules out something like this.
+
+170
+00:14:36,836 --> 00:14:40,522
+Which doesn't involve any mutability at
+all.
+
+171
+00:14:40,522 --> 00:14:46,350
+All we do is create a new list.
+Do you think that's a mistake of the, of
+
+172
+00:14:46,350 --> 00:14:51,598
+the rules or is there some deep wisdom to
+the rules nevertheless?
+
+173
+00:14:51,598 --> 00:14:58,139
+In fact, the Scholar Compiler is right to
+throw out lists that prepend because it
+
+174
+00:14:58,139 --> 00:15:02,096
+does violate the lists of substitution
+principle.
+
+175
+00:15:02,096 --> 00:15:05,649
+Why?
+Well here's something one can do with a
+
+176
+00:15:05,649 --> 00:15:09,686
+list of type, list of IntSet, called the
+list excess.
+
+177
+00:15:09,686 --> 00:15:15,420
+We can do excess dot prepend empty.
+Because empty of course is an IntSet.
+
+178
+00:15:16,360 --> 00:15:22,075
+But the same operation on a list wires of
+type list of non-empty would lead to a
+
+179
+00:15:22,075 --> 00:15:25,815
+type error.
+So if you did that wires.prependempty and
+
+180
+00:15:25,815 --> 00:15:31,108
+you would see a type error message like
+here which says well we required a
+
+181
+00:15:31,108 --> 00:15:36,894
+non-empty because that was the element
+type of the list but we found an empty and
+
+182
+00:15:36,894 --> 00:15:42,531
+the two are not compatible.
+So here's something you can do with a list
+
+183
+00:15:42,531 --> 00:15:46,531
+of IntSet that it cannot do with a list of
+non-empty set.
+
+184
+00:15:46,531 --> 00:15:51,817
+And because we found such a thing it
+follows that according to the Liskov
+
+185
+00:15:51,817 --> 00:15:57,460
+Substitution Principle, list of non-empty
+cannot be a sub-type of list of IntSet.
+
+186
+00:15:59,320 --> 00:16:04,350
+Okay.
+So now we now why prepend is illegal, but
+
+187
+00:16:04,350 --> 00:16:10,635
+Still, there's an unsatisfactory feeling
+here, because prepend is an actual method,
+
+188
+00:16:10,635 --> 00:16:16,766
+after all, to have on immutable lists.
+So the question is, can we somehow make it
+
+189
+00:16:16,766 --> 00:16:19,560
+variance correct?
+And, in fact, we can.
+
+190
+00:16:19,560 --> 00:16:23,612
+And for that, we will make use of a lower
+bound.
+
+191
+00:16:23,612 --> 00:16:30,164
+So, here is a reformulation of prepent
+which uses a lower bound for the type
+
+192
+00:16:30,164 --> 00:16:34,905
+parameter U.
+We say prepent it takes a type parameter U
+
+193
+00:16:34,905 --> 00:16:39,561
+which must be a super type of the list
+element type T.
+
+194
+00:16:39,561 --> 00:16:44,906
+It takes a U element of the type U and it
+returns a list of U.
+
+195
+00:16:44,906 --> 00:16:48,700
+And the body of prepent is as it was
+before.
+
+196
+00:16:49,460 --> 00:16:53,189
+And actually the, the, this passes the
+variance checks.
+
+197
+00:16:53,189 --> 00:16:59,099
+Because it turns out that co-variant type
+parameters, such as a T of list may appear
+
+198
+00:16:59,099 --> 00:17:02,194
+in the lower bounds of Meta Type
+Parameters.
+
+199
+00:17:02,194 --> 00:17:07,120
+Contra-variant type parameters may appear
+in the upper bounds instead.
+
+200
+00:17:08,040 --> 00:17:14,179
+So, you can find out yourself how this
+works in detail by solving the following
+
+201
+00:17:14,179 --> 00:17:18,065
+exercise.
+Implement prepend as shown in trait list.
+
+202
+00:17:18,065 --> 00:17:24,204
+The question is, let's say we have a
+function that takes a list of non empty as
+
+203
+00:17:24,204 --> 00:17:30,189
+first parameter and empty element as
+second parameter, and prepends the empty
+
+204
+00:17:30,189 --> 00:17:36,240
+list set to the list of non empty sets.
+What would happen?
+
+205
+00:17:36,800 --> 00:17:43,582
+The possible answers are: this would not
+type check or the result type of this
+
+206
+00:17:43,582 --> 00:17:50,713
+function would be a list of non empty or
+maybe a list of empty or a list of IntSet
+
+207
+00:17:50,713 --> 00:17:54,974
+or a list of any.
+The top type of all color types.
+
+208
+00:17:54,974 --> 00:18:05,640
+What do you think?
+Now let's see how we would solve that.
+
+209
+00:18:06,080 --> 00:18:12,660
+The straightforward way to attack this is,
+well lets try it out.
+
+210
+00:18:16,420 --> 00:18:23,240
+Let's add the function prepend, and the
+function f, as we've seen on this slide.
+
+211
+00:18:29,060 --> 00:18:35,132
+And if we look at function F, its type,
+and we hover over F with say.
+
+212
+00:18:35,132 --> 00:18:42,419
+It takes a list of non-empty and an empty
+parameters as given and it returns a list
+
+213
+00:18:42,419 --> 00:18:46,757
+of IntSet.
+So a list of IntSet is the correct answer.
+
+214
+00:18:46,757 --> 00:18:52,916
+That still begs the explanation, why?
+So let's look first at the subtype
+
+215
+00:18:52,916 --> 00:18:56,300
+hierarchy.
+As always we have that IntSet.
+
+216
+00:18:56,580 --> 00:19:01,060
+Is a super type of both non-empty and
+empty.
+
+217
+00:19:08,400 --> 00:19:16,680
+So we call the predef method on a list of
+non-empty.
+
+218
+00:19:17,060 --> 00:19:22,380
+So, T in this case, for the predef method,
+that is nonempty.
+
+219
+00:19:22,380 --> 00:19:26,393
+That was our, the, the parameter of the
+list.
+
+220
+00:19:26,393 --> 00:19:33,580
+But T takes a type parameter which can be
+an arbitrary supertype of nonempty.
+
+221
+00:19:34,360 --> 00:19:41,319
+And one thing that must happen with the
+supertype is that LM is an instance of the
+
+222
+00:19:41,319 --> 00:19:45,428
+supertype.
+So LM the type U that is empty because
+
+223
+00:19:45,428 --> 00:19:49,537
+that's the type of the X that we pass to
+pre-def.
+
+224
+00:19:49,537 --> 00:19:53,645
+Is empty a subtype of non-empty?
+No, of course not.
+
+225
+00:19:53,645 --> 00:20:00,102
+So that's why the empty value that we pass
+in here, it doesn't conform to the
+
+226
+00:20:00,102 --> 00:20:05,017
+non-empty type.
+So what the type inferencer would choose
+
+227
+00:20:05,017 --> 00:20:10,638
+instead is the next higher type up here.
+So that would be IntSet.
+
+228
+00:20:10,638 --> 00:20:15,723
+Maybe you can be an Intset, and indeed,
+that would work out.
+
+229
+00:20:15,723 --> 00:20:22,414
+The list xs, which is a list of non empty,
+is, of course, also a list of IntSet,
+
+230
+00:20:22,414 --> 00:20:29,249
+because of covariance of lists.
+And empty is itself an IntSet.
+
+231
+00:20:29,249 --> 00:20:36,341
+So the type inference that would determine
+that the correct type parameter for U,
+
+232
+00:20:36,341 --> 00:20:43,346
+indeed, must be IntSet and the type that
+gets returned from Prepend a list of
+
+233
+00:20:43,346 --> 00:20:47,374
+IntSet.
+And that's, then also the result type of
+
+234
+00:20:47,374 --> 00:20:50,457
+f.
+So, so one thing we've seen here is that
+
+235
+00:20:50,457 --> 00:20:53,582
+intuitively F does exactly the right
+thing.
+
+236
+00:20:53,582 --> 00:20:59,542
+If we take a list of non-empties and we
+add an empty, the best thing that we could
+
+237
+00:20:59,542 --> 00:21:05,356
+get out of that would be a list of IntSets
+because that's the smallest type in a
+
+238
+00:21:05,356 --> 00:21:11,170
+manner of speaking that contains both the
+XS, the list of non-empties, as well as
+
+239
+00:21:11,170 --> 00:21:14,732
+the additional element X which was of type
+empty.
+
+240
+00:21:14,732 --> 00:21:19,395
+So we see that the machinery.
+With the subtype bound here, it is a
+
+241
+00:21:19,395 --> 00:21:23,441
+little bit complicated.
+But, on the other hand, it does the
+
+242
+00:21:23,441 --> 00:21:28,055
+exactly the right thing.
+It will lead to exactly the right invert
+
+243
+00:21:28,055 --> 00:21:33,380
+types for data structures that contain
+elements of various different types.

@@ -1,0 +1,994 @@
+1
+00:00:00,000 --> 00:00:03,552
+An important problem in programing is
+decomposition.
+
+2
+00:00:03,552 --> 00:00:08,950
+Let's say you have a hierarchy of classes
+and you want to build tree-like data
+
+3
+00:00:08,950 --> 00:00:12,161
+structures from the instances of these
+classes.
+
+4
+00:00:12,161 --> 00:00:16,671
+How do you build such a tree?
+And how do you find out what kind of
+
+5
+00:00:16,671 --> 00:00:20,975
+elements are in the tree?
+And how do you access the data that's
+
+6
+00:00:20,975 --> 00:00:25,485
+stored in this elements?
+That's the problem of decomposition, which
+
+7
+00:00:25,485 --> 00:00:30,439
+we are going to tackle in this session.
+Lets look at this with an example.
+
+8
+00:00:30,439 --> 00:00:35,356
+Suppose you want to write a small
+interpreter for arithmetic expressions.
+
+9
+00:00:35,356 --> 00:00:40,542
+To keep it simple, lets restrict ourselves
+for the moment to just numbers and
+
+10
+00:00:40,542 --> 00:00:44,987
+additions as expressions.
+Such expressions can be represented as a
+
+11
+00:00:44,987 --> 00:00:48,624
+class hierarchy.
+You'd have a base straight Expr for
+
+12
+00:00:48,624 --> 00:00:51,790
+expressions and two sub classes, Number
+and Sum.
+
+13
+00:00:51,790 --> 00:00:58,019
+Now if you want to explore a tree of nodes
+consisting of Numbers and Sum, you would
+
+14
+00:00:58,019 --> 00:01:01,922
+like to know what kind of tree is it.
+Is it a Number?
+
+15
+00:01:01,922 --> 00:01:04,850
+Is it a Sum?
+And what components has it?
+
+16
+00:01:04,850 --> 00:01:09,720
+To be able to do that, it brings us to the
+following implementation.
+
+17
+00:01:10,300 --> 00:01:17,037
+So here you see, I have my class
+hierarchy, I have an expression and then I
+
+18
+00:01:17,037 --> 00:01:26,458
+have two subclasses Number and Sum.
+Now for a complete functionality of
+
+19
+00:01:26,458 --> 00:01:33,080
+expression, if I look at an expression I
+would like to know is it a Number or is it
+
+20
+00:01:33,080 --> 00:01:38,835
+a Sum and that's done by the first two
+methods. Here is Number and is Sum.
+
+21
+00:01:38,835 --> 00:01:44,511
+Now, if it's a Number, then I would like
+to know the value of that Number.
+
+22
+00:01:44,511 --> 00:01:50,817
+That would be a number, let's call it n.
+And if it's a sum, then I would know, want
+
+23
+00:01:50,817 --> 00:01:57,440
+to know what are it's operands and that
+would be a leftOp and a rightOp field.
+
+24
+00:01:59,380 --> 00:02:03,496
+So to do that here's the implementation of
+Number.
+
+25
+00:02:03,496 --> 00:02:09,942
+Number is a subclass of expression and it
+would now implement all the five methods
+
+26
+00:02:09,942 --> 00:02:13,747
+that you see here.
+In expressions, we have the two
+
+27
+00:02:13,747 --> 00:02:17,320
+classification methods, its Number and its
+Sum,
+
+28
+00:02:21,840 --> 00:02:30,935
+And we would have the three accessor
+methods for either Numbers or Sums, which
+
+29
+00:02:30,935 --> 00:02:35,591
+we've numValue, which, this one applies
+only to Numbers.
+
+30
+00:02:35,591 --> 00:02:39,740
+And leftOp, rightOp,, these ones do apply
+to sums.
+
+31
+00:02:39,740 --> 00:02:43,972
+So to implement these five methods, what
+do we do in Number?
+
+32
+00:02:43,972 --> 00:02:50,141
+Well, isNumber obviously is true, isSum
+obviously is false. The numeric value of a
+
+33
+00:02:50,141 --> 00:02:55,951
+number is just the number we pass into it.
+And the left operand and right operand,
+
+34
+00:02:55,951 --> 00:03:01,044
+they are operations that are not
+applicable to Numbers. So both of them
+
+35
+00:03:01,044 --> 00:03:07,070
+would throw an error that says that say
+well you have called a leftOp or a rightOp
+
+36
+00:03:07,285 --> 00:03:13,722
+method on number and that is illegal.
+So let's look at Sums next.
+
+37
+00:03:13,722 --> 00:03:23,082
+So the idea would be that Sum of e1, e2
+would correspond to the expression that is
+
+38
+00:03:23,082 --> 00:03:26,991
+e1 plus e2.
+Its five implementations are as follows.
+
+39
+00:03:26,991 --> 00:03:30,656
+A Sum is clearly not a Number.
+A Sum is a Sum.
+
+40
+00:03:30,656 --> 00:03:37,416
+The numeric number of a Sum is something
+that's not applicable, that would throw an
+
+41
+00:03:37,416 --> 00:03:41,081
+error.
+The left operand is the first argument
+
+42
+00:03:41,081 --> 00:03:46,375
+that we pass into Sum.
+The right operation is the second argument
+
+43
+00:03:46,375 --> 00:03:51,909
+we pass into Sum.
+So now that we've got the basic wiring of
+
+44
+00:03:51,909 --> 00:03:57,975
+expressions, let's do something with it.
+One thing we could do is write an
+
+45
+00:03:57,975 --> 00:04:03,210
+evaluation function.
+So the evaluation function should take one
+
+46
+00:04:03,210 --> 00:04:09,609
+of these expression trees and it should
+return the number that it represents.
+
+47
+00:04:09,609 --> 00:04:16,505
+So for instance, I would like to have that
+eval of Sum of the Number one and the
+
+48
+00:04:16,505 --> 00:04:24,240
+Number two, Should give me three.
+So how would I write an evaluation
+
+49
+00:04:24,240 --> 00:04:28,896
+function like that?
+Well, one way to do that would be to
+
+50
+00:04:28,896 --> 00:04:31,948
+simply ask, given an expression, what it
+is?.
+
+51
+00:04:32,339 --> 00:04:38,442
+So, we ask this question, is it a number.
+If yes, then we can return the numeric
+
+52
+00:04:38,442 --> 00:04:43,685
+value of that expression.
+Otherwise, if the expression is a Sum then
+
+53
+00:04:43,685 --> 00:04:49,710
+we take, it's both two operands, the left
+operand and the right operand and we
+
+54
+00:04:49,710 --> 00:04:56,304
+evaluate both of them using eval.
+And finally, you have to guard against the
+
+55
+00:04:56,304 --> 00:05:01,070
+case that you might have another
+expression that is neither a Number or a
+
+56
+00:05:01,070 --> 00:05:03,775
+Sum.
+Maybe not now, but maybe in the future,
+
+57
+00:05:03,775 --> 00:05:06,930
+somebody will add such a subclass of
+expression.
+
+58
+00:05:06,930 --> 00:05:12,018
+So it's prudent to have a third class
+which says well, if it's neither a Number
+
+59
+00:05:12,018 --> 00:05:15,367
+nor a Sum,
+Then we throw an error which says I found
+
+60
+00:05:15,367 --> 00:05:19,670
+an unknown expression and here it is.
+.
+
+61
+00:05:19,670 --> 00:05:21,040
+Okay.
+So far so good.
+
+62
+00:05:21,040 --> 00:05:26,661
+But there's a problem with that and that
+is that writing all these classification
+
+63
+00:05:26,661 --> 00:05:29,813
+and access of functions quickly becomes
+tedious.
+
+64
+00:05:29,813 --> 00:05:35,297
+We've already written fifteen method
+definitions only to do something as simple
+
+65
+00:05:35,297 --> 00:05:38,450
+as expressions consisting of Sums and
+Numbers.
+
+66
+00:05:38,450 --> 00:05:42,611
+And things get worse if we add other forms
+of expressions.
+
+67
+00:05:42,611 --> 00:05:47,563
+So let's demonstrate that.
+Let's say we want to add to our expression
+
+68
+00:05:47,563 --> 00:05:51,940
+trees two new classes.
+One that represents the product of two
+
+69
+00:05:51,940 --> 00:05:56,389
+expressions, e1 and e2,
+So e1 times e2 would be a class product
+
+70
+00:05:56,389 --> 00:06:03,631
+given arguments e1 and e2. and the other
+new class would be Var that represents
+
+71
+00:06:03,631 --> 00:06:07,068
+variables.
+So variables would take a string that
+
+72
+00:06:07,068 --> 00:06:12,932
+represents the name.
+So if you want it to continue with our
+
+73
+00:06:12,932 --> 00:06:18,102
+scheme of classification and access
+methods, then we'd need to add new methods
+
+74
+00:06:18,102 --> 00:06:23,340
+to, of course, those two new classes but
+also to all the classes defined above.
+
+75
+00:06:25,320 --> 00:06:30,512
+So, a question to you.
+If we wanted to do that for Product and
+
+76
+00:06:30,512 --> 00:06:33,973
+Var, how many new method definitions would
+we need?
+
+77
+00:06:33,973 --> 00:06:40,445
+Here I want you to count the method
+definitions in Product and Var themselves.
+
+78
+00:06:40,445 --> 00:06:45,637
+But also any new Accessor and
+classification methods that we have to
+
+79
+00:06:45,637 --> 00:06:50,980
+retrofit to the existing classes, to
+Expression and Sum and Num.
+
+80
+00:06:50,980 --> 00:06:55,420
+Possible answers would be nine, or ten,
+nineteen, or maybe 25,
+
+81
+00:06:55,420 --> 00:07:00,433
+Or even 35, or 40.
+So to answer that question, let's look
+
+82
+00:07:00,433 --> 00:07:06,076
+back at our existing solution.
+What we want to do now is add two new
+
+83
+00:07:06,076 --> 00:07:11,055
+subclasses of Expression, one for Product,
+the other for Vars.
+
+84
+00:07:11,055 --> 00:07:17,582
+And Var would have probably a name and
+Products would have essentially also
+
+85
+00:07:17,582 --> 00:07:22,878
+leftOp and rightOp just like Sums.
+So what do we need as new methods.
+
+86
+00:07:22,878 --> 00:07:28,629
+Well, we would need new classification
+method that tells us whether a given
+
+87
+00:07:28,629 --> 00:07:34,379
+expression is a Product or a Var.
+So there would be some new methods called
+
+88
+00:07:34,379 --> 00:07:41,113
+that isVar and isProdu that we would have
+to add to the trait expression and also to
+
+89
+00:07:41,113 --> 00:07:44,670
+its subclasses.
+Now, what about the access methods?
+
+90
+00:07:44,912 --> 00:07:51,447
+Here we would need, in addition to the Num
+value, and leftOp and rightOp, also an
+
+91
+00:07:51,447 --> 00:07:55,240
+operation that gives us the name of a
+variable.
+
+92
+00:07:57,920 --> 00:08:02,475
+Would we need access and methods for
+leftOp and rightOp and product?
+
+93
+00:08:02,475 --> 00:08:07,886
+Well, you might think so, but in fact,
+it's probably better to just re-use the
+
+94
+00:08:07,886 --> 00:08:12,157
+Accessor methods of Sum, to just say both
+products and sum.
+
+95
+00:08:12,157 --> 00:08:17,852
+They're binary operations so they share
+the accesses for the left and right and
+
+96
+00:08:17,852 --> 00:08:21,909
+side operance.
+So that means no new access or methods for
+
+97
+00:08:21,909 --> 00:08:27,248
+products, just a classification method.
+And we're left with three methods in,
+
+98
+00:08:27,248 --> 00:08:30,950
+trait Expr.
+So that means trait Expr now has eight
+
+99
+00:08:30,950 --> 00:08:36,135
+methods and all subclasses of trait Expr,
+also needs to implement these methods.
+
+100
+00:08:36,135 --> 00:08:41,320
+So that would mean eight methods for class
+number and eight methods for class Sum.
+
+101
+00:08:42,440 --> 00:08:48,415
+And then, of course, we have the two new
+classes, Product and Var, which also have
+
+102
+00:08:48,415 --> 00:08:53,408
+to implement all of the eight methods now,
+isNumber, isSum, isVar, isProd, numValue,
+
+103
+00:08:53,408 --> 00:09:00,997
+leftOp, rightOp, and name. So that means,
+overall, we have five classes,
+
+104
+00:09:00,997 --> 00:09:06,029
+Each of them implementing eight methods
+for a total of 40 methods.
+
+105
+00:09:06,029 --> 00:09:12,356
+Our previous solution had three classes,
+each of them implementing five methods for
+
+106
+00:09:12,356 --> 00:09:17,616
+a total of fifteen methods.
+So the answer to the question was, we have
+
+107
+00:09:17,616 --> 00:09:22,286
+25 new methods.
+So generally, if we continue with that
+
+108
+00:09:22,286 --> 00:09:28,818
+game to extend the hierachy with new
+classes we find out that the number of
+
+109
+00:09:28,818 --> 00:09:40,536
+methods we need tends to grow
+quadratically, and that's, of course, very
+
+110
+00:09:40,536 --> 00:09:44,186
+bad news,
+Because it means that our, program size,
+
+111
+00:09:44,186 --> 00:09:49,889
+and ability to understand programs, will
+quickly be exhausted, as we add new
+
+112
+00:09:49,889 --> 00:09:54,506
+classes to the hierarchy.
+So the question is what to do about it.
+
+113
+00:09:54,506 --> 00:09:59,729
+Can we find another solution that avoids
+the quadratic increase of methods?
+
+114
+00:09:59,729 --> 00:10:03,838
+Well, here's one which I would actually
+call a non solution.
+
+115
+00:10:03,838 --> 00:10:09,341
+Most languages have some form of type
+testing and type casting, and Scala let's
+
+116
+00:10:09,341 --> 00:10:13,519
+you do that as well.
+So it has a method'is instance of' that
+
+117
+00:10:13,519 --> 00:10:19,022
+can check whether an object's type
+conforms to T and it has a method called
+
+118
+00:10:19,022 --> 00:10:24,524
+isInstanceOf that check whether an object
+as type conforms type T, so that would be
+
+119
+00:10:24,524 --> 00:10:27,922
+a type cast.
+If the cast fails at one time because the
+
+120
+00:10:27,922 --> 00:10:32,070
+object is not at run time, then it will
+throw a class cast exception.
+
+121
+00:10:32,070 --> 00:10:38,340
+So x is instance of T is really the same
+thing as x instance of T in Java.
+
+122
+00:10:38,340 --> 00:10:46,132
+And it's asInstanceOf is the same thing as
+a type cast, which is written like this in
+
+123
+00:10:46,132 --> 00:10:47,730
+Java.
+.
+
+124
+00:10:47,730 --> 00:10:54,820
+The Scala form of these type tests and
+type casts is as methods on the type class
+
+125
+00:10:54,820 --> 00:10:58,710
+any.
+And the methods would take the type that
+
+126
+00:10:58,710 --> 00:11:03,380
+they want to test or cast against as a
+type parameter.
+
+127
+00:11:03,380 --> 00:11:08,567
+If you compare the Scala solution and the
+Java solution then you see that Scala
+
+128
+00:11:08,567 --> 00:11:13,625
+solution is quite a bit longer, and you
+could argue less legible than the Java
+
+129
+00:11:13,625 --> 00:11:16,413
+solution, and that's completely
+intentional,
+
+130
+00:11:16,413 --> 00:11:21,406
+Because, actually it turns out that
+typetest and typecasts are very low level
+
+131
+00:11:21,406 --> 00:11:25,296
+and unsafe and that, in fact, Scala has
+much better solutions.
+
+132
+00:11:25,296 --> 00:11:29,965
+So, the use of type test and type cast,
+[INAUDIBLE in Scala because of sometimes
+
+133
+00:11:29,965 --> 00:11:34,180
+useful for interoperability with Java, but
+the use is discouraged.
+
+134
+00:11:35,700 --> 00:11:40,427
+So using type tests and type class, we
+could do something like that for eval..
+
+135
+00:11:40,816 --> 00:11:45,544
+We could say, okay, we have a class
+expression. and now we n-, don't need to
+
+136
+00:11:45,544 --> 00:11:50,347
+put anything special inside expression.
+And you would simply ask: is the
+
+137
+00:11:50,347 --> 00:11:56,395
+expression an instance of my number class?
+Then we cast it to number in that case and
+
+138
+00:11:56,395 --> 00:12:02,372
+we pull out the num value from the number.
+On the other hand, if the expression is an
+
+139
+00:12:02,372 --> 00:12:08,207
+instance of sum then we take the left
+operand after casting it to sum, take the
+
+140
+00:12:08,207 --> 00:12:13,971
+right operand after casting it to sum and
+evaluate both operands, finally sum the
+
+141
+00:12:13,971 --> 00:12:17,458
+results.
+And the third part would be as before, if
+
+142
+00:12:17,458 --> 00:12:25,540
+it's neither, then we throw an error.
+So if we look at the solution, then the
+
+143
+00:12:25,540 --> 00:12:30,306
+good part of it is that we don't need any
+classification methods.
+
+144
+00:12:30,306 --> 00:12:33,900
+These instance of tests, fulfill that role
+now,
+
+145
+00:12:33,900 --> 00:12:39,106
+And we need access methods only for
+classes where the value is defined.
+
+146
+00:12:39,106 --> 00:12:44,240
+So that means that our base,, trait ede
+could actually be empty.
+
+147
+00:12:44,240 --> 00:12:50,280
+Whereas number needs a num value.
+Because and some.
+
+148
+00:12:50,760 --> 00:13:00,489
+Needs a left up and a right up.
+But number doesn't need a leftOp and a
+
+149
+00:13:00,489 --> 00:13:06,630
+rightOp,, because we will call leftOp and
+rightOp only after casting to Sum.
+
+150
+00:13:06,630 --> 00:13:09,462
+So, we need many fewer methods, which is
+good.
+
+151
+00:13:09,462 --> 00:13:14,612
+On the other hand, use of typetest and
+typecast is very low level, it is unsafe
+
+152
+00:13:14,612 --> 00:13:19,698
+because, when you do a type-cast you do
+not know necessarily at runtime whether
+
+153
+00:13:19,698 --> 00:13:23,882
+type-cast will succeed.
+It might also throw a classcast exception.
+
+154
+00:13:23,882 --> 00:13:29,032
+In this example, here we have actually
+guarded every type-cast by a type-test, so
+
+155
+00:13:29,032 --> 00:13:34,053
+we can assure statistically that none of
+these casts will fail, but in general
+
+156
+00:13:34,053 --> 00:13:37,916
+that's not assured.
+So that's why, we recommend the people to
+
+157
+00:13:37,916 --> 00:13:42,524
+stay away from type-casts.
+So here's a solution that looks much
+
+158
+00:13:42,524 --> 00:13:45,490
+better.
+If, after all, all we want to do is
+
+159
+00:13:45,490 --> 00:13:51,373
+evaluate expressions, then we could have a
+direct object oriented solution for that.
+
+160
+00:13:51,373 --> 00:13:56,690
+Instead of making eval a method which
+exists outside our hierarchy, we just
+
+161
+00:13:56,690 --> 00:14:02,603
+write it as a method of expression itself.
+So now, what we need to do is that, in the
+
+162
+00:14:02,603 --> 00:14:08,161
+base trait, we would have an expression
+eval which returns int, and is abstract,
+
+163
+00:14:08,161 --> 00:14:11,510
+as usual.
+Then, for a number, the evaluation of a
+
+164
+00:14:11,510 --> 00:14:17,139
+number would just give the number that's,
+well, that, well, passed into the class.
+
+165
+00:14:17,139 --> 00:14:21,628
+That is the parameter.
+And to evaluate a Sum, we simply evaluate
+
+166
+00:14:21,628 --> 00:14:26,901
+its left operand, evaluate its right
+operand, and form the sum of those two
+
+167
+00:14:26,901 --> 00:14:29,155
+values.
+Great.
+
+168
+00:14:29,155 --> 00:14:33,859
+So this is clearly much preferable to what
+we did so far,
+
+169
+00:14:33,859 --> 00:14:38,562
+But what happens if we'd like to display
+expressions now.
+
+170
+00:14:38,562 --> 00:14:44,917
+So lets assume we want to have here
+another method, call it show, that returns
+
+171
+00:14:44,917 --> 00:14:48,780
+a string.
+At ths place the expression.
+
+172
+00:14:49,280 --> 00:14:54,159
+Then of course we'd need to have an
+implementation of show in Number and
+
+173
+00:14:54,159 --> 00:14:57,901
+another one in Sum.
+That's all very well, but there's one
+
+174
+00:14:57,901 --> 00:15:03,582
+disadvantage here that we needed to touch
+all the classes in the hierarchy and add a
+
+175
+00:15:03,582 --> 00:15:08,127
+method in each one of them.
+So we have to touch many pieces of code,
+
+176
+00:15:08,127 --> 00:15:12,873
+which in a real system could be, for
+instance, in different source files.
+
+177
+00:15:12,873 --> 00:15:18,220
+So any such change that adds a new message
+to our hierarchy is rather pervasive.
+
+178
+00:15:18,220 --> 00:15:23,751
+But there's a more fundamental limitation
+of this object-oriented decomposition
+
+179
+00:15:23,751 --> 00:15:28,037
+scheme that we've seen.
+To see that, let's assume that we don't
+
+180
+00:15:28,037 --> 00:15:33,637
+want to evaluate an expression nor do we
+want to show it, but we want to simplify
+
+181
+00:15:33,637 --> 00:15:38,684
+it, let's say using this rule here.
+So we want to replace sums of products
+
+182
+00:15:38,684 --> 00:15:43,801
+with the same left operand with a product
+of sums using the usual rule of
+
+183
+00:15:43,801 --> 00:15:47,680
+distribution.
+How would we go about doing that?
+
+184
+00:15:47,680 --> 00:15:53,320
+Well, the problem here is we can't really
+have a simplify method in either product
+
+185
+00:15:53,320 --> 00:15:56,416
+or sum.
+Because the simplification involves a
+
+186
+00:15:56,416 --> 00:16:01,576
+whole subtree, not a single node.
+So it can't be encapsulated as a method of
+
+187
+00:16:01,576 --> 00:16:05,290
+a single object without also looking at
+other objects.
+
+188
+00:16:05,290 --> 00:16:09,074
+Like we could may be put simplify in the
+sum operation,
+
+189
+00:16:09,074 --> 00:16:14,784
+But then it would have to look at its two
+operands and verify that, indeed, they are
+
+190
+00:16:14,784 --> 00:16:19,806
+both products and that the left operand of
+each product is the same tree.
+
+191
+00:16:19,806 --> 00:16:22,300
+Well,
+Doing that, we are actually back at
+
+192
+00:16:22,300 --> 00:16:26,108
+classification and access methods, so
+we're back to square one.
+
+193
+00:16:26,108 --> 00:16:30,162
+We need tests and access methods for all
+the different subclasses.
+
+194
+00:16:30,162 --> 00:16:34,954
+So that shows that object oriented
+decomposition is good for some things like
+
+195
+00:16:34,954 --> 00:16:39,991
+implementing the eval function, but it's
+can't do other things such as a non local
+
+196
+00:16:39,991 --> 00:16:45,028
+simplification, and it might not be the
+best solution if you have many new methods
+
+197
+00:16:45,028 --> 00:16:49,881
+that you want to introduce because you
+have to touch all subclasses every time
+
+198
+00:16:49,881 --> 00:16:54,267
+you introduce a new method.
+In the next session, we're going to see
+
+199
+00:16:54,267 --> 00:16:57,180
+another technique that will address these
+problems.

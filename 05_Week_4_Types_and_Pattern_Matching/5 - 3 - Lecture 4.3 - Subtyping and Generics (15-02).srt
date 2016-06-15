@@ -1,0 +1,843 @@
+1
+00:00:00,000 --> 00:00:05,450
+As you know, in previous sessions we have
+already covered two forms of polymorphism.
+
+2
+00:00:05,450 --> 00:00:10,086
+One was subtyping, which was usually
+associated with object oriented
+
+3
+00:00:10,086 --> 00:00:13,222
+programming.
+The other was generics, which came
+
+4
+00:00:13,222 --> 00:00:18,609
+originally from functional programming.
+Once you combine subtyping and generics,
+
+5
+00:00:18,609 --> 00:00:24,200
+the subtle interactions that we are going
+to explore in this session and the next
+
+6
+00:00:24,200 --> 00:00:27,200
+one.
+In particular, we're going to develop an
+
+7
+00:00:27,200 --> 00:00:32,586
+important method in this session to find
+out when one type can be a subtype of
+
+8
+00:00:32,586 --> 00:00:35,381
+another.
+That method is called the Liscov
+
+9
+00:00:35,381 --> 00:00:39,640
+Substitution Principle.
+In the last session we have encountered
+
+10
+00:00:39,640 --> 00:00:45,721
+the two principal forms of polymorphism.
+Subtyping, where we can pass instances of
+
+11
+00:00:45,721 --> 00:00:52,337
+a subtype where a base type was required.
+And, generics, where we can parameterize
+
+12
+00:00:52,337 --> 00:00:57,017
+types with other types.
+In this session we will look at the
+
+13
+00:00:57,017 --> 00:01:02,341
+interactions between the two concepts.
+There are essentially two main areas to
+
+14
+00:01:02,341 --> 00:01:05,276
+cover.
+The first one is bounds, where we can
+
+15
+00:01:05,276 --> 00:01:08,553
+subject type parameters to sub type
+constraints.
+
+16
+00:01:08,553 --> 00:01:14,082
+And the second is variance, that defines
+how parameterized types behave under sub
+
+17
+00:01:14,082 --> 00:01:18,026
+typing.
+So let's look at type bounds first.
+
+18
+00:01:18,026 --> 00:01:24,281
+As a motivating example, consider you want
+to write a method assertAllPos or assert
+
+19
+00:01:24,281 --> 00:01:28,153
+all positive.
+That method should take an IntSet and it
+
+20
+00:01:28,153 --> 00:01:34,036
+should return the IntSet it, itself, but
+it should check with all elements of the
+
+21
+00:01:34,036 --> 00:01:38,355
+IntSet are positive.
+If they're not then it should throw an
+
+22
+00:01:38,355 --> 00:01:42,577
+exception.
+What would be the best type you can give
+
+23
+00:01:42,577 --> 00:01:46,481
+to assert all pos?
+You might come up with this type here.
+
+24
+00:01:46,481 --> 00:01:50,454
+Assertallpos.
+Well, it would take an insert and it would
+
+25
+00:01:50,454 --> 00:01:56,169
+return an IntSet and well, in the case
+where not all elements are positive would
+
+26
+00:01:56,169 --> 00:02:00,770
+withdraw an exception but that's not
+reflected in the result type.
+
+27
+00:02:00,770 --> 00:02:06,625
+And that's fine for most situations.
+But maybe one can be more precise.
+
+28
+00:02:06,625 --> 00:02:14,320
+In fact, if we look at the behavior of a
+assertAllPos, we see that it's governed
+
+29
+00:02:14,320 --> 00:02:24,080
+essentially by two equations that we set
+assertAllPos of empty is empty.
+
+30
+00:02:24,880 --> 00:02:38,800
+And, assetAllPos of a non empty set is,
+well, it's either, another non empty set
+
+31
+00:02:41,600 --> 00:02:46,700
+or rather the same that we passed in, or
+it throws an exception.
+
+32
+00:02:49,780 --> 00:02:55,561
+So what we see in particular is that if
+assertAllPos gets an empty argument, then
+
+33
+00:02:55,561 --> 00:03:00,929
+it would give you back an empty result.
+And if it gets a non-empty argument, it
+
+34
+00:03:00,929 --> 00:03:06,023
+would give you back a non-empty result.
+And that knowledge is actually not
+
+35
+00:03:06,023 --> 00:03:10,634
+reflected in this type here.
+Well we say well it takes an IntSet and
+
+36
+00:03:10,634 --> 00:03:14,901
+gives you back an IntSet.
+So how can we capture that additional
+
+37
+00:03:14,901 --> 00:03:18,769
+knowledge?
+So one way to express it is this way.
+
+38
+00:03:18,769 --> 00:03:24,526
+We could say assertAllPos.
+It takes sum type S that must be some
+
+39
+00:03:24,526 --> 00:03:28,221
+subtype of IntSet either empty or non
+empty.
+
+40
+00:03:28,221 --> 00:03:35,440
+And a set of that type itself.
+And will return a result of the same type.
+
+41
+00:03:35,800 --> 00:03:42,095
+So here the part that says less that colon
+insert is an upper bound of the type
+
+42
+00:03:42,095 --> 00:03:48,875
+parameter S what it means is that we can
+instantiate S to any type argument as long
+
+43
+00:03:48,875 --> 00:03:53,880
+as the type argument conforms to the
+bound, conforms to insert.
+
+44
+00:03:54,700 --> 00:04:02,225
+We also will use the symbol less than
+colon outside of type bound. So generally,
+
+45
+00:04:02,225 --> 00:04:10,597
+S < :: T will mean S is a sub-type of T.
+So we have S and we have T, and S is a
+
+46
+00:04:10,597 --> 00:04:16,806
+sub-type of T.
+Whereas S > T means the opposite, so S is
+
+47
+00:04:16,806 --> 00:04:21,980
+a supertype of T, or otherwise put T is a
+sub-type of S.
+
+48
+00:04:24,940 --> 00:04:31,287
+So we've seen upper bounds where the type
+variable ranged overall subtypes of a
+
+49
+00:04:31,287 --> 00:04:35,095
+given type.
+Scala actually also has lower bounds.
+
+50
+00:04:35,095 --> 00:04:39,459
+So we could say a bound s is a super type
+of non-empty.
+
+51
+00:04:39,459 --> 00:04:46,203
+And that would introduce a type parameter
+s that can range only over the super types
+
+52
+00:04:46,203 --> 00:04:50,488
+of non-empty.
+So in our case, of the IntSet example, s
+
+53
+00:04:50,488 --> 00:04:55,090
+could be one of either non-empty, IntSet
+AnyRef or any.
+
+54
+00:04:55,090 --> 00:05:00,155
+You might ask where are lower bounds
+useful and it's not immediately apparent
+
+55
+00:05:00,155 --> 00:05:05,675
+but you'll see later on in this session an
+important use case where lower bounds are
+
+56
+00:05:05,675 --> 00:05:10,481
+indeed essential.
+Finally it's also possible to mix a lower
+
+57
+00:05:10,481 --> 00:05:14,884
+bound with an upper bound.
+So that you would write like here.
+
+58
+00:05:14,884 --> 00:05:20,681
+You could say s is bounded from below by
+non empty and from above by IntSet And
+
+59
+00:05:20,681 --> 00:05:26,184
+that would then restrict any actual
+argument for s to a type that's in the
+
+60
+00:05:26,184 --> 00:05:32,599
+interval between non empty and IntSet In
+our case, that interval actually contains
+
+61
+00:05:32,599 --> 00:05:37,801
+only the two types, non-empty and IntSet
+because we have this inheritance
+
+62
+00:05:37,801 --> 00:05:41,270
+relationship.
+But in general, there could have, of
+
+63
+00:05:41,270 --> 00:05:45,966
+course, be more types between the lower
+bound and the upper bound.
+
+64
+00:05:45,966 --> 00:05:51,819
+So now that we've have looked at bounds,
+there is still another thing to consider.
+
+65
+00:05:51,819 --> 00:06:01,962
+So, we know that non-empty is a sub-type
+of IntSet What about if we wrap both types
+
+66
+00:06:01,962 --> 00:06:06,750
+in a list?
+Should a list of non-empty also be a
+
+67
+00:06:06,750 --> 00:06:16,109
+sub-type of list of IntSet?
+Intuitively, this makes sense.
+
+68
+00:06:16,109 --> 00:06:22,148
+A list of nonempty sets is obviously a
+special case of a list of arbitrary sets.
+
+69
+00:06:22,148 --> 00:06:27,734
+So from a domain modeling perspective,
+list of nonempty should indeed be a
+
+70
+00:06:27,734 --> 00:06:33,547
+subtype of list of IntSets So we call
+types for which this relationship holds,
+
+71
+00:06:33,547 --> 00:06:39,134
+covariant, because the subtyping
+relationship varies exactly like the type
+
+72
+00:06:39,134 --> 00:06:42,908
+parameter.
+In our case then, it would make sense to
+
+73
+00:06:42,908 --> 00:06:48,299
+make lists into a covariant type.
+The question to ask then, of course, is
+
+74
+00:06:48,299 --> 00:06:53,499
+that a property just of list, or should
+all types be covariant, is covariance
+
+75
+00:06:53,499 --> 00:06:56,920
+something that every parameterized type
+should be.
+
+76
+00:07:01,020 --> 00:07:06,776
+So to get some perspective on it, let's
+look at the concept of arrays in Java, and
+
+77
+00:07:06,776 --> 00:07:10,258
+also in C#.
+Which is, in this respect, buck for buck,
+
+78
+00:07:10,258 --> 00:07:14,380
+comparable with Java.
+If you don't know Java or C#, then the
+
+79
+00:07:14,380 --> 00:07:20,207
+only thing you need to know here, really,
+is that an array of elements of type T is
+
+80
+00:07:20,207 --> 00:07:24,827
+written T brackets in Java.
+And in Scala, we actually express this
+
+81
+00:07:24,827 --> 00:07:29,162
+slightly differently.
+We would use a normal parameter as type
+
+82
+00:07:29,162 --> 00:07:32,360
+syntax array of T to refer to the same
+types.
+
+83
+00:07:32,760 --> 00:07:38,561
+Arrays in Java are actually covariant,
+just like the list type we have seen.
+
+84
+00:07:38,561 --> 00:07:44,518
+So one would have that an array of
+nonempty sets is a subtype of an array of
+
+85
+00:07:44,518 --> 00:07:49,667
+IntSets.
+But it actually turns out that this idea
+
+86
+00:07:49,667 --> 00:07:56,160
+of arrays being covariant causes problems.
+To see why, consider this Java snippet
+
+87
+00:07:56,160 --> 00:07:59,812
+below.
+We create an array of non empties A, we
+
+88
+00:07:59,812 --> 00:08:06,305
+assign it to an IntSet B, we assign empty
+into the first element of B, and we pull
+
+89
+00:08:06,305 --> 00:08:10,850
+out the first element of A and assign it
+to a non empty.
+
+90
+00:08:10,850 --> 00:08:17,100
+So let's visualize what goes on here.
+In the first step, we create a new array.
+
+91
+00:08:19,940 --> 00:08:23,707
+And fill it with a non-empty element, call
+it A.
+
+92
+00:08:23,707 --> 00:08:30,041
+In the second step we assign A to B and
+that's actually a reference assignment.
+
+93
+00:08:30,041 --> 00:08:36,294
+So after this step, we would have another
+pointer, B, pointing to the same array.
+
+94
+00:08:36,294 --> 00:08:42,066
+In the third step, we assign empty into
+the first element of the B array.
+
+95
+00:08:42,066 --> 00:08:47,998
+So let me erase a non-empty value here,
+and replace it with an empty value
+
+96
+00:08:47,998 --> 00:08:53,298
+instead.
+In the final step, we pull out the first
+
+97
+00:08:53,298 --> 00:08:57,653
+element of the array.
+That's the empty value.
+
+98
+00:08:57,653 --> 00:09:05,075
+And assign it into a non empty set, S.
+So what we would get is S, of type non
+
+99
+00:09:05,075 --> 00:09:09,399
+empty, equals E.
+Now, something's clearly gone wrong here.
+
+100
+00:09:09,399 --> 00:09:15,220
+Because we ended up assigning an empty set
+into a variable of type non-empty sets.
+
+101
+00:09:15,220 --> 00:09:19,905
+So, if types are supposed to prevent
+something, it's precisely this.
+
+102
+00:09:19,905 --> 00:09:23,810
+That we, that, that you can't do that.
+So what went wrong?
+
+103
+00:09:23,810 --> 00:09:28,748
+So looking at the example again.
+The first line would execute fine.
+
+104
+00:09:28,748 --> 00:09:32,788
+So would the second line, because arrays
+are covariant.
+
+105
+00:09:32,788 --> 00:09:38,774
+But the third line will actually give you
+something at runtime namely and array
+
+106
+00:09:38,774 --> 00:09:42,740
+store exception.
+So you would get a runtime exception.
+
+107
+00:09:43,800 --> 00:09:47,799
+That protects the assignment of MT into
+this array.
+
+108
+00:09:47,799 --> 00:09:54,152
+What actually happens it that, to make up
+for the problems caused by coherence of
+
+109
+00:09:54,152 --> 00:10:00,661
+arrays, Java needs to store in every array
+a type tag that reflects what, at what
+
+110
+00:10:00,661 --> 00:10:05,994
+type this array was created.
+So when we create a non empty array, the
+
+111
+00:10:05,994 --> 00:10:11,720
+type tag would read, well, it contains non
+empty, so let me write this here.
+
+112
+00:10:11,720 --> 00:10:15,590
+So the type tag would say, well it's
+actually a non empty array.
+
+113
+00:10:15,590 --> 00:10:20,505
+And now that we have signed something in
+to an element of the array, we run time
+
+114
+00:10:20,505 --> 00:10:24,621
+type of the thing we have signed gets
+checked against the type tag.
+
+115
+00:10:24,621 --> 00:10:29,536
+So in our case here it would be have an
+empty value but the type tag would read
+
+116
+00:10:29,536 --> 00:10:32,670
+non empty and that would give you a run
+time error.
+
+117
+00:10:32,670 --> 00:10:35,709
+Now, it seems that this is not a very good
+deal.
+
+118
+00:10:35,709 --> 00:10:41,078
+We have traded a compile-time error for a
+run-time error, and we have also paid the
+
+119
+00:10:41,078 --> 00:10:44,053
+price for a run-time check that we have to
+do.
+
+120
+00:10:44,053 --> 00:10:48,710
+Every array store has to undergo this,
+this check against the array tach.
+
+121
+00:10:48,710 --> 00:10:54,223
+So one could argue that it was really a
+mistake to make a raised covariant that
+
+122
+00:10:54,223 --> 00:10:59,599
+produced a hole in the type system that
+had to be patched by a run time check.
+
+123
+00:10:59,599 --> 00:11:04,078
+And you might ask why did the designers of
+Java do it in the end.
+
+124
+00:11:04,078 --> 00:11:09,523
+Well it actually turned out that they
+wanted to do with they wanted to be able
+
+125
+00:11:09,523 --> 00:11:14,328
+to write a method such as sort.
+That would work for any array.
+
+126
+00:11:14,328 --> 00:11:19,967
+So the way they would express that in the
+first version of Java, it would say the
+
+127
+00:11:19,967 --> 00:11:25,048
+sort method would take an object array.
+And then covariance of arrays was
+
+128
+00:11:25,048 --> 00:11:30,757
+necessary so that an array of strings or
+an array of integers could all be passed
+
+129
+00:11:30,757 --> 00:11:35,130
+to an object array.
+Of course, with Java five and later on,
+
+130
+00:11:35,130 --> 00:11:39,770
+you've a much better way of doing that.
+You would do it the same way as in
+
+131
+00:11:39,770 --> 00:11:44,383
+Scholar, you would use a generic type.
+But before, because generics were not
+
+132
+00:11:44,383 --> 00:11:48,473
+available in the earlier version of Java,
+people made do with that.
+
+133
+00:11:48,473 --> 00:11:51,820
+Now, can we somehow generalize what we've
+learned here?
+
+134
+00:11:51,820 --> 00:11:56,097
+When does it makes sense for a, for a type
+to be a subtype of another?
+
+135
+00:11:56,097 --> 00:11:58,824
+And when should that rather not be the
+case?
+
+136
+00:11:58,824 --> 00:12:04,154
+That's actually an important principle,
+first stated by Barbara Liskov that tells
+
+137
+00:12:04,154 --> 00:12:06,820
+us when a type can be a subtype of
+another.
+
+138
+00:12:06,820 --> 00:12:11,261
+Essentially what it says is if A is a
+subtype of B.
+
+139
+00:12:11,261 --> 00:12:18,575
+Then everything one can do with a value of
+type B, should one should also be able to
+
+140
+00:12:18,575 --> 00:12:24,508
+do with a value of type A.
+So we have the Type B, that's the super
+
+141
+00:12:24,508 --> 00:12:26,980
+type.
+The Type A is the subtype.
+
+142
+00:12:26,980 --> 00:12:33,121
+And we say, well, if we expect that we can
+do something with Bs, then we can, should
+
+143
+00:12:33,121 --> 00:12:39,186
+be able to substitute an A for a B, and we
+can still do the same thing with an A.
+
+144
+00:12:39,186 --> 00:12:45,100
+The actual definition Liskov used is
+actually a bit more formal, so here it is.
+
+145
+00:12:45,100 --> 00:12:51,090
+The definition says, let Q of X be a
+property that's provable about object X of
+
+146
+00:12:51,090 --> 00:12:56,170
+type B, then Q of Y should also be
+provable for objects Y of type A.
+
+147
+00:12:56,170 --> 00:13:01,270
+Where A is less than B.
+So, the original formulation coached it in
+
+148
+00:13:01,270 --> 00:13:07,390
+terms of what you can prove about objects,
+not what operations you can perform.
+
+149
+00:13:07,390 --> 00:13:10,396
+Take what we've seen from Java back to
+Scala.
+
+150
+00:13:10,396 --> 00:13:15,472
+Then, let's look at the problematic array
+example but now expressed in Scala.
+
+151
+00:13:15,472 --> 00:13:20,393
+Here's how you would do that.
+Would create an array of non empty values,
+
+152
+00:13:20,393 --> 00:13:25,792
+you would assign empty into the first
+element of the array B, so notice that
+
+153
+00:13:25,792 --> 00:13:30,978
+array selection is expressed with
+parenthesis in Scholar, not brackets, so
+
+154
+00:13:30,978 --> 00:13:34,175
+its really the same thing as a function
+call.
+
+155
+00:13:34,175 --> 00:13:39,858
+And the underlying reason for that is that
+arrays are really specializations of
+
+156
+00:13:39,858 --> 00:13:44,120
+functions in Scholar.
+If you write code like that in Scholar,
+
+157
+00:13:44,120 --> 00:13:49,220
+then what would you expect to observe?
+Would you expect to see a type error or
+
+158
+00:13:49,220 --> 00:13:52,100
+would you expect to see a program that
+compiles?
+
+159
+00:13:52,100 --> 00:13:56,607
+And if you expect the type error then in
+what line would you expect it.
+
+160
+00:13:56,607 --> 00:14:01,941
+If the program compiles, would you expect
+to it throw exception at runtime or you
+
+161
+00:14:01,941 --> 00:14:04,988
+would you think it should run without
+exception.
+
+162
+00:14:04,988 --> 00:14:08,100
+So, you have six choices overall.
+Make your choice.
+
+163
+00:14:17,820 --> 00:14:25,660
+So the correct answer is, you would expect
+to see a type error in line two.
+
+164
+00:14:26,880 --> 00:14:34,346
+Why?
+Well, because the a value was an array of
+
+165
+00:14:34,346 --> 00:14:42,560
+nonempty.
+Where as B was an array of IntSet.
+
+166
+00:14:44,960 --> 00:14:49,998
+But, in Scala, arrays are not covariant.
+So you would not have a subtype
+
+167
+00:14:49,998 --> 00:14:55,685
+relationship between those two arrays.
+And that means you will get a type error.
+
+168
+00:14:55,685 --> 00:15:01,084
+It will say, I have found an array of
+nonempty, but I have expec, expected an
+
+169
+00:15:01,084 --> 00:15:02,164
+array of IntSet.

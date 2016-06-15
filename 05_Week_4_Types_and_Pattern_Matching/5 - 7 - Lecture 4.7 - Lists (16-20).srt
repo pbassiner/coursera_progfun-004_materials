@@ -1,0 +1,964 @@
+1
+00:00:00,000 --> 00:00:04,920
+In the next series of lectures, we'll take
+a close look at collections, in
+
+2
+00:00:04,920 --> 00:00:10,109
+particular, immutable collections that are
+used in purely functional programs.
+
+3
+00:00:10,109 --> 00:00:15,366
+An important tool in the functional
+programs was tool box, because they enable
+
+4
+00:00:15,366 --> 00:00:20,354
+the expression of algorithms in a very
+high level and concise way that, in
+
+5
+00:00:20,354 --> 00:00:23,320
+addition, has a high chance of being
+correct.
+
+6
+00:00:23,320 --> 00:00:29,450
+In this session, we'll start with lists.
+You've already seen lists as a fundamental
+
+7
+00:00:29,450 --> 00:00:34,086
+data structure last week, where we
+discussed the core concepts.
+
+8
+00:00:34,086 --> 00:00:40,366
+In this week, now we are going to show you
+how lists are defined in this Scala
+
+9
+00:00:40,366 --> 00:00:44,030
+standard library, and what kind of
+operations they support.
+
+10
+00:00:44,030 --> 00:00:49,601
+So let's see how lists are defined in the
+Standard Library and what you can do with
+
+11
+00:00:49,601 --> 00:00:52,254
+them.
+First, to construct the list having
+
+12
+00:00:52,254 --> 00:00:57,029
+elements X1 to Xn you simply write list
+and the elements in parentheses.
+
+13
+00:00:57,029 --> 00:01:01,473
+So here you see some examples.
+A list of fruit consisting of apples,
+
+14
+00:01:01,473 --> 00:01:05,055
+oranges, and pears.
+A list of numbers consisting of the
+
+15
+00:01:05,055 --> 00:01:08,968
+numbers one, to four.
+And here's the diagonal of a three by
+
+16
+00:01:08,968 --> 00:01:11,931
+three matrix represented as a list,
+Of lists.
+
+17
+00:01:11,931 --> 00:01:17,845
+And finally, the last example is the empty
+list, which is simply return list of open
+
+18
+00:01:17,845 --> 00:01:21,823
+parens, close parens.
+Lists are sequences just like arrays are,
+
+19
+00:01:21,823 --> 00:01:26,867
+and you might know arrays from Java or C
+but there are two important differences.
+
+20
+00:01:26,867 --> 00:01:31,786
+The first is that lists are immutable, so
+you can't change an element of a list.
+
+21
+00:01:31,786 --> 00:01:35,834
+And the second is that lists are
+recursive, while arrays are flat.
+
+22
+00:01:35,834 --> 00:01:41,002
+In fact, you see the lists you see in the
+Scala standard library, are very much like
+
+23
+00:01:41,002 --> 00:01:45,361
+the lists that we have constructed from
+scratch over the last week.
+
+24
+00:01:45,361 --> 00:01:48,039
+The basic construction is exactly the
+same.
+
+25
+00:01:48,039 --> 00:01:53,270
+The data structures are the same but the
+lists in the Scala library carry many more
+
+26
+00:01:53,270 --> 00:01:57,643
+operations that you can do with them.
+And in the, in this session and the next,
+
+27
+00:01:57,643 --> 00:02:00,540
+we are going to find out what these
+operations are.
+
+28
+00:02:02,360 --> 00:02:07,779
+So just as a reminder concerning the
+structures of lists.
+
+29
+00:02:07,779 --> 00:02:15,481
+So if you have a list of apples, oranges,
+and pears, then that would be represented
+
+30
+00:02:15,481 --> 00:02:22,897
+as a list of cells, where the first cell
+would be apples, the second cell would
+
+31
+00:02:22,897 --> 00:02:30,140
+contain, as its' had, oranges.
+The third one would be pears.
+
+32
+00:02:31,240 --> 00:02:36,883
+And right end part of the last console is
+the empty list Nil.
+
+33
+00:02:36,883 --> 00:02:42,173
+To look at diagonals, so that will be a
+bit more complicated.
+
+34
+00:02:42,173 --> 00:02:53,472
+So there we would have as a first element
+a list which is one, zero, zero, and Nil.
+
+35
+00:02:53,472 --> 00:03:07,992
+As a second element we would have the list
+which is zero one zero.
+
+36
+00:03:08,000 --> 00:03:19,094
+As a third element, and we would have the
+list, which is zero, zero one and all
+
+37
+00:03:19,094 --> 00:03:25,260
+these three elements are combined in a
+list, so it would look like this.
+
+38
+00:03:33,820 --> 00:03:36,905
+So, let's have a quick look at the list
+types.
+
+39
+00:03:36,905 --> 00:03:41,361
+It is essentially the same as what we have
+constructed last week.
+
+40
+00:03:41,361 --> 00:03:46,778
+So, a list with string element is written
+as list of string, a parametrized type.
+
+41
+00:03:46,778 --> 00:03:51,920
+So, fruit would be a list of string,
+numbers would be a list of int, diagonal
+
+42
+00:03:51,920 --> 00:03:56,993
+three would be a list of list of int.
+And finally, empty would be a list of
+
+43
+00:03:56,993 --> 00:04:02,273
+nothing. A list that does not contain
+elements and is therefore a list of the
+
+44
+00:04:02,273 --> 00:04:06,647
+bottom type, of as, as element type.
+Now we've seen lists constructed
+
+45
+00:04:06,647 --> 00:04:12,335
+homogeneously, refer it in list and just
+all the elements in the list but in fact,
+
+46
+00:04:12,335 --> 00:04:16,127
+that's syntactic sugar for something more
+fundamental.
+
+47
+00:04:16,127 --> 00:04:21,745
+All lists in Scala are constructed from
+the empty list Nil and the construction
+
+48
+00:04:21,745 --> 00:04:27,012
+operation, which is written as a double,
+double point and is pronounced Cons.
+
+49
+00:04:27,012 --> 00:04:33,262
+So the operation x cons xs gives you a new
+list with the first element x and it's
+
+50
+00:04:33,262 --> 00:04:39,346
+followed by the elements of xs. So that
+means that our previous, lists of fruit
+
+51
+00:04:39,346 --> 00:04:43,191
+and numbers and empty can also be written
+like this.
+
+52
+00:04:43,191 --> 00:04:48,957
+So fruit would be apples, corns, a list
+oranges, corns, a list pears and then nil.
+
+53
+00:04:48,957 --> 00:04:53,763
+That corresponds exactly to what we've
+drawn in the slide before.
+
+54
+00:04:53,763 --> 00:04:57,460
+Numbers then would be similarly and
+finally empty.
+
+55
+00:04:57,460 --> 00:05:03,994
+The empty list would just be nil.
+So again note the similarity of what we've
+
+56
+00:05:03,994 --> 00:05:07,603
+done last week with our simple list
+hierarchy.
+
+57
+00:05:07,603 --> 00:05:14,220
+It's just where we were writing new cons x
+xs.
+
+58
+00:05:14,220 --> 00:05:21,624
+Now we write simply, x :: xs.
+In fact, there's a convention for Scala
+
+59
+00:05:21,624 --> 00:05:25,478
+syntax which makes the cons operation look
+nicer.
+
+60
+00:05:25,478 --> 00:05:31,328
+We have the universal convention that all
+operators that end in a colon associate to
+
+61
+00:05:31,328 --> 00:05:34,357
+the right.
+Whereas all other operators would
+
+62
+00:05:34,357 --> 00:05:39,381
+associate to the left, as usual.
+So that means that if you have two double
+
+63
+00:05:39,381 --> 00:05:44,749
+colons like here A :: B :: C then that's
+really interpreted as A :: and then B :: C
+
+64
+00:05:44,749 --> 00:05:50,049
+so the parentheses go to the right.
+And that means when you write a list like
+
+65
+00:05:50,049 --> 00:05:54,617
+this, you can omit the parentheses because
+that would be redundant.
+
+66
+00:05:54,617 --> 00:06:00,560
+So this list really means the same as what
+we've drawn before with parenthesis going
+
+67
+00:06:00,560 --> 00:06:02,300
+here,
+Like that.
+
+68
+00:06:02,300 --> 00:06:07,530
+The second difference concerning operators
+that end in colon.
+
+69
+00:06:07,530 --> 00:06:10,628
+Concerns that raise their scene of method
+calls.
+
+70
+00:06:10,628 --> 00:06:15,471
+In fact an operand that ends in a call is
+seen as a method call of its right hand
+
+71
+00:06:15,471 --> 00:06:18,892
+operand.
+Remember all other in fix operators are
+
+72
+00:06:18,892 --> 00:06:21,927
+seen as method calls on the left hand
+operands.
+
+73
+00:06:21,927 --> 00:06:27,414
+So the left hand operand was the receiver.
+For operaators ending in a colon, this is
+
+74
+00:06:27,414 --> 00:06:32,644
+reversed, so it's the right hand operand.
+And that makes a lot of sense, because it
+
+75
+00:06:32,644 --> 00:06:38,029
+means that an expression like this will
+really be expanded by the compiler to this
+
+76
+00:06:38,029 --> 00:06:42,223
+sequence of method courts.
+So it's Nil followed by the colon
+
+77
+00:06:42,223 --> 00:06:47,465
+operation, that's a method colon Nil and
+we pass four as the argument to it.
+
+78
+00:06:47,465 --> 00:06:52,987
+Then we have another colon method, colon
+we pass three, then we have another one
+
+79
+00:06:52,987 --> 00:06:58,690
+and we pass two, and finally, we pass one.
+So each application of the double colon
+
+80
+00:06:58,690 --> 00:07:04,735
+cons operation pre-pens the argument to
+the list that was constructed so far.
+
+81
+00:07:04,735 --> 00:07:10,544
+So, double colon is really with this
+convention, the same as the preprened
+
+82
+00:07:10,544 --> 00:07:18,755
+operation we defined last week.
+You also know from last week that there
+
+83
+00:07:18,755 --> 00:07:24,236
+are three fundamental operations on lists.
+And that all other operations can be
+
+84
+00:07:24,236 --> 00:07:29,509
+expressed in terms of these three.
+They are, isEmpty which finds out whether
+
+85
+00:07:29,509 --> 00:07:33,117
+a list is empty.
+It returns true if it's empty, false
+
+86
+00:07:33,117 --> 00:07:36,587
+otherwise.
+Head, which returns the first element of
+
+87
+00:07:36,587 --> 00:07:42,068
+the list. Exception if the list is empty.
+Tail which returns the list compose of all
+
+88
+00:07:42,068 --> 00:07:46,780
+the elements except the first.
+So these operations are as you've seen
+
+89
+00:07:46,780 --> 00:07:50,355
+last week defined as methods on objects of
+type list.
+
+90
+00:07:50,355 --> 00:07:55,486
+So for instance you would write fruit.head
+and get apple or you would write
+
+91
+00:07:55,486 --> 00:08:00,160
+fruit.tail.head and get oranges.
+The second element in the fruit list.
+
+92
+00:08:00,363 --> 00:08:05,782
+If you take the diagonal of size three
+then its head element would be the first
+
+93
+00:08:05,782 --> 00:08:08,278
+row.
+So that would be the list of one, zero,
+
+94
+00:08:08,278 --> 00:08:11,065
+zero.
+And if you take head of the empty list,
+
+95
+00:08:11,065 --> 00:08:15,942
+then you would get an exception.
+A no such element exception which would
+
+96
+00:08:15,942 --> 00:08:20,277
+tell you that you have tried to take the
+head of the empty list.
+
+97
+00:08:20,277 --> 00:08:25,560
+Its also possible and in fact, often
+preferred, to decompose lists with pattern
+
+98
+00:08:25,560 --> 00:08:28,689
+matching.
+The patterns that you can apply to lists
+
+99
+00:08:28,689 --> 00:08:32,252
+are exactly the same as the construction
+methods of lists.
+
+100
+00:08:32,252 --> 00:08:36,799
+So there will be a middle pattern that
+corresponds to the middle constant,
+
+101
+00:08:36,799 --> 00:08:42,346
+there's a cons pattern that has a pattern.
+And in front of the double colon and the
+
+102
+00:08:42,346 --> 00:08:46,615
+pattern afterwards.
+And the idea of that would be that this
+
+103
+00:08:46,615 --> 00:08:51,897
+pattern matches any list whose head
+matches P and whose tail matches the
+
+104
+00:08:51,897 --> 00:08:56,165
+second pattern, PS.
+And finally there is a short hand list of
+
+105
+00:08:56,165 --> 00:09:01,881
+P1 to PN, and that's, as usual, the same
+as the pattern P1 cons P2 and so on cons
+
+106
+00:09:01,881 --> 00:09:06,295
+PN, and finally, a nil at the end.
+So, let's see some examples.
+
+107
+00:09:06,295 --> 00:09:11,358
+The first pattern here would match lists
+whose first element is a one.
+
+108
+00:09:11,360 --> 00:09:18,345
+The second element is a two and the rest
+of the list is arbitrary and is bound to
+
+109
+00:09:18,345 --> 00:09:21,295
+the variable xs.
+The second paren.
+
+110
+00:09:21,295 --> 00:09:27,485
+Here would match lists of length one.
+And the first element can be arbitrary and
+
+111
+00:09:27,485 --> 00:09:32,669
+is bound to the variable x.
+The pattern list of x is exactly the same
+
+112
+00:09:32,669 --> 00:09:36,848
+as x cons nil.
+So again, it's lists of length one whose
+
+113
+00:09:36,848 --> 00:09:42,651
+element is bound to the variable x.
+The list of open parens., closed parens.,
+
+114
+00:09:42,651 --> 00:09:46,674
+that's the empty list, the same as nil.
+And the paren.
+
+115
+00:09:46,674 --> 00:09:52,684
+List of two colon xs, what would that be?
+While that would match a list with a
+
+116
+00:09:52,684 --> 00:09:59,379
+single element which is another list that
+starts with two and whose tail is bound to
+
+117
+00:09:59,379 --> 00:10:06,609
+the variable xs.
+So let's do an exercise.
+
+118
+00:10:06,609 --> 00:10:13,165
+Consider this list pattern here x cons y
+cons list xs, ys, cons zs.
+
+119
+00:10:13,165 --> 00:10:19,339
+What is the condition that describes most
+accurately the length l of the list it
+
+120
+00:10:19,339 --> 00:10:22,922
+matches?
+Does it match lists of length three or
+
+121
+00:10:22,922 --> 00:10:27,039
+four or five?
+Or any list that, whose length is greater
+
+122
+00:10:27,039 --> 00:10:32,680
+or equal to three or greater or equal to
+four or greater or equal to five?
+
+123
+00:10:32,680 --> 00:10:35,772
+Well, let's have a look at the pattern
+again.
+
+124
+00:10:35,772 --> 00:10:38,513
+So.
+What we see here is a list of three
+
+125
+00:10:38,513 --> 00:10:43,854
+elements, the first named x the second
+named Y, the third is a list by itself.
+
+126
+00:10:43,854 --> 00:10:49,758
+And then, the rest of the list is captured
+by the variable zs so that means that the
+
+127
+00:10:49,758 --> 00:10:52,289
+list.
+Must have a length that is greater or
+
+128
+00:10:52,289 --> 00:10:55,767
+equal to three.
+The variable zed s might be empty, nil, in
+
+129
+00:10:55,767 --> 00:11:01,195
+which case the list would have a length of
+exactly three or it might be non-empty in
+
+130
+00:11:01,195 --> 00:11:05,154
+which case the length of the list would be
+greater than three.
+
+131
+00:11:05,154 --> 00:11:10,262
+So in any case the condition that we're
+looking for would be length greater or =
+
+132
+00:11:10,262 --> 00:11:13,263
+three.
+As another example let's suppose we want
+
+133
+00:11:13,263 --> 00:11:16,136
+to sort a list of numbers in ascending
+order.
+
+134
+00:11:16,136 --> 00:11:21,628
+In fact the standard class list in, in the
+Scala library has a sort function but
+
+135
+00:11:21,628 --> 00:11:25,140
+let's pretend it hasn't and we have to do
+it ourselves.
+
+136
+00:11:25,140 --> 00:11:32,545
+So one way to sort the list say, list of
+7392 would be to sort the tail of the
+
+137
+00:11:32,545 --> 00:11:36,194
+list.
+392 sorted would give us list of 239, and
+
+138
+00:11:36,194 --> 00:11:40,452
+then to insert the head of the list at the
+right place.
+
+139
+00:11:40,452 --> 00:11:47,033
+At the right place means that, the, it,
+it, all elements that precede the inserted
+
+140
+00:11:47,033 --> 00:11:53,150
+elements are smaller or equal, and all
+elements that follow are larger or equal.
+
+141
+00:11:53,150 --> 00:11:58,600
+That idea is insertion sort.
+So.
+
+142
+00:11:58,600 --> 00:12:03,681
+We would write it as follows.
+We would say, well, we have a function I
+
+143
+00:12:03,681 --> 00:12:08,537
+sort for insertion sort.
+It takes a list of ints, it gives us back
+
+144
+00:12:08,537 --> 00:12:12,199
+a list of ints which is the sorted version
+of xs.
+
+145
+00:12:12,199 --> 00:12:18,102
+And we would say, okay, if xs is the empty
+list, then, let's return the empty list.
+
+146
+00:12:18,102 --> 00:12:24,080
+If xs is a list that consists of at least
+one element, call that y, and arrest ys.
+
+147
+00:12:24,080 --> 00:12:29,406
+Then, what we would do is, we would sort
+recursively the rest, the tail, YS and we
+
+148
+00:12:29,406 --> 00:12:34,125
+would insert Y into the tail.
+What you've seen here is by far the most
+
+149
+00:12:34,125 --> 00:12:39,182
+standard way to decompose a list.
+You would typically ask first, is the list
+
+150
+00:12:39,182 --> 00:12:44,306
+empty, and if it's not empty, you would
+ask, well, what is its head and what is
+
+151
+00:12:44,306 --> 00:12:47,677
+its tail?
+And all of these questions are expressed
+
+152
+00:12:47,677 --> 00:12:53,273
+in the two patterns list of open parens,
+close parens and the cons pattern that you
+
+153
+00:12:53,273 --> 00:12:58,391
+see here.
+So the definition of insertion sort is not
+
+154
+00:12:58,391 --> 00:13:03,808
+quite done yet because we still have to
+define the function Insert, that inserts
+
+155
+00:13:03,808 --> 00:13:08,547
+an element x at the right place of a list
+x-s which is already sorted.
+
+156
+00:13:08,547 --> 00:13:13,422
+I'll leave that to you as an exercise.
+As a hint, we would apply the same
+
+157
+00:13:13,422 --> 00:13:16,537
+decomposition of lists that we've seen
+before.
+
+158
+00:13:16,537 --> 00:13:21,953
+The standard decomposition into a case
+where the list is empty, and where it's a
+
+159
+00:13:21,953 --> 00:13:26,625
+cons of a heads and a tail.
+So all that remains is fill in the triple
+
+160
+00:13:26,625 --> 00:13:30,791
+question marks here.
+Once you've done that, I'd like you to
+
+161
+00:13:30,791 --> 00:13:35,747
+answer the following question.
+What is the worst case complexity of
+
+162
+00:13:35,747 --> 00:13:40,037
+insertion sort relative to the length of
+the input list N?
+
+163
+00:13:40,037 --> 00:13:46,103
+What I mean by that is what is the number
+of steps insertion sort performs in our
+
+164
+00:13:46,103 --> 00:13:51,060
+substitution model as a function of the
+length of the input list N.
+
+165
+00:13:51,060 --> 00:13:56,271
+Does sort always take the same amount of
+time no matter how large N is?
+
+166
+00:13:56,271 --> 00:14:02,291
+So we would say that sort takes constant
+time or does sort take a number of steps
+
+167
+00:14:02,291 --> 00:14:08,090
+that's proportional to the input list N?
+Or is it maybe proportional to N times
+
+168
+00:14:08,090 --> 00:14:11,320
+logarithm of N or proportional to N
+squared?
+
+169
+00:14:11,320 --> 00:14:17,178
+So lets see how we would answer this.
+Lets first fill in the insert function.
+
+170
+00:14:17,178 --> 00:14:22,883
+So inserting an element in an empty list.
+What would we expect to get back?
+
+171
+00:14:22,883 --> 00:14:28,587
+Well, that would be the list that contains
+just the element to be inserted.
+
+172
+00:14:28,587 --> 00:14:33,136
+Inserting X in a non-empty list, well
+there would two cases.
+
+173
+00:14:33,136 --> 00:14:39,486
+The first case would be that the.
+Element to be inserted is, in fact, less
+
+174
+00:14:39,486 --> 00:14:43,639
+than or equal to the first element to the
+list.
+
+175
+00:14:43,639 --> 00:14:48,322
+In that case, we can simply give you X
+followed by XS.
+
+176
+00:14:48,322 --> 00:14:54,596
+So we know that the element X will be the
+head element of the new list.
+
+177
+00:14:54,596 --> 00:14:57,198
+Otherwise.
+What do we need to do?
+
+178
+00:14:57,198 --> 00:15:02,218
+Well, the first element of our list in the
+other case where x is greater than y,
+
+179
+00:15:02,218 --> 00:15:07,175
+would be y, because that's the smallest
+element of all the elements that we've
+
+180
+00:15:07,175 --> 00:15:09,400
+seen.
+And that would be followed by.
+
+181
+00:15:09,740 --> 00:15:18,055
+Now what we need to do is we need to have
+a call of insert of x into the remainder
+
+182
+00:15:18,055 --> 00:15:23,457
+of the list, into y s.
+So lets look at the complexity.
+
+183
+00:15:23,457 --> 00:15:29,553
+Now, looking alone at insert first, we see
+that worst case would be that the element
+
+184
+00:15:29,553 --> 00:15:33,079
+X is greater than all the elements of the
+lists.
+
+185
+00:15:33,079 --> 00:15:38,295
+In which case, we would need N recursive
+calls for the insert functions.
+
+186
+00:15:38,295 --> 00:15:44,538
+So the number of steps of insert would be
+proportional to N where N is the length of
+
+187
+00:15:44,538 --> 00:15:48,528
+the list.
+Going back to insertion sort here.
+
+188
+00:15:48,528 --> 00:15:54,356
+We ask ourselves how many calls to insert
+would be expect for list of length N.
+
+189
+00:15:54,356 --> 00:16:00,627
+Well the answer is there would be one call
+for each element that we have in the list.
+
+190
+00:16:00,627 --> 00:16:06,308
+So that would be another factor of N.
+So what we would get at the end is that
+
+191
+00:16:06,308 --> 00:16:10,291
+the complexity of insert is proportional
+to N squared.
+
+192
+00:16:10,291 --> 00:16:15,529
+Which is actually not a good.
+So we will see in a couple of sessions
+
+193
+00:16:15,529 --> 00:16:19,440
+another way to sort lists whose complexity
+is better.
