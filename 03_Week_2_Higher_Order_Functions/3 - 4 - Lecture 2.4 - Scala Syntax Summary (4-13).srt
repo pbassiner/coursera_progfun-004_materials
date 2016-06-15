@@ -1,0 +1,248 @@
+1
+00:00:00,000 --> 00:00:04,056
+Over the last two weeks you've seen
+several ways to express functions, to
+
+2
+00:00:04,056 --> 00:00:09,076
+compose them, to use them in your program.
+In this session we are going to review the
+
+3
+00:00:09,076 --> 00:00:14,811
+language constructs that you have seen so
+far in one syntax summary that you can use
+
+4
+00:00:14,811 --> 00:00:21,073
+as a reference.
+In fact there's a standard way to describe
+
+5
+00:00:21,073 --> 00:00:27,086
+elements like that with grammar and one of
+the most commonly used notations for such
+
+6
+00:00:27,086 --> 00:00:31,032
+a grammar is called extended backwards now
+form.
+
+7
+00:00:31,032 --> 00:00:37,016
+So in that standard backwards now form a
+vertical bar would denote an alternative.
+
+8
+00:00:37,016 --> 00:00:43,021
+Brackets would denote an optional element
+zero or one occurrences of an element and
+
+9
+00:00:43,021 --> 00:00:48,047
+braces would denote a repartition zero or
+more occurrences of an element.
+
+10
+00:00:48,047 --> 00:00:53,049
+Let's start with types.
+We've seen two form of types, so we would
+
+11
+00:00:53,049 --> 00:00:58,012
+have a bar here.
+A type in our language is a simple type or
+
+12
+00:00:58,012 --> 00:01:01,088
+a function type.
+A simple type so far is just an
+
+13
+00:01:01,088 --> 00:01:06,066
+identifier, and the function type is
+always contains an arrow.
+
+14
+00:01:06,066 --> 00:01:13,009
+And on the left hand side of this arrow
+could be either a simple type, or a set of
+
+15
+00:01:13,009 --> 00:01:19,075
+types in parenthesis.
+Another way to put it would be the
+
+16
+00:01:19,075 --> 00:01:23,087
+following.
+A type can be either a numeric type.
+
+17
+00:01:23,087 --> 00:01:28,018
+So we've seen int and double.
+But there's also bite, short, character,
+
+18
+00:01:28,018 --> 00:01:31,085
+long, and float.
+That's the same as the primitive types in
+
+19
+00:01:31,085 --> 00:01:34,088
+Java.
+Or it could be the boolean types that has
+
+20
+00:01:34,088 --> 00:01:39,032
+values true and false as we have seen.
+Or it could be the string type.
+
+21
+00:01:39,032 --> 00:01:44,021
+Or it could be a function type such as int
+to int or a pair of ints to ints.
+
+22
+00:01:44,021 --> 00:01:47,076
+Later, we're going to see more form of
+types than these.
+
+23
+00:01:47,076 --> 00:01:52,058
+Let's look at expressions.
+So here you see the complete syntax of
+
+24
+00:01:52,058 --> 00:01:56,051
+expressions.
+I'm not going to go into detail but it's
+
+25
+00:01:56,051 --> 00:02:01,000
+there for you as reference.
+Let's look instead at categories of
+
+26
+00:02:01,000 --> 00:02:05,075
+expressions and some examples.
+So an expressions can be an identifier,
+
+27
+00:02:05,075 --> 00:02:12,245
+such as x or, IsGoodEnough, or it can be a
+literal, such as zero or 1.0, or "abc".
+
+28
+00:02:12,245 --> 00:02:17,751
+Or it can be a function application, such
+as square root of x.
+
+29
+00:02:17,751 --> 00:02:22,046
+Or an operator application, such as y + x.
+Or a selection.
+
+30
+00:02:22,046 --> 00:02:28,005
+We've seen math.abs that selected the abs
+method from the math module.
+
+31
+00:02:28,005 --> 00:02:33,056
+Or a conditional expression, such as if (x
+< zero) - x else x.
+
+32
+00:02:33,056 --> 00:02:39,653
+Or it can be a block, like the one that
+you see here in braces, or finally an
+
+33
+00:02:39,653 --> 00:02:43,817
+anonymous function such as x arrow x plus
+one.
+
+34
+00:02:43,817 --> 00:02:48,211
+The last syntactic category are
+definitions.
+
+35
+00:02:48,211 --> 00:02:53,514
+We have seen so far function definitions
+and value definitions.
+
+36
+00:02:53,514 --> 00:02:59,431
+Function definitions start with a def,
+followed by an identifier, followed by
+
+37
+00:02:59,431 --> 00:03:06,110
+zero or more parameter lists, followed by
+an optional result type, followed by an
+
+38
+00:03:06,110 --> 00:03:11,563
+equal sign and finally an expression.
+Value definitions are simpler, they
+
+39
+00:03:11,563 --> 00:03:17,024
+consists of val, then an ident, then an
+optional type, then equals, then
+
+40
+00:03:17,024 --> 00:03:21,312
+expressions.
+Parameters can be by name, or by value.
+
+41
+00:03:21,312 --> 00:03:28,258
+So a parameter is an identifier, then a
+colon and then comes a type, but you can
+
+42
+00:03:28,258 --> 00:03:35,074
+prefix the type with the arrow, and you've
+seen that means a call by name parameter.
+
+43
+00:03:38,069 --> 00:03:43,089
+So that's all the syntax that we've seen
+so far, that we've needed so far in our
+
+44
+00:03:43,089 --> 00:03:47,021
+examples.
+We will add more elements as we need them
+
+45
+00:03:47,021 --> 00:03:51,017
+over the coming weeks.
+So those are all the language elements
+
+46
+00:03:51,017 --> 00:03:55,045
+that we have used so far.
+You will notice that they're all related
+
+47
+00:03:55,045 --> 00:03:59,068
+to functions and that we have spoken very,
+very little about data.
+
+48
+00:03:59,068 --> 00:04:04,527
+You had only some primitive data types
+like doubles or ints or booleans.
+
+49
+00:04:04,527 --> 00:04:11,487
+This is going to change next week where we
+are going to study new ways to indroduce
+
+50
+00:04:11,487 --> 00:04:16,050
+data that are centered around classes and

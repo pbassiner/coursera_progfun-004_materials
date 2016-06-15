@@ -1,0 +1,833 @@
+1
+00:00:00,000 --> 00:00:05,023
+Last session we have introduced high order
+functions as building blocks of programs.
+
+2
+00:00:05,023 --> 00:00:09,097
+High order functions are essential in many
+functional programming languages.
+
+3
+00:00:09,097 --> 00:00:13,027
+So much so that there's a special form to
+write them.
+
+4
+00:00:13,027 --> 00:00:16,001
+Which we are going to cover in this
+session.
+
+5
+00:00:16,082 --> 00:00:23,003
+So the topic of this session is currying,
+and I do not mean the food with that.
+
+6
+00:00:23,003 --> 00:00:29,017
+You'll find out in a second what that is.
+For our motivation, let's look again at
+
+7
+00:00:29,017 --> 00:00:33,057
+our summation functions, sumInts,
+sumCubes, sumFactorials.
+
+8
+00:00:33,057 --> 00:00:39,052
+We could factor out the body of these
+functions and now simply pass the function
+
+9
+00:00:39,052 --> 00:00:45,018
+to apply to each element in the interval.
+And the two pounds in the intervals.
+
+10
+00:00:45,018 --> 00:00:50,010
+But there's still repetition.
+Each of the three functions takes two
+
+11
+00:00:50,010 --> 00:00:54,079
+parameters A and B and then passes them on
+to the sum functions.
+
+12
+00:00:54,079 --> 00:00:59,071
+Can we get rid of these parameters and
+thereby become even shorter?
+
+13
+00:01:01,006 --> 00:01:08,017
+To see how that could be done, let's
+rewrite the sum functions as you see here.
+
+14
+00:01:08,017 --> 00:01:15,001
+So that sum function now takes only a
+single parameter, F, of type n to n as
+
+15
+00:01:15,001 --> 00:01:21,003
+before, and it returns a function.
+As its result indicated by this function
+
+16
+00:01:21,003 --> 00:01:24,039
+type here.
+So how can it return a function as a
+
+17
+00:01:24,039 --> 00:01:27,075
+result?
+Well, it defines a function in this body,
+
+18
+00:01:27,075 --> 00:01:33,151
+sum F, which takes the two bounds and does
+the usual computation that you've seen
+
+19
+00:01:33,151 --> 00:01:36,097
+before.
+And that function sum F will be returned
+
+20
+00:01:36,097 --> 00:01:41,005
+from sum.
+So sum is now a function that returns
+
+21
+00:01:41,005 --> 00:01:45,087
+another function.
+In particular, a locally defined function.
+
+22
+00:01:48,020 --> 00:01:53,030
+So if you do that, then we can in fact
+define sumInts to be simply sum of x,
+
+23
+00:01:53,030 --> 00:01:58,067
+arrow x, sum cubed is sum of the cubing
+function, and SUM factorial is sum of the
+
+24
+00:01:58,067 --> 00:02:02,023
+fact function.
+It turns out that these functions, they
+
+25
+00:02:02,023 --> 00:02:07,073
+are just exactly the same as the functions
+we defined before, and they can applied
+
+26
+00:02:07,073 --> 00:02:13,017
+just like the functions we defined before.
+So, we could say, SUM cubes one, ten, plus
+
+27
+00:02:13,017 --> 00:02:16,046
+SUM factorials ten, twenty.
+Next question.
+
+28
+00:02:16,046 --> 00:02:22,098
+In the previous example can we avoid the
+middleman, sum N, sum cubes, and the like.
+
+29
+00:02:22,098 --> 00:02:26,065
+Can we use directly the general sum
+function?
+
+30
+00:02:26,065 --> 00:02:30,040
+Of course.
+We simply write, sum of, in this case
+
+31
+00:02:30,040 --> 00:02:37,043
+cube, and then the bounds one to ten.
+Let's analyze that a, a little bit more.
+
+32
+00:02:37,043 --> 00:02:42,040
+So sum of cube applies to sum function.
+To the cube function.
+
+33
+00:02:42,040 --> 00:02:49,072
+And returns the sum of cube's function.
+Sum of cube is therefore equivalent to sum
+
+34
+00:02:49,072 --> 00:02:55,068
+cubes, and that function is next applied
+to the arguments one and ten.
+
+35
+00:02:56,084 --> 00:03:02,035
+So what that shows is that function
+application associates to the left.
+
+36
+00:03:02,035 --> 00:03:08,034
+If we write, sum of cube 110, then that's
+really the same thing as sum of cube.
+
+37
+00:03:10,021 --> 00:03:16,128
+This expression returns a function and
+that function then is applied to one and
+
+38
+00:03:16,128 --> 00:03:21,060
+ten.
+So here's another piece of syntactic
+
+39
+00:03:21,060 --> 00:03:25,032
+sugar.
+The definition of functions that return
+
+40
+00:03:25,032 --> 00:03:31,062
+functions is so useful in functional
+programming that we have a syntax for it
+
+41
+00:03:31,062 --> 00:03:34,093
+in skylar.
+So the A previous definition of sum
+
+42
+00:03:34,093 --> 00:03:40,028
+actually can be written shorter like that.
+We can just combine the, two parameter
+
+43
+00:03:40,028 --> 00:03:45,069
+lists of the outer function and the nested
+function and write them one after the
+
+44
+00:03:45,069 --> 00:03:48,083
+other.
+It would say sum of F int and then comes
+
+45
+00:03:48,083 --> 00:03:53,097
+another parameter list with A and B.
+And the body of the sum function is very
+
+46
+00:03:53,097 --> 00:03:59,015
+much like it was before.
+You might ask, well what's the point of
+
+47
+00:03:59,015 --> 00:04:04,090
+doing it that way instead of simply
+writing the function with three parameters
+
+48
+00:04:04,090 --> 00:04:10,006
+like we did at the beginning?
+Well the idea is that if you do that then
+
+49
+00:04:10,006 --> 00:04:14,014
+actually you can write sum of, let's say
+cube, separately.
+
+50
+00:04:14,014 --> 00:04:20,010
+That's a valid expression by itself and
+you can avoid passing the other arguments.
+
+51
+00:04:20,010 --> 00:04:26,006
+They will arrive in a different parameters
+list that can be applied later on in a
+
+52
+00:04:26,006 --> 00:04:33,070
+different context.
+So I've said that functions with multiple
+
+53
+00:04:33,070 --> 00:04:37,091
+parameter lists are syntactic sugar.
+Let's see how they expand.
+
+54
+00:04:37,091 --> 00:04:43,020
+If you have a function with multiple
+parameter lists like that, RX1, RXN equals
+
+55
+00:04:43,020 --> 00:04:48,056
+E, where N is greater than zero, that's,
+in fact, equivalent to taking the first N
+
+56
+00:04:48,056 --> 00:04:53,072
+minus one number of parameter lists.
+And for the last one, you create a fresh
+
+57
+00:04:53,072 --> 00:04:56,063
+function called G, that takes the last
+list.
+
+58
+00:04:56,063 --> 00:05:01,094
+Maps it to the body E, and G is the
+function that gets returned from F.
+
+59
+00:05:01,094 --> 00:05:08,000
+That was exactly the definition we did
+with sum F when we modeled the sum
+
+60
+00:05:08,000 --> 00:05:14,030
+function that dropped its second parameter
+list by having the inner function, sum F.
+
+61
+00:05:14,030 --> 00:05:18,040
+Or for short, we can just write an
+anonymous function.
+
+62
+00:05:18,040 --> 00:05:24,076
+So the, the, the definition up here would
+also be equivalent to the definition that
+
+63
+00:05:24,076 --> 00:05:30,042
+you see down here, where the last
+parameter list is, the parameter list of
+
+64
+00:05:30,042 --> 00:05:38,010
+anonymous function that maps to E.
+Now, if you repeat that process n times,
+
+65
+00:05:38,010 --> 00:05:44,065
+then our original n parameter list
+function is mapped to a function that has
+
+66
+00:05:44,065 --> 00:05:51,038
+no parameter list at all, but on the right
+hand side we have n nested anonymous
+
+67
+00:05:51,038 --> 00:05:54,089
+functions.
+This style of definition in function
+
+68
+00:05:54,089 --> 00:06:00,043
+application where essentially every
+function is mapped to an expression that
+
+69
+00:06:00,043 --> 00:06:06,004
+consists of anonymous functions, nested
+anonymous functions, that each take one
+
+70
+00:06:06,004 --> 00:06:10,073
+parameter, is called currying.
+It's named after its promoter, Haskell
+
+71
+00:06:10,073 --> 00:06:14,064
+Brooks Curry, who was a logician in the
+twentieth century.
+
+72
+00:06:14,064 --> 00:06:19,086
+It's no coincidence that Haskell Brooks
+Curry shares his first name with the
+
+73
+00:06:19,086 --> 00:06:24,039
+Haskell programming language.
+In fact, the, this idea goes back even
+
+74
+00:06:24,039 --> 00:06:29,039
+further to Shawn Finkel and probably
+Fricke, but the term Currying has stuck.
+
+75
+00:06:31,069 --> 00:06:38,043
+So let's take one more look at types.
+Given this function, sum f int and with it
+
+76
+00:06:38,043 --> 00:06:46,066
+two arguments, what is its type?
+The answer would be, it first, it is the
+
+77
+00:06:46,066 --> 00:06:51,084
+function that takes the function's
+argument, so that would be the argument
+
+78
+00:06:51,084 --> 00:06:54,092
+pipe.
+And that returns a function, that takes
+
+79
+00:06:54,092 --> 00:07:00,804
+two integers as arguments that would both
+be those two, and that returns finally an
+
+80
+00:07:00,804 --> 00:07:04,051
+int.
+So note that functional pipes associate to
+
+81
+00:07:04,051 --> 00:07:07,038
+the right.
+Here I could have written also.
+
+82
+00:07:07,038 --> 00:07:11,079
+Type like this.
+So, we take the intuitive function and we
+
+83
+00:07:11,079 --> 00:07:17,069
+return this function, but this blue
+parenthesis here are actually redundant.
+
+84
+00:07:17,069 --> 00:07:24,006
+Because, in general, at types such as int,
+arrow int, arrow int is read as int arrow,
+
+85
+00:07:24,006 --> 00:07:28,015
+and then the second pairs of ins are in
+parenthesis.
+
+86
+00:07:28,015 --> 00:07:32,072
+So we put the parenthesis for function
+types on the right.
+
+87
+00:07:35,016 --> 00:07:38,076
+Let's do an exercise.
+We have seen the sum function.
+
+88
+00:07:38,076 --> 00:07:44,046
+Can we write a product function that
+calculates the product of the values of a
+
+89
+00:07:44,046 --> 00:07:47,063
+function for the points on a given
+interval?
+
+90
+00:07:50,004 --> 00:07:55,087
+As a second exercise, once you have
+product can you write factorial in terms
+
+91
+00:07:55,087 --> 00:07:59,048
+of it?
+And the third part of the exercise would
+
+92
+00:07:59,048 --> 00:08:05,024
+be, can you think of a more general
+function which generalizes both sum and
+
+93
+00:08:05,024 --> 00:08:10,023
+product?
+So let's see how we would answer that
+
+94
+00:08:10,023 --> 00:08:14,000
+exercise.
+I have already opened a new worksheet and
+
+95
+00:08:14,000 --> 00:08:19,026
+given you the product function and the
+parameters and results it takes.
+
+96
+00:08:19,026 --> 00:08:25,048
+So that's analogous to some product would
+take a function that goes from end to end
+
+97
+00:08:25,048 --> 00:08:29,099
+into two pounds, which are in ints, and we
+would return an int.
+
+98
+00:08:29,099 --> 00:08:36,017
+How would we define it?
+So we would go analogous to sum function.
+
+99
+00:08:36,017 --> 00:08:43,096
+First ask, well, if the bounds are empty,
+then we want to return the unit value for
+
+100
+00:08:43,096 --> 00:08:49,034
+multiplication.
+So for sum, the unit value was a zero, but
+
+101
+00:08:49,034 --> 00:08:54,053
+for multiplication, it's a one.
+So we return a one here.
+
+102
+00:08:54,053 --> 00:09:01,094
+And otherwise, we take f of a, and now
+times product of f and a, plus one, and b.
+
+103
+00:09:05,055 --> 00:09:17,007
+Let's test it.
+Oh, forgot the function.
+
+104
+00:09:17,052 --> 00:09:25,056
+Let's take the squares of all.
+Ints between three and seven.
+
+105
+00:09:25,065 --> 00:09:31,034
+That gives us a value which is hard to
+check, so let's do a smaller, 144.
+
+106
+00:09:31,034 --> 00:09:35,083
+That looks correct.
+Let's come to the second part of the
+
+107
+00:09:35,083 --> 00:09:39,067
+exercise.
+Second part of the exercise was, can we
+
+108
+00:09:39,067 --> 00:09:45,036
+define factorial in terms of product?
+So let's see how we would do that.
+
+109
+00:09:47,084 --> 00:09:50,906
+You have the factorial, which takes an
+int.
+
+110
+00:09:50,906 --> 00:09:56,090
+And what would that be?
+So it would be, the definition would be,
+
+111
+00:09:56,090 --> 00:10:00,380
+it's a multiplication of all numbers
+between one and m.
+
+112
+00:10:00,380 --> 00:10:06,664
+So it's a product where we pass as the
+function parameter the identity, and the
+
+113
+00:10:06,664 --> 00:10:13,981
+balance would be one and N.
+Again let's test that.
+
+114
+00:10:13,981 --> 00:10:18,807
+Factorial of five, would be 120, which is
+also correct.
+
+115
+00:10:18,807 --> 00:10:26,202
+The third part of the exercise was, can we
+find a function that generalizes sum and
+
+116
+00:10:26,202 --> 00:10:29,976
+product?
+Using that function we should be able to
+
+117
+00:10:29,976 --> 00:10:33,538
+express both sum and product.
+What could that be?
+
+118
+00:10:33,538 --> 00:10:39,321
+Well that function would then be
+parametrized in the type of mapping that
+
+119
+00:10:39,321 --> 00:10:44,453
+we want to apply, because that was
+something that was common in some end
+
+120
+00:10:44,453 --> 00:10:48,647
+product, plus the two bounds, plus the two
+things that differ.
+
+121
+00:10:48,647 --> 00:10:55,013
+The two things that differ were, what was
+the unit value and what was the combining
+
+122
+00:10:55,013 --> 00:10:58,984
+function with which we combined individual
+values of f?
+
+123
+00:10:58,984 --> 00:11:03,712
+In fact that what, what we are after is a
+version of map reduce.
+
+124
+00:11:03,712 --> 00:11:09,860
+We want to have a function, the function f
+would map values in the interval to new
+
+125
+00:11:09,860 --> 00:11:13,078
+values, and reduce, then would combine
+them.
+
+126
+00:11:13,078 --> 00:11:16,095
+So let's call this new function map
+reduce.
+
+127
+00:11:16,095 --> 00:11:22,072
+And what should we get as parameters?
+Well, it needs to get the f parameter and
+
+128
+00:11:22,072 --> 00:11:28,092
+it needs to get a new parameter called det
+combine that takes two ints and returns an
+
+129
+00:11:28,092 --> 00:11:32,098
+int.
+And finally, it needs to have a unit
+
+130
+00:11:32,098 --> 00:11:36,028
+value.
+We'll call it a zero value, which is an
+
+131
+00:11:36,028 --> 00:11:39,022
+int.
+So that's the value to return if the
+
+132
+00:11:39,022 --> 00:11:43,024
+interval is empty.
+And after that, we would have the same
+
+133
+00:11:43,024 --> 00:11:48,047
+thing as before.
+So we would have the two values of A and
+
+134
+00:11:48,047 --> 00:11:50,097
+B.
+How would we define it?
+
+135
+00:11:50,097 --> 00:11:56,055
+Well, let's take the definition of product
+as a template.
+
+136
+00:11:56,055 --> 00:12:01,044
+So if A is greater than B, then what do we
+return?
+
+137
+00:12:01,044 --> 00:12:07,011
+The zero value.
+Otherwise, we take F of A, and what we do,
+
+138
+00:12:07,011 --> 00:12:15,015
+we do with F of A, we're neither summing
+nor multiplying, but we now combine it
+
+139
+00:12:15,015 --> 00:12:23,010
+with the map reduce value of the same
+three parameters that we had initially.
+
+140
+00:12:23,048 --> 00:12:35,089
+And a + one and b.
+And it seems I'm missing, apparently.
+
+141
+00:12:37,024 --> 00:12:40,055
+Good.
+So that was the map reduce example.
+
+142
+00:12:40,055 --> 00:12:45,045
+Let's test it.
+Well a good way to test it actually would
+
+143
+00:12:45,045 --> 00:12:52,001
+be to say well let's define product in
+terms of map reduce, because after all, we
+
+144
+00:12:52,001 --> 00:12:56,066
+wanted a function that generalizes both
+sum and product.
+
+145
+00:12:56,066 --> 00:13:00,004
+So product then would be map reduce.
+Off.
+
+146
+00:13:00,034 --> 00:13:06,079
+What's the function, the given function?
+F is the mapping function.
+
+147
+00:13:06,079 --> 00:13:15,032
+The combining function would be a function
+that takes x and y and returns the product
+
+148
+00:13:15,032 --> 00:13:20,038
+of x and y.
+And the zero would be one for a product.
+
+149
+00:13:20,038 --> 00:13:27,372
+And we pass the parameters like this.
+And we delete the previous version of
+
+150
+00:13:27,372 --> 00:13:31,767
+product.
+Oops.
+
+151
+00:13:31,767 --> 00:13:40,131
+I had, had a problem here, where, let's
+see what it says.
+
+152
+00:13:40,131 --> 00:13:49,162
+In fact what happened here, we get two
+errors, which says we have a forward
+
+153
+00:13:49,162 --> 00:13:53,829
+reference, that extends over two
+definitions of values, reds zero and reds
+
+154
+00:13:53,829 --> 00:13:57,140
+one.
+If you remembered off the worksheet so
+
+155
+00:13:57,140 --> 00:14:02,326
+far, reds zero and reds one, where the
+values that named these individual
+
+156
+00:14:02,326 --> 00:14:06,111
+parameters.
+What happens here is that if you define a
+
+157
+00:14:06,111 --> 00:14:12,041
+function then in fact that function can
+refer to other functions but only as long
+
+158
+00:14:12,041 --> 00:14:17,351
+as there, that there are no definitions or
+expressions between two, the two
+
+159
+00:14:17,351 --> 00:14:21,380
+functions.
+So what we need to do then is move the map
+
+160
+00:14:21,380 --> 00:14:26,716
+reviews up in front of the product.
+So that we wouldn't have a forward
+
+161
+00:14:26,716 --> 00:14:30,286
+reference anymore.
+So now the program compiles.
+
+162
+00:14:30,286 --> 00:14:34,233
+And we would get the same value of
+factorial of 520.
+
+163
+00:14:34,233 --> 00:14:40,241
+So that means that we have substituted a
+correct definition, or seemingly correct
+
+164
+00:14:40,241 --> 00:14:46,476
+definition, for product.
+You've seen currying as a way to define
+
+165
+00:14:46,476 --> 00:14:50,182
+functions piecewise, one parameter section
+after the other.
+
+166
+00:14:50,182 --> 00:14:55,439
+In the next session we are going to take
+what we've learned with high order
+
+167
+00:14:55,439 --> 00:14:58,037
+functions, in another concrete example.

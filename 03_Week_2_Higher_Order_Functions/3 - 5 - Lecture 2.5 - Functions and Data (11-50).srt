@@ -1,0 +1,660 @@
+1
+00:00:00,820 --> 00:00:03,870
+So the last two weeks have introduced you 
+to functions. 
+
+2
+00:00:03,870 --> 00:00:08,838
+You've seen ways to extract and compose 
+functions using high order functions, 
+
+3
+00:00:08,838 --> 00:00:12,500
+currying. 
+You've seen ways to write beautiful 
+
+4
+00:00:12,500 --> 00:00:16,770
+programs with just functions. 
+But all these functions used for were 
+
+5
+00:00:16,770 --> 00:00:22,760
+essentially other functions and primitive 
+data such as[INAUDIBLE] or Boolean. 
+
+6
+00:00:22,760 --> 00:00:27,162
+What we're going to do in this week is 
+add a new dimension to programming and 
+
+7
+00:00:27,162 --> 00:00:32,861
+that, ways to compose and extract data. 
+And the way we're going to that is by 
+
+8
+00:00:32,861 --> 00:00:38,774
+introducing object and classes. 
+Okay, so in this section we learned how 
+
+9
+00:00:38,774 --> 00:00:42,900
+functions can create and encapsulate data 
+structures. 
+
+10
+00:00:42,900 --> 00:00:45,860
+As an example, let's consider rational 
+numbers. 
+
+11
+00:00:45,860 --> 00:00:50,520
+We want to design a package for doing 
+rational arithmetic. 
+
+12
+00:00:50,520 --> 00:00:53,610
+A quick reminder from high school 
+mathematics. 
+
+13
+00:00:53,610 --> 00:00:58,745
+A rational number x over y is represented 
+by two integers, which are called the 
+
+14
+00:00:58,745 --> 00:01:05,604
+numerator x and the denominator y. 
+Now, in a sense, we can already do that 
+
+15
+00:01:05,604 --> 00:01:09,470
+with what we know from skala. 
+We could define two functions 
+
+16
+00:01:09,470 --> 00:01:13,260
+addRationalNumerator and 
+addRationalDenominator. 
+
+17
+00:01:13,260 --> 00:01:17,410
+And they et, each get all the bits of the 
+2 rational numbers as arguments. 
+
+18
+00:01:17,410 --> 00:01:21,130
+So both functions would get the 
+numerators and denominator of the first 
+
+19
+00:01:21,130 --> 00:01:24,858
+rational and the numerator and the 
+denominator. 
+
+20
+00:01:24,858 --> 00:01:28,640
+Of the second one and then they would 
+implement the usual add workings for 
+
+21
+00:01:28,640 --> 00:01:33,140
+rational arithmetic. 
+However, it would be difficult to manage 
+
+22
+00:01:33,140 --> 00:01:38,218
+all these numerators and denominators. 
+It's a much better choice to combine the 
+
+23
+00:01:38,218 --> 00:01:42,459
+numerator and denominator for rational 
+number in a data structure. 
+
+24
+00:01:44,850 --> 00:01:49,850
+In Scala we do this by defining a class. 
+So here you see an example. 
+
+25
+00:01:49,850 --> 00:01:54,800
+We write class, rational and then we have 
+two arguments call them x and y and then 
+
+26
+00:01:54,800 --> 00:01:59,272
+the rational class would have two 
+methods. 
+
+27
+00:01:59,272 --> 00:02:01,820
+Def's. 
+The one is called numer, and it's the 
+
+28
+00:02:01,820 --> 00:02:06,122
+same as the x argument. 
+And the other is called denom, and it's 
+
+29
+00:02:06,122 --> 00:02:11,432
+the same as the y argument. 
+So what that does, what that definition 
+
+30
+00:02:11,432 --> 00:02:16,360
+introduces is two entities. 
+A new type, that we can use henceforth, 
+
+31
+00:02:16,360 --> 00:02:21,296
+which is named Rational. 
+And also, a way to construct rationals to 
+
+32
+00:02:21,296 --> 00:02:27,56
+create elements of this type. 
+Way to construct this encapsulated in a 
+
+33
+00:02:27,56 --> 00:02:30,408
+constructor. 
+Scala keeps the names of types and values 
+
+34
+00:02:30,408 --> 00:02:34,832
+in two different namespaces. 
+It always knows from the context whether 
+
+35
+00:02:34,832 --> 00:02:39,376
+you mean the type or a value. 
+So there's no conflict between the two 
+
+36
+00:02:39,376 --> 00:02:43,43
+definitions the constructor and the type 
+of a rational. 
+
+37
+00:02:45,520 --> 00:02:50,360
+A type in a programming language is 
+essentially a set of values. 
+
+38
+00:02:50,360 --> 00:02:55,660
+Now the values that belong to a class 
+type are called objects. 
+
+39
+00:02:55,660 --> 00:02:59,814
+We create an object by taking the 
+constructor of the class and prefixing it 
+
+40
+00:02:59,814 --> 00:03:05,556
+with the operator new. 
+So a new rational 1, 2 would create a new 
+
+41
+00:03:05,556 --> 00:03:13,500
+element of the type rational where the 
+nominator is 1 and the t nominator is 2. 
+
+42
+00:03:13,500 --> 00:03:20,572
+Let's try this out in a worksheet. 
+So I will make a new package for the week 
+
+43
+00:03:20,572 --> 00:03:28,317
+three. 
+And I create a new websheet in the 
+
+44
+00:03:28,317 --> 00:03:33,860
+package. 
+Call it rationals. 
+
+45
+00:03:33,860 --> 00:03:38,758
+The one thing I am going to do after the 
+first object, which was as usual as my 
+
+46
+00:03:38,758 --> 00:03:45,520
+scratch package to try things out, is 
+define my class of rationals. 
+
+47
+00:03:45,520 --> 00:03:49,96
+So I say rational and I have the two ints 
+as we've seen on the site. 
+
+48
+00:03:49,96 --> 00:03:56,598
+And that's it, so what we do here is we 
+create a new rational that's 1 and 2 and 
+
+49
+00:03:56,598 --> 00:04:04,342
+what we see is we have created a new 
+value like 0 of type rational And the 
+
+50
+00:04:04,342 --> 00:04:15,110
+value print, as rational at, and then 
+some number. 
+
+51
+00:04:15,110 --> 00:04:18,980
+The number happens to be the hash code of 
+that rational number. 
+
+52
+00:04:18,980 --> 00:04:23,6
+That's just the particularity of the JBM, 
+if you don't define how things should 
+
+53
+00:04:23,6 --> 00:04:29,719
+print, that's the way they print. 
+Okay, so lets continue the rational 
+
+54
+00:04:29,719 --> 00:04:50,720
+sample, and define the numerator to be x. 
+And the denominator to be 1. 
+
+55
+00:04:50,720 --> 00:04:51,240
+And what we could do then is, we could 
+call this rational say x, we could take 
+
+56
+00:04:51,240 --> 00:04:53,550
+the numerator of x, and what we see. 
+No big surprise, is one. 
+
+57
+00:04:53,550 --> 00:04:59,440
+Whereas if we take the denominator we 
+would get two. 
+
+58
+00:04:59,440 --> 00:05:03,598
+So you see that objects of class varation 
+will have now two members called numer 
+
+59
+00:05:03,598 --> 00:05:07,441
+and denom and that the members are 
+selected just like in Java with an infix 
+
+60
+00:05:07,441 --> 00:05:12,458
+dot between the object name and the 
+member name. 
+
+61
+00:05:12,458 --> 00:05:17,600
+So the next step is to do some arithmetic 
+on rationals. 
+
+62
+00:05:17,600 --> 00:05:21,191
+We want to define the usual arithmetic 
+functions, addition, subtraction, 
+
+63
+00:05:21,191 --> 00:05:25,816
+multiplication, division, using the 
+standard rules that you see here. 
+
+64
+00:05:25,816 --> 00:05:30,916
+Now, one thing we could do is we could 
+use the class rational as a pure data 
+
+65
+00:05:30,916 --> 00:05:34,899
+type. 
+Just as something that gives us the data 
+
+66
+00:05:34,899 --> 00:05:37,820
+and. 
+Define the operations as functions 
+
+67
+00:05:37,820 --> 00:05:42,45
+outside so addRational would take two 
+rationals give you a rational, it would 
+
+68
+00:05:42,45 --> 00:05:46,335
+create a new rational according to the 
+matic, matical formula that multiplies 
+
+69
+00:05:46,335 --> 00:05:53,502
+numerators and denominators of the two 
+rationals in the way That you see here. 
+
+70
+00:05:53,502 --> 00:05:58,386
+And to make things print nicely we could 
+also define a makeString function that 
+
+71
+00:05:58,386 --> 00:06:02,530
+takes a Rational and produces the 
+numerator of the Rational and the 
+
+72
+00:06:02,530 --> 00:06:08,199
+denominator of the Rational separated by 
+a slash. 
+
+73
+00:06:09,210 --> 00:06:13,946
+So now we can write new Rational(1, 2) 
+and new Rational(2, 3), add the two with 
+
+74
+00:06:13,946 --> 00:06:18,386
+addRational, put user string with 
+makeString, and we would get 7/6, 
+
+75
+00:06:18,386 --> 00:06:26,858
+following the usual arithmetic loss. 
+But one can also go further and package 
+
+76
+00:06:26,858 --> 00:06:30,998
+the arithmetic functions that operate on 
+a data abstraction in the data 
+
+77
+00:06:30,998 --> 00:06:35,640
+abstraction itself. 
+So those functions that are put into 
+
+78
+00:06:35,640 --> 00:06:41,480
+classes are called methods. 
+In our example we could imagine that 
+
+79
+00:06:41,480 --> 00:06:46,88
+rational numbers now would have, in 
+addition to the methods numer and denom, 
+
+80
+00:06:46,88 --> 00:06:52,644
+also the methods add, subtract, multiply, 
+divide, equal and toString. 
+
+81
+00:06:53,740 --> 00:06:56,564
+Let's do this in the worksheet. 
+Let's design an addition function. 
+
+82
+00:06:56,564 --> 00:07:00,230
+Add. 
+Add takes 1 rational as its argument and 
+
+83
+00:07:00,230 --> 00:07:08,910
+it would then produce the numerator times 
+the argument's denominator. 
+
+84
+00:07:08,910 --> 00:07:14,404
+Plus the arguments numerator times its 
+own denominator that's the humerator of 
+
+85
+00:07:14,404 --> 00:07:26,822
+the new rational. 
+And it's denominator would be just the 
+
+86
+00:07:26,822 --> 00:07:34,750
+two denominators multiplied. 
+One thing important here is that the 
+
+87
+00:07:34,750 --> 00:07:39,446
+addition function here takes only a 
+single parameter not two. 
+
+88
+00:07:39,446 --> 00:07:43,547
+Where is the other one. 
+While the left upper end of add is really 
+
+89
+00:07:43,547 --> 00:07:48,292
+the rational number itself. 
+The rational number for which we define 
+
+90
+00:07:48,292 --> 00:07:51,177
+the class. 
+So let's see how that would work in the 
+
+91
+00:07:51,177 --> 00:07:56,866
+worksheet. 
+We would write let's write another 
+
+92
+00:07:56,866 --> 00:08:07,550
+rational, maybe, 2 3rds. 
+And then, let's write x.add of y. 
+
+93
+00:08:07,550 --> 00:08:11,704
+We still don't see very much because our 
+rational class doesn't have a good way to 
+
+94
+00:08:11,704 --> 00:08:15,905
+print itself. 
+So let's change that, we do the change 
+
+95
+00:08:15,905 --> 00:08:20,198
+that by adding a toString function to the 
+class. 
+
+96
+00:08:20,198 --> 00:08:23,484
+A toString function will be called 
+whenever an element of the class should 
+
+97
+00:08:23,484 --> 00:08:27,735
+be printed. 
+So what would toString be or one thing to 
+
+98
+00:08:27,735 --> 00:08:32,235
+do it would be two sides numer plus the 
+slash plus denom, where the plus is 
+
+99
+00:08:32,235 --> 00:08:39,520
+string concatination. 
+Okay, we see an arrow here. 
+
+100
+00:08:39,520 --> 00:08:43,690
+What do we get it says there we override 
+a method. 
+
+101
+00:08:43,690 --> 00:08:47,280
+And we need an override modifier. 
+I'll explain that later on, what that 
+
+102
+00:08:47,280 --> 00:08:50,660
+means. 
+And now let's just do as the, clip 
+
+103
+00:08:50,660 --> 00:08:58,654
+suggests, and we see that the rational, 
+all rational numbers now print nicely. 
+
+104
+00:08:58,654 --> 00:09:03,444
+Okay, let's do an exercise. 
+In your worksheet, add a method neg to 
+
+105
+00:09:03,444 --> 00:09:08,328
+class Rational that is used like this: 
+x.neg should evaluate to the negative of 
+
+106
+00:09:08,328 --> 00:09:14,475
+the rational number x. 
+And the second step, now add a method 
+
+107
+00:09:14,475 --> 00:09:19,780
+subtract or sub, to subtract 2 rational 
+numbers. 
+
+108
+00:09:19,780 --> 00:09:25,274
+And the final question that you have to 
+answer, using your worksheet, is with the 
+
+109
+00:09:25,274 --> 00:09:30,30
+numbers x, y, zet as given on the 
+previous slide, what is the result of x 
+
+110
+00:09:30,30 --> 00:09:38,430
+minus y minus zet. 
+Okay, let's see how we would do that. 
+
+111
+00:09:38,430 --> 00:09:48,69
+We take 1st the test case, let's take 
+those 3 definitions and paste them into 
+
+112
+00:09:48,69 --> 00:09:59,450
+the work sheet, replacing the previous 
+one And get to work. 
+
+113
+00:09:59,450 --> 00:10:02,944
+So the first thing we need to do is 
+define the function neg. 
+
+114
+00:10:02,944 --> 00:10:07,99
+So neg should have a, a result type 
+Rational. 
+
+115
+00:10:08,250 --> 00:10:13,754
+And what we would do is we return a new 
+rational with the numerator negated and 
+
+116
+00:10:13,754 --> 00:10:20,482
+the denominator as it is before. 
+The next thing we have to do is to find a 
+
+117
+00:10:20,482 --> 00:10:25,903
+function subtract with like add takes 
+another rational. 
+
+118
+00:10:27,790 --> 00:10:31,560
+And returns another rational. 
+So what would we do there? 
+
+119
+00:10:31,560 --> 00:10:36,348
+Well of course we could write, define it 
+with a formula not unlike the one for 
+
+120
+00:10:36,348 --> 00:10:41,900
+add, the one for subtract directly 
+divised from that. 
+
+121
+00:10:41,900 --> 00:10:47,688
+A more elegant way would be to say well 
+we add the parameter negated. 
+
+122
+00:10:47,688 --> 00:10:54,455
+So what's the advantage of doing it this 
+way is that we do not repeat ourselves. 
+
+123
+00:10:54,455 --> 00:10:59,915
+We do not have to write this rather 
+complicated formula twice, so that's 
+
+124
+00:10:59,915 --> 00:11:05,830
+usually called the DRY principle, don't 
+repeat yourself, and it's a very good 
+
+125
+00:11:05,830 --> 00:11:14,673
+li-, guideline for software development 
+whether it's functional or not. 
+
+126
+00:11:14,673 --> 00:11:21,694
+So once we have that, let's add the test 
+case so that would be x subtract y 
+
+127
+00:11:21,694 --> 00:11:31,110
+subtract that and we get the answer 
+negative 79 divided by 42. 
+
+128
+00:11:31,110 --> 00:11:35,16
+So in this session you have seen classes 
+and objects as a fundamental way to 
+
+129
+00:11:35,16 --> 00:11:39,656
+organize data. 
+In the next session we are going to learn 
+
+130
+00:11:39,656 --> 00:11:43,40
+several new things about classes and 
+objects. 
+
+131
+00:11:43,40 --> 00:11:46,368
+It actually pays to save the worksheet 
+that we have worked on for this session 
+
+132
+00:11:46,368 --> 00:11:50,663
+because we will find good use for it in 
+the next session as well. 
+

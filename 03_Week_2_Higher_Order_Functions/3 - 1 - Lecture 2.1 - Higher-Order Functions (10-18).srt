@@ -1,0 +1,639 @@
+1
+00:00:00,000 --> 00:00:04,072
+In this session, we are going to cover an
+important concept in functional
+
+2
+00:00:04,072 --> 00:00:07,082
+programming.
+Higher order functions let you pass
+
+3
+00:00:07,082 --> 00:00:11,006
+functions as arguments and return them as
+results.
+
+4
+00:00:11,006 --> 00:00:16,063
+One thing particular about functional
+languages is that they treat functions as
+
+5
+00:00:16,063 --> 00:00:19,014
+first class values.
+This means that.
+
+6
+00:00:19,014 --> 00:00:24,010
+Like any other value a function can be
+passed as a parameter to another function
+
+7
+00:00:24,010 --> 00:00:27,078
+or returned as a result.
+We'll see in this session that this
+
+8
+00:00:27,078 --> 00:00:30,048
+provides a flexible way to compose
+programs.
+
+9
+00:00:30,048 --> 00:00:35,084
+Functions that take other functions as
+parameters, or that return functions as
+
+10
+00:00:35,084 --> 00:00:41,034
+results are called higher order functions.
+So, that's the opposite of first order
+
+11
+00:00:41,034 --> 00:00:44,070
+functions.
+A first order function would be, then, a
+
+12
+00:00:44,070 --> 00:00:50,040
+function that acts on data types, simple
+data types such as [inaudible] or longs or
+
+13
+00:00:50,040 --> 00:00:55,021
+lists, but not other functions.
+Whereas, a higher order function acts on
+
+14
+00:00:55,021 --> 00:00:57,075
+other functions.
+Let's see an example.
+
+15
+00:00:57,075 --> 00:01:03,056
+Let's suppose we want to take the sum of
+all the integers between a and b.
+
+16
+00:01:03,056 --> 00:01:09,038
+So we could write something like this.
+Sum iints, it takes the, the bounds as
+
+17
+00:01:09,038 --> 00:01:14,036
+parameters, the and the b.
+And we ask well, if a is greater than b,
+
+18
+00:01:14,036 --> 00:01:19,095
+then there is nothing to sum.
+And we would return zero as the, logical
+
+19
+00:01:19,095 --> 00:01:23,084
+value for that.
+And otherwise we would return a + a
+
+20
+00:01:23,084 --> 00:01:27,016
+recursive call of sum ints of a+1 and b.
+Good.
+
+21
+00:01:27,016 --> 00:01:33,004
+Now that we've done that, let's vary the
+problem a little bit and consider taking
+
+22
+00:01:33,004 --> 00:01:36,090
+the sum of the cubes of all integers
+between a and b.
+
+23
+00:01:36,090 --> 00:01:41,076
+So here's the cube function.
+Take an x, return x times x times x.
+
+24
+00:01:41,076 --> 00:01:45,034
+Some cubes then would be the same as some
+ints.
+
+25
+00:01:45,034 --> 00:01:49,047
+But, where we used an A before now we
+return cube of A.
+
+26
+00:01:49,047 --> 00:01:53,006
+And otherwise, it's the same thing as some
+ints.
+
+27
+00:01:53,006 --> 00:01:59,012
+Recursive call to sum cubes in this case.
+Next, let's take the sum of all factorials
+
+28
+00:01:59,012 --> 00:02:03,094
+of the integers between a and b.
+Well, you see the principle by now.
+
+29
+00:02:03,094 --> 00:02:09,042
+The program, again, is exactly like sum
+ints and sum cubes, except that where
+
+30
+00:02:09,042 --> 00:02:13,037
+previously we computed the q, we compute
+the factorial.
+
+31
+00:02:13,037 --> 00:02:20,026
+Of course, these are all special cases of
+the mathematical sum of the values of f of
+
+32
+00:02:20,026 --> 00:02:26,091
+n, where f is the given function, and n is
+taken from the interval between a and b.
+
+33
+00:02:26,091 --> 00:02:32,009
+The questions is, well if mathematics has
+a special notation for that, shouldn't
+
+34
+00:02:32,009 --> 00:02:36,075
+programming have one as well.
+Can we factor out the common pattern into
+
+35
+00:02:36,075 --> 00:02:42,066
+a single method.
+So here's how that's done.
+
+36
+00:02:42,066 --> 00:02:49,049
+Let's define a function sum which takes a
+parameter F of type INT to INT, and to two
+
+37
+00:02:49,049 --> 00:02:55,002
+bounds A and B, both INTs.
+And let's generalize the previous, three
+
+38
+00:02:55,002 --> 00:03:00,006
+definitions as follows.
+We write, if A greater than B, then zero,
+
+39
+00:03:00,006 --> 00:03:04,020
+otherwise, take F of A plus sum of F and A
+plus one.
+
+40
+00:03:04,020 --> 00:03:07,037
+B.
+So the new thing here is that F is a
+
+41
+00:03:07,037 --> 00:03:11,092
+parameter of the sum function.
+It's not a given function.
+
+42
+00:03:11,092 --> 00:03:16,019
+It's a parameter.
+Once we have that, we can then write our
+
+43
+00:03:16,019 --> 00:03:19,081
+function sum in sum cube, sum factorial as
+follows.
+
+44
+00:03:19,081 --> 00:03:23,042
+Sum.
+Ints would be simply sum of id of ab,
+
+45
+00:03:23,042 --> 00:03:28,090
+where the id function simply returns its
+parameter unchanged.
+
+46
+00:03:28,090 --> 00:03:34,088
+Sum cubes would be sum of cube and AB,
+where the cube function is as what we've
+
+47
+00:03:34,088 --> 00:03:38,090
+seen before.
+And finally, sum factorial is sum of fact
+
+48
+00:03:38,090 --> 00:03:43,068
+and AB, where the fact function is, again,
+the factorial function.
+
+49
+00:03:43,068 --> 00:03:49,089
+So what we've done, effectively, is reuse
+the pattern that defines the sum function,
+
+50
+00:03:49,089 --> 00:03:55,050
+so that we had to write that only once.
+And we could reuse it in the three
+
+51
+00:03:55,050 --> 00:04:03,025
+definitions of the particular sums.
+One thing that's new here is a function
+
+52
+00:04:03,025 --> 00:04:07,009
+type.
+Function type is written A aero B, where A
+
+53
+00:04:07,009 --> 00:04:11,066
+and B are types.
+And its a type of a function that takes
+
+54
+00:04:11,066 --> 00:04:16,016
+some argument of type A, and returns a
+result of type B.
+
+55
+00:04:16,016 --> 00:04:22,077
+So for example Int aero Int, is a type of
+functions that map integers to integers.
+
+56
+00:04:24,000 --> 00:04:29,065
+Looking at the previous example again, we
+have successfully shortened the definition
+
+57
+00:04:29,065 --> 00:04:34,029
+of some ins, some cube, some factorials.
+But there's an annoying detail.
+
+58
+00:04:34,029 --> 00:04:38,080
+You have to name all the little auxiliary
+functions that we do here.
+
+59
+00:04:38,080 --> 00:04:43,078
+So, we've gained some eh, programme called
+here but we've spent more in the
+
+60
+00:04:43,078 --> 00:04:46,075
+definition of all these auxiliary
+functions.
+
+61
+00:04:46,075 --> 00:04:52,026
+So we've seen that passing functions as
+parameters can lead to the creation of
+
+62
+00:04:52,026 --> 00:04:55,088
+many small functions, and sometimes that's
+tedious.
+
+63
+00:04:55,088 --> 00:04:59,073
+Compare the situation to other types such
+as strings.
+
+64
+00:04:59,073 --> 00:05:05,049
+We could write something like Def STR
+equals ABC and then print an STR, But we
+
+65
+00:05:05,049 --> 00:05:09,005
+don't have to.
+We can just as well write print on ABC
+
+66
+00:05:09,005 --> 00:05:12,066
+directly and that's because strings exist
+as literals.
+
+67
+00:05:12,066 --> 00:05:17,056
+Since functions are important in our
+language, it makes sense to think of
+
+68
+00:05:17,056 --> 00:05:22,025
+introducing literals for functions as
+well, and that's what we do next.
+
+69
+00:05:22,025 --> 00:05:27,014
+These literals are called anonymous
+functions, because they do not have a
+
+70
+00:05:27,014 --> 00:05:31,072
+name.
+So here is how we write anonymous
+
+71
+00:05:31,072 --> 00:05:35,002
+functions.
+There is an example let's consider the
+
+72
+00:05:35,002 --> 00:05:40,027
+function that raises this argument to a
+cube that would be written as you see
+
+73
+00:05:40,027 --> 00:05:45,079
+here, sorry, takes a parameter X of type
+int, and then there comes an arrow and then
+
+74
+00:05:45,079 --> 00:05:50,037
+comes the value of the function In this
+case, case X times X times X.
+
+75
+00:05:50,037 --> 00:05:55,051
+So X colon INT is the parameter of the
+function, and on the right hand side of
+
+76
+00:05:55,051 --> 00:05:59,067
+the arrow is the body.
+In fact, the type of the parameter can be
+
+77
+00:05:59,067 --> 00:06:03,023
+omitted if the compiler can infer it from
+the context.
+
+78
+00:06:03,023 --> 00:06:08,031
+And if you have several parameters, you
+can write them in a list separated by
+
+79
+00:06:08,031 --> 00:06:11,008
+commas.
+So, for instance, that function here.
+
+80
+00:06:11,008 --> 00:06:15,045
+What would that be?
+Well yes the summation functions so it
+
+81
+00:06:15,045 --> 00:06:20,056
+would take two integers X and Y, and give
+you the sum of X and Y.
+
+82
+00:06:20,056 --> 00:06:24,071
+You could ask, are anonymous function
+essential for Scalar?
+
+83
+00:06:24,071 --> 00:06:29,053
+Just as, let's say, conditionals or value
+definitions are essential.
+
+84
+00:06:29,053 --> 00:06:35,015
+Or can they be defined in some other way?
+It actually, it turns out that every
+
+85
+00:06:35,015 --> 00:06:39,096
+anonymous function can be expressed in
+some other way, using a def.
+
+86
+00:06:39,096 --> 00:06:45,058
+So let's say you have an anonymous
+function with n parameters x1 to xn and a
+
+87
+00:06:45,058 --> 00:06:49,016
+body e.
+You can always write this as the function
+
+88
+00:06:49,016 --> 00:06:52,011
+def f.
+Then come the parameters, then comes the
+
+89
+00:06:52,011 --> 00:06:56,088
+body, and then you follow that by a
+reference to this function that you have
+
+90
+00:06:56,088 --> 00:07:00,009
+just defined.
+Sometimes you might have to write the
+
+91
+00:07:00,009 --> 00:07:04,074
+expression in a block, so that it, it
+doesn't, the name doesn't get confused
+
+92
+00:07:04,074 --> 00:07:09,067
+with something else.
+Because we can always rewrite anonymous
+
+93
+00:07:09,067 --> 00:07:13,087
+functions, we can therefore say that they
+are syntactic sugar.
+
+94
+00:07:13,087 --> 00:07:19,025
+They make writing functions sometimes
+easier, but they're not essential in the
+
+95
+00:07:19,025 --> 00:07:24,082
+sense that they do not add anything to the
+fundamentally expressive power of the
+
+96
+00:07:24,082 --> 00:07:28,051
+language.
+So to come back to the sum INTs and sum
+
+97
+00:07:28,051 --> 00:07:34,065
+cubes example, using anonymous functions,
+we can write these now in a shorter way.
+
+98
+00:07:34,065 --> 00:07:41,001
+Sum INTs would be just the function sum,
+where the function we pass is the identity
+
+99
+00:07:41,001 --> 00:07:46,076
+function, written X arrow X, and to
+balance our, the parameters, and sum cubes
+
+100
+00:07:46,076 --> 00:07:51,060
+would have as the function parameter X
+arrow X times X times X.
+
+101
+00:07:51,060 --> 00:07:57,038
+And if we do that, then we do not need
+anymore the auxiliary definitions of
+
+102
+00:07:57,038 --> 00:08:00,021
+identity or cube.
+Let's do an exercise.
+
+103
+00:08:00,021 --> 00:08:06,007
+The sum function uses linear recursion,
+can you write a tail recursive function
+
+104
+00:08:06,007 --> 00:08:09,031
+instead?
+Note that, unlike factorial, some really
+
+105
+00:08:09,031 --> 00:08:13,025
+could profit from this tail
+recursion optimization.
+
+106
+00:08:13,025 --> 00:08:18,081
+Because of the interval between A and B is
+large, you might get a lot of different
+
+107
+00:08:18,081 --> 00:08:22,027
+recursive steps so you might risk a stack
+overflow.
+
+108
+00:08:22,027 --> 00:08:27,030
+So let's rectify that, and design a
+tail recursive function instead.
+
+109
+00:08:27,030 --> 00:08:30,082
+I've already given you a template for this
+function.
+
+110
+00:08:31,003 --> 00:08:35,071
+It uses a nested function loop.
+And all you have to do is replace the
+
+111
+00:08:35,071 --> 00:08:43,014
+triple question marks here and here.
+So let's see how we would go about that.
+
+112
+00:08:43,014 --> 00:08:49,007
+The first one here is we, in the loop
+function we have a test that says well if
+
+113
+00:08:49,007 --> 00:08:53,056
+something is true then probably that would
+be the termination.
+
+114
+00:08:53,056 --> 00:08:58,051
+So when do we terminate.
+Well we terminate if the lower bound A is
+
+115
+00:08:58,051 --> 00:09:03,038
+greater then the upper bound B.
+And what do we return in that case?
+
+116
+00:09:03,038 --> 00:09:09,006
+Well, since we have used the accumulator
+trick, we would return the accumulator.
+
+117
+00:09:09,006 --> 00:09:14,059
+Once we have that, we can look at the
+initial call, so as the first parameter,
+
+118
+00:09:14,059 --> 00:09:20,056
+we would pass the initial lower bound A.
+And as the initial accumulator would have
+
+119
+00:09:20,056 --> 00:09:24,070
+to be what.
+Well, we know accumulator is the result
+
+120
+00:09:24,070 --> 00:09:29,007
+that we return, and the interval is
+initially empty,
+
+121
+00:09:29,007 --> 00:09:34,080
+so that would have to be zero.
+And finally, in the recursive call, we
+
+122
+00:09:34,080 --> 00:09:39,094
+would assume that the initial bound gets
+incremented by one.
+
+123
+00:09:39,094 --> 00:09:45,076
+And the new accumulator is F applied to A
+plus the previous accumulator.
+
+124
+00:09:45,076 --> 00:09:56,083
+You can test this function.
+Let's apply this function to lower bound
+
+125
+00:09:56,083 --> 00:10:03,049
+three, upper bound five.
+And you would get 50, as expected.
+
+126
+00:10:03,049 --> 00:10:08,092
+You have seen higher order functions as
+essential building blocks of functional
+
+127
+00:10:08,092 --> 00:10:12,054
+programs.
+In the next session we are going to play a
+
+128
+00:10:12,054 --> 00:10:18,018
+little bit more with higher order functions
+and introduce new ways to express them.

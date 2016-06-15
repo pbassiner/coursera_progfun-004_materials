@@ -1,0 +1,862 @@
+1
+00:00:01,109 --> 00:00:04,919
+In this session we are going to stay a bit with the rational
+
+2
+00:00:04,919 --> 00:00:09,818
+numbers we introduced in the last session and are going to explore them further.
+
+3
+00:00:09,818 --> 00:00:13,173
+We are going to introduce in particular an important cornerstone of software engineering,
+
+4
+00:00:13,173 --> 00:00:23,126
+namely data abstraction, and show how it relates to the model of classes that we've introduced earlier.
+
+5
+00:00:23,449 --> 00:00:29,009
+So, in this session we will learn several
+new aspects about classes and objects.
+
+6
+00:00:29,009 --> 00:00:33,724
+Let's start with the worksheet that we had
+at the end of last session.
+
+7
+00:00:33,935 --> 00:00:37,314
+I will just change this, make a new
+example here.
+
+8
+00:00:37,314 --> 00:00:38,792
+We'll say, y dot add of y.
+
+9
+00:00:38,792 --> 00:00:42,440
+What does that give?
+Well, it gives us 70 over 49.
+
+10
+00:00:42,440 --> 00:00:48,760
+What you've seen here is that, that's a
+number that's not as simple as possible.
+
+11
+00:00:48,760 --> 00:00:53,453
+I would have expected a simpler number, a
+number maybe ten over seven.
+
+12
+00:00:53,453 --> 00:00:57,194
+So, why is that?
+Well, it turns out to be able to do that,
+
+13
+00:00:57,194 --> 00:01:00,322
+we need to still simplify the rational
+number.
+
+14
+00:01:00,322 --> 00:01:06,104
+When we produce them with the addition and
+multiplication operators, it could be that
+
+15
+00:01:06,104 --> 00:01:12,769
+we end up with numerators and denominators
+that can be further simplified by dividing
+
+16
+00:01:12,769 --> 00:01:18,075
+both with a common divisor. And that
+operation needs to be done so that we can
+
+17
+00:01:18,075 --> 00:01:21,680
+print rational numbers in the simplest
+possible form.
+
+18
+00:01:21,960 --> 00:01:26,431
+We could, of course, implement this in
+each rational operation. Add a
+
+19
+00:01:26,431 --> 00:01:31,702
+simplification step to add and multiply
+and subtract and so on. But, it would be
+
+20
+00:01:31,702 --> 00:01:37,041
+very easy to forget this division in an
+operation. Also, it would violate the DRY
+
+21
+00:01:37,041 --> 00:01:42,379
+principal, don't repeat yourself. So, a
+better alternative would be to perform the
+
+22
+00:01:42,379 --> 00:01:47,184
+simplification just once, and the natural
+place for that would be in the
+
+23
+00:01:47,184 --> 00:01:52,790
+initialization code of the class rational,
+that's when we create the rational object.
+
+24
+00:01:52,790 --> 00:01:56,380
+Alright. So, let's see how we would do
+that in the worksheet.
+
+25
+00:01:56,660 --> 00:02:02,498
+What I'll do first is I will retake the
+definition of gcd that we have seen the
+
+26
+00:02:02,498 --> 00:02:06,896
+previous week, and then make it a method
+of class rational.
+
+27
+00:02:07,124 --> 00:02:12,962
+What's important is that I put the
+modifier private in front of it because I
+
+28
+00:02:12,962 --> 00:02:18,498
+do not want that clients of class rational
+can see gcd. It's strictly for
+
+29
+00:02:18,498 --> 00:02:23,427
+implementation purposes here.
+The next thing I do is I define a
+
+30
+00:02:23,427 --> 00:02:28,280
+private value, g, which is the greatest
+common divisor of x and y.
+
+31
+00:02:28,840 --> 00:02:35,742
+And then, when I create a numerator, I'll
+say the numerator is x divided by g, and
+
+32
+00:02:35,742 --> 00:02:41,771
+the denominator is y divided by g.
+Let's see whether anything changes.
+
+33
+00:02:41,771 --> 00:02:48,673
+Well, my addition operation now yields the
+rational in simplified form and that's
+
+34
+00:02:48,673 --> 00:02:53,042
+what we wanted.
+So, note that, gcd and g are private
+
+35
+00:02:53,042 --> 00:02:58,809
+members of class rational.
+We can only access them from inside the
+
+36
+00:02:58,809 --> 00:03:03,171
+rational class.
+In this example, we've calculated the gcd
+
+37
+00:03:03,171 --> 00:03:09,348
+immediately here on initialization of the
+class, so that its value can be reused in
+
+38
+00:03:09,348 --> 00:03:15,525
+the calculations of numer and denom here
+so we don't have to recalculate gcd every
+
+39
+00:03:15,525 --> 00:03:20,809
+time someone calls numer and denom.
+We could also change that, of course.
+
+40
+00:03:20,809 --> 00:03:25,200
+We could call GCD in the code of numer and
+denom like that.
+
+41
+00:03:25,200 --> 00:03:30,816
+So that way we avoid the additional seal
+G, and it could be advantages if the
+
+42
+00:03:30,816 --> 00:03:34,610
+functions numer and denom are not called
+very often.
+
+43
+00:03:34,610 --> 00:03:39,716
+Then we could amortize the additional cost
+of the GCD operations here.
+
+44
+00:03:39,716 --> 00:03:45,552
+What we could equally well do is turn
+numer and denom into vowels, so that they
+
+45
+00:03:45,552 --> 00:03:49,674
+are computed only once.
+So now that would be advantageous if the
+
+46
+00:03:49,674 --> 00:03:52,536
+functions numer and denom are called very
+often.
+
+47
+00:03:52,536 --> 00:03:56,829
+Because, in that case, we've already
+computed what they are, and we do not
+
+48
+00:03:56,829 --> 00:04:00,933
+repeat the computations.
+What's important here is that, no matter
+
+49
+00:04:00,933 --> 00:04:06,546
+which of the three alternatives we choose
+clients observe exactly the same behavior
+
+50
+00:04:06,546 --> 00:04:09,821
+in each case.
+So, this ability to choose different
+
+51
+00:04:09,821 --> 00:04:14,432
+implementations of the data without
+affecting clients is called data
+
+52
+00:04:14,432 --> 00:04:17,573
+abstraction.
+And data abstraction is one of the
+
+53
+00:04:17,573 --> 00:04:22,384
+cornerstones of software engineering.
+It's a very important principle, in
+
+54
+00:04:22,384 --> 00:04:27,775
+particular, as systems grow large.
+In the next step, we want to add two more
+
+55
+00:04:27,775 --> 00:04:32,826
+methods to our class rational.
+One method less, which compares two
+
+56
+00:04:32,826 --> 00:04:38,731
+rational values, and the other, maximum,
+which takes the maximum of two values.
+
+57
+00:04:38,731 --> 00:04:42,616
+Let's start with less.
+So, we would take a rational.
+
+58
+00:04:42,616 --> 00:04:47,278
+When is this rational that you see here
+less than the other?
+
+59
+00:04:47,278 --> 00:04:54,705
+Well, it would be if the numerator times
+the denominator of the other function is
+
+60
+00:04:54,705 --> 00:05:01,147
+less than the numerator of the other
+rational times our own denominator.
+
+61
+00:05:01,147 --> 00:05:08,664
+We've simply multiplied both sides with
+the both denominators, and that's what we
+
+62
+00:05:08,664 --> 00:05:11,080
+arrive at.
+So, let's test it.
+
+63
+00:05:12,020 --> 00:05:17,364
+Is x dot less y?
+And the answer is true, as expected.
+
+64
+00:05:17,364 --> 00:05:23,120
+The next function we want to do is the
+maximum function.
+
+65
+00:05:26,320 --> 00:05:30,957
+So, what could that be?
+The maximum of the current rational and
+
+66
+00:05:30,957 --> 00:05:34,739
+the parameter.
+Well, we'd really be able, want to be able
+
+67
+00:05:34,739 --> 00:05:38,734
+to use less here.
+And we want to say, well, if the current
+
+68
+00:05:38,734 --> 00:05:44,585
+rational number is less than the other
+rational number then, the other rational
+
+69
+00:05:44,585 --> 00:05:49,907
+number, otherwise the current one.
+But, that means we have to refer to our
+
+70
+00:05:49,907 --> 00:05:55,080
+rational number as a whole.
+And, in fact, there is a way to do that in
+
+71
+00:05:55,080 --> 00:06:00,558
+all, most object oriented languages this is
+either called "this" or "self".
+
+72
+00:06:00,558 --> 00:06:06,417
+So, this refers to the current rational.
+So it would, would say if this is less
+
+73
+00:06:06,417 --> 00:06:10,830
+than that, then we'll return that,
+otherwise, we return this.
+
+74
+00:06:10,830 --> 00:06:16,580
+And we can also test it.
+X maximum of y would be five, seven,
+
+75
+00:06:16,580 --> 00:06:23,425
+because that's the bigger of the two.
+So, we've seen that, on the inside of a
+
+76
+00:06:23,425 --> 00:06:30,910
+class, the name this represents the object
+on which the current method is executed.
+
+77
+00:06:30,910 --> 00:06:36,240
+And you've seen that this is essential for
+certain operations such as Maximum where
+
+78
+00:06:36,240 --> 00:06:40,810
+we have to return the whole rational
+number as a result, as you see here.
+
+79
+00:06:40,810 --> 00:06:45,627
+Okay. So, now that we are there,
+We can actually make a further
+
+80
+00:06:45,627 --> 00:06:49,800
+simplification. If we refer to a name x in
+a class,
+
+81
+00:06:49,800 --> 00:06:55,117
+that's really just an abbreviation for
+this dot x. So, the, the members of a
+
+82
+00:06:55,117 --> 00:06:59,070
+class can always be referenced with this
+as the prefix.
+
+83
+00:06:59,070 --> 00:07:03,669
+So, an equivalent way to formulate the
+less method is as follows.
+
+84
+00:07:03,669 --> 00:07:08,555
+That we say this.numer times that.denom,
+less than that.numer times this.denom.
+
+85
+00:07:08,555 --> 00:07:13,801
+And together, with the choice of our
+parameter name, now you see why we've
+
+86
+00:07:13,801 --> 00:07:17,754
+called it that.
+That gives us a nice symmetry in the
+
+87
+00:07:17,754 --> 00:07:23,000
+operations between the left operand and the right operand.
+
+88
+00:07:23,000 --> 00:07:27,263
+Okay.
+As a next step, let's look at some of the
+
+89
+00:07:27,263 --> 00:07:31,626
+restrictions we have to impose on
+rationals.
+
+90
+00:07:31,626 --> 00:07:43,204
+As a motivation, let me create a rational
+val strange equals new rational one over
+
+91
+00:07:43,204 --> 00:07:54,820
+zero. And then, add strange to itself.
+What do we get?
+
+92
+00:07:54,820 --> 00:07:58,827
+We get an arithmetic exception division by
+zero.
+
+93
+00:07:58,827 --> 00:08:05,257
+Because of course, a rational that has a
+denominator of zero doesn't exist.
+
+94
+00:08:05,507 --> 00:08:11,607
+It's not a rational number.
+So, how can we guard against users
+
+95
+00:08:11,607 --> 00:08:19,083
+creating illegal rationals like that?
+One thing we could do is add a requirement
+
+96
+00:08:19,083 --> 00:08:23,101
+into our class.
+So, show you how that's done.
+
+97
+00:08:23,101 --> 00:08:30,671
+We could require that y is different from
+zero, and then we could say denominator
+
+98
+00:08:30,671 --> 00:08:38,475
+must be non zero.
+If we do that and look at the worksheet,
+
+99
+00:08:38,475 --> 00:08:44,017
+then now our exception has changed.
+It now says, illegal argument exception,
+
+100
+00:08:44,017 --> 00:08:48,885
+Denominator must be nonzero.
+So, a requirement is a test that is
+
+101
+00:08:48,885 --> 00:08:54,652
+performed when the class is initialized
+here, and if that test fails, then you,
+
+102
+00:08:54,652 --> 00:08:59,820
+you will get an exception, in this case,
+an illegal argument exception.
+
+103
+00:09:00,180 --> 00:09:07,145
+So, let me remove the problematic lines
+to get a clean work sheet again.
+
+104
+00:09:07,145 --> 00:09:12,592
+The require function that we've called in
+class rational is actually a predefined
+
+105
+00:09:12,592 --> 00:09:15,249
+function.
+So, it's already defined for us.
+
+106
+00:09:15,249 --> 00:09:20,032
+And it takes a condition, that's the test
+and an optional message string.
+
+107
+00:09:20,032 --> 00:09:23,619
+In our case, that was the denominator must
+be positive.
+
+108
+00:09:23,619 --> 00:09:28,667
+If the condition here is false, then
+require will throw any illegal argument
+
+109
+00:09:28,667 --> 00:09:31,723
+exception,
+And that exception will contain the
+
+110
+00:09:31,723 --> 00:09:36,009
+message string.
+Designs require that's also another test
+
+111
+00:09:36,009 --> 00:09:40,591
+which is called assert.
+Assert takes a condition like require and
+
+112
+00:09:40,591 --> 00:09:45,877
+also an optional message string so you
+could use it like this for instance,
+
+113
+00:09:45,877 --> 00:09:51,586
+X equals square root of y. And then, you
+assert that x must be greater or equal
+
+114
+00:09:51,586 --> 00:09:55,639
+to zero.
+Like require, a failing assert will also
+
+115
+00:09:55,639 --> 00:09:58,653
+throw an exception, but it's a different
+one.
+
+116
+00:09:58,653 --> 00:10:04,063
+Now, it will throw an assertion error instead
+of, before, an illegal argument exception.
+
+117
+00:10:04,063 --> 00:10:07,145
+That, in fact, reflects a difference in
+intent.
+
+118
+00:10:07,145 --> 00:10:12,967
+Require is used to enforce a precondition
+on the caller of a function or the creator
+
+119
+00:10:12,967 --> 00:10:18,104
+of an object of some class. Whereas,
+assert is used to check the code of the
+
+120
+00:10:18,104 --> 00:10:21,855
+function itself.
+So, if a precondition fails, then you get
+
+121
+00:10:21,855 --> 00:10:26,967
+an illegal argument exception. Whereas, if
+an assertion fails and it's not the
+
+122
+00:10:26,967 --> 00:10:30,884
+caller's fault and consequently you get an
+assertion error.
+
+123
+00:10:30,884 --> 00:10:35,200
+Another syntactic construct we're going to
+cover is constructors.
+
+124
+00:10:35,200 --> 00:10:40,361
+In fact, in Scala, every class already
+implicitly introduces a constructor which
+
+125
+00:10:40,361 --> 00:10:43,302
+is called the primary constructor of the
+class.
+
+126
+00:10:43,302 --> 00:10:48,725
+That primary constructor simply takes the
+parameters of the class and executes all
+
+127
+00:10:48,725 --> 00:10:53,327
+statements in the class body.
+So, for instance, the constructor of class
+
+128
+00:10:53,327 --> 00:10:58,347
+rational would take the x and y as the
+parameter, and then execute the class
+
+129
+00:10:58,347 --> 00:11:01,517
+body. So, that means, it would execute the
+require,
+
+130
+00:11:01,517 --> 00:11:06,801
+It would execute the value definition
+here, and for the def, there's nothing to
+
+131
+00:11:06,801 --> 00:11:10,020
+execute.
+If you know Java, then you're used to
+
+132
+00:11:10,020 --> 00:11:15,402
+classes having several constructors.
+In fact, in Scala, that's also possible,
+
+133
+00:11:15,402 --> 00:11:18,747
+even though the syntax is different from
+Java.
+
+134
+00:11:18,747 --> 00:11:24,565
+So, let's say we want to have a second
+constructor for class Rational that only
+
+135
+00:11:24,565 --> 00:11:29,874
+takes one integer: denominator.
+In that case, we would assume that the
+
+136
+00:11:29,874 --> 00:11:34,674
+nominator could be zero.
+We can just write as follows. We can write
+
+137
+00:11:34,674 --> 00:11:42,682
+def this x int,
+And then we write x and one. So, what you
+
+138
+00:11:42,682 --> 00:11:47,830
+see here is a second usage of the keyword,
+this, now used in function position.
+
+139
+00:11:47,830 --> 00:11:53,112
+If this is used as a function, then it
+means a constructor of the class. So here,
+
+140
+00:11:53,112 --> 00:11:58,528
+we define a second constructor for class
+rational in addition to the primary one.
+
+141
+00:11:58,528 --> 00:12:04,077
+It only takes a single argument, and what
+it does it calls another constructor with
+
+142
+00:12:04,077 --> 00:12:08,155
+the two arguments.
+That constructor takes two arguments is in
+
+143
+00:12:08,155 --> 00:12:11,900
+fact the implicit primary constructor of
+class rational.
+
+144
+00:12:12,220 --> 00:12:17,719
+So, if we do that, then we can use class
+rational in a simpler way.
+
+145
+00:12:17,719 --> 00:12:21,800
+We could, for instance, say new rational
+of two,
+
+146
+00:12:22,540 --> 00:12:26,451
+And that then would give the rational two
+over one.
+
+147
+00:12:26,451 --> 00:12:30,900
+So, we could conveniently omit the
+denominator if it's one.
+
+148
+00:12:31,680 --> 00:12:36,460
+So, let's do an exercise.
+Modify the rational class so that all
+
+149
+00:12:36,460 --> 00:12:40,314
+rational numbers are kept unsimplified
+internally,
+
+150
+00:12:40,314 --> 00:12:46,020
+But the simplification is applied when
+numbers are converted to strings.
+
+151
+00:12:46,840 --> 00:12:52,959
+When you've done that, think about where
+the clients of the new class rational
+
+152
+00:12:52,959 --> 00:12:59,156
+would observe the same behavior when
+interacting with it, same behavior as the
+
+153
+00:12:59,156 --> 00:13:03,236
+previous one.
+Possible answers are yes, no, or yes for
+
+154
+00:13:03,236 --> 00:13:09,120
+small sizes of denominators and nominators
+and small numbers of operations.
+
+155
+00:13:10,340 --> 00:13:14,900
+Okay. So, let's see how we would solve
+this example.
+
+156
+00:13:14,900 --> 00:13:21,358
+So, I can leave the gcd function because
+I will still need it, but I remove the
+
+157
+00:13:21,358 --> 00:13:27,899
+definition of the value G as well as the
+two divisions here, so that means that
+
+158
+00:13:27,899 --> 00:13:31,624
+rationals are, from now on, kept
+unsimplified.
+
+159
+00:13:31,624 --> 00:13:36,758
+You see that our x add, sorry, our y
+example jumped back to seventy over
+
+160
+00:13:36,758 --> 00:13:42,471
+forty-nine instead of ten over seven.
+So, what we do instead is we go into the
+
+161
+00:13:42,471 --> 00:13:46,280
+toString function and do something
+there.
+
+162
+00:13:46,280 --> 00:13:59,499
+What I propose is that we define our
+gcd function in toString. val g equals gcd
+
+163
+00:13:59,499 --> 00:14:11,976
+of numer and denom.
+And then, we divide numer by d and denom
+
+164
+00:14:11,976 --> 00:14:20,601
+by g, and that would do the trick. So, now
+we keep the rational number unsimplified.
+
+165
+00:14:20,601 --> 00:14:27,207
+But, before we print it, we perform the
+simplification. And in our case, all the
+
+166
+00:14:27,207 --> 00:14:33,180
+results really gave back the same value.
+So, is that always the case?
+
+167
+00:14:33,180 --> 00:14:38,229
+Well, the answer, actually, is no.
+It's only the case if the numerator or
+
+168
+00:14:38,229 --> 00:14:42,863
+denominator is small.
+The reason for that is that we are dealing
+
+169
+00:14:42,863 --> 00:14:46,529
+here with integers as the fields of a
+class rational.
+
+170
+00:14:46,529 --> 00:14:52,201
+And, so we might exceed the maximal number
+for an integer which is a bit more than
+
+171
+00:14:52,201 --> 00:14:55,313
+two billion.
+For that reason, it actually, it's
+
+172
+00:14:55,313 --> 00:15:00,708
+actually better to always normalize
+numbers as early as possible because that
+
+173
+00:15:00,708 --> 00:15:05,204
+means that we can perform more
+computations without running into
+
+174
+00:15:05,204 --> 00:15:06,657
+arithmetic overflows.
