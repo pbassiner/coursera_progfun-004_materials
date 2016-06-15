@@ -1,0 +1,724 @@
+1
+00:00:00,000 --> 00:00:06,552
+In this session, we cover lazy evaluation.
+Roughly, laziness means do things as late
+
+2
+00:00:06,552 --> 00:00:12,465
+as possible, and never do them twice.
+We will apply laziness to streams, and
+
+3
+00:00:12,465 --> 00:00:17,020
+trace how it helps evaluation in a
+concrete stream query.
+
+4
+00:00:17,020 --> 00:00:22,428
+The implementation of streams that you've
+seen in the last session solves the
+
+5
+00:00:22,428 --> 00:00:27,421
+problem of avoiding unnecessary
+computations when the tail value of the
+
+6
+00:00:27,421 --> 00:00:33,246
+stream is not needed, but it suffers from
+another very serious potential performance
+
+7
+00:00:33,246 --> 00:00:36,783
+problem.
+And that is that if tail is called several
+
+8
+00:00:36,783 --> 00:00:41,983
+times the corresponding stream will be
+recomputed each time tail is called. And
+
+9
+00:00:41,983 --> 00:00:47,670
+of course that could by itself cause up to
+exponential blow up in program complexity.
+
+10
+00:00:47,670 --> 00:00:53,889
+Fortunately this problem can be avoided by
+storing the result of the first evaluation
+
+11
+00:00:53,889 --> 00:01:00,109
+of tail and reusing the stored result
+instead of recomputing it the second and
+
+12
+00:01:00,109 --> 00:01:05,223
+third times and all other times around.
+We can convince our self, that this
+
+13
+00:01:05,223 --> 00:01:10,008
+optimization is sound, since the pure
+function of language and expression,
+
+14
+00:01:10,008 --> 00:01:13,350
+produces the same result each time it is
+evaluated.
+
+15
+00:01:13,350 --> 00:01:17,414
+So instead of re-evaluating the same
+expression several times.
+
+16
+00:01:17,414 --> 00:01:22,722
+We could just squirrel away the first time
+we have produced the result, and reuse
+
+17
+00:01:22,722 --> 00:01:27,166
+that result every time.
+That scheme is called lazy evaluation, as
+
+18
+00:01:27,166 --> 00:01:32,537
+opposed to the call by name evaluation
+that we've seen in the last session.
+
+19
+00:01:32,537 --> 00:01:37,980
+And also as opposed to the strict
+evaluation for normal parameters and wild
+
+20
+00:01:37,980 --> 00:01:41,489
+definitions.
+Lazy evaluation is a very powerful
+
+21
+00:01:41,489 --> 00:01:46,440
+principle because it avoids both
+unnecessary and repeated computations.
+
+22
+00:01:46,440 --> 00:01:51,743
+In fact, it's so attractive that a
+programming language, Haskell, has been
+
+23
+00:01:51,743 --> 00:01:55,720
+built on top of it.
+So Haskell uses lazy evaluation by
+
+24
+00:01:55,720 --> 00:02:00,065
+default, everywhere.
+You could argue, well, why does Scala not
+
+25
+00:02:00,065 --> 00:02:03,380
+do it?
+Well, there's one, or maybe two problems
+
+26
+00:02:03,380 --> 00:02:09,714
+with lazy evaluation which are essentially
+rooted in the fact that lazy evaluation is
+
+27
+00:02:09,714 --> 00:02:13,250
+quite unpredictable in when computations
+happen.
+
+28
+00:02:13,250 --> 00:02:18,945
+And how much space they take.
+You could argue, in a abstract, pure
+
+29
+00:02:18,945 --> 00:02:23,734
+functional language, it shouldn't really
+matter when computations happen, and
+
+30
+00:02:23,734 --> 00:02:26,885
+that's true.
+But once you add mutable side effects,
+
+31
+00:02:26,885 --> 00:02:31,989
+which Scala also permits, even though we
+haven't used them in this course, you can
+
+32
+00:02:31,989 --> 00:02:37,429
+get into some very confusing situations.
+So what Scala does is it uses strict
+
+33
+00:02:37,429 --> 00:02:43,898
+evaluation by default, like the absolute
+majority of all programming languages, but
+
+34
+00:02:43,898 --> 00:02:50,447
+it still allows lazy evaluation of value
+definitions with the lazy val syntax form.
+
+35
+00:02:50,447 --> 00:02:55,654
+So if you wrote lazy val x equals
+expression, you would get a lazy
+
+36
+00:02:55,654 --> 00:03:01,413
+evaluation of the value x here.
+So what that means is that just in a call
+
+37
+00:03:01,413 --> 00:03:06,700
+by name evaluation that you would get with
+def x equals expression.
+
+38
+00:03:06,700 --> 00:03:12,293
+The expression here would not be evaluated
+immediately at the point of the finish,
+
+39
+00:03:12,293 --> 00:03:17,750
+and it would be delayed, will be delayed
+until somebody wants the first time the
+
+40
+00:03:17,750 --> 00:03:21,365
+value of x.
+But afterwards the behavior between def x
+
+41
+00:03:21,365 --> 00:03:25,798
+and lazy val x diverge.
+For def x of course you have the behavior
+
+42
+00:03:25,798 --> 00:03:31,392
+that every time you call x the expression
+is reevaluated, whereas for lazy val the
+
+43
+00:03:31,392 --> 00:03:35,280
+expression is reused every time except for
+the first one.
+
+44
+00:03:35,280 --> 00:03:39,065
+So let's test this understanding with an
+exercise.
+
+45
+00:03:39,065 --> 00:03:44,365
+Consider the following program.
+We have a function expr and it defines
+
+46
+00:03:44,592 --> 00:03:49,286
+three values X, Y and Z.
+Each definition is preceded by a print
+
+47
+00:03:49,286 --> 00:03:53,753
+statement that prints that the definition
+is now evaluated.
+
+48
+00:03:53,753 --> 00:03:59,734
+And then finally we have an expression
+that makes use of X, Y and Z, so it does Z
+
+49
+00:03:59,734 --> 00:04:05,564
+plus Y, plus X plus Z, plus Y plus X.
+If you run this program, what gets printed
+
+50
+00:04:05,564 --> 00:04:10,230
+as a side-effect of evaluating expr?
+Here you have some choices.
+
+51
+00:04:10,230 --> 00:04:13,680
+Is it one of these four or maybe something
+else?
+
+52
+00:04:13,680 --> 00:04:16,793
+So let's see how we would approach this
+problem.
+
+53
+00:04:16,793 --> 00:04:21,528
+When we evaluate X, probably first have to
+evaluate the three definitions.
+
+54
+00:04:21,722 --> 00:04:26,846
+We have a vowel definition here, the
+right-hand side gets evaluated immediately
+
+55
+00:04:26,846 --> 00:04:30,738
+and would print an X.
+The lazy vowel on the def would not be
+
+56
+00:04:30,738 --> 00:04:34,564
+evaluated at the point of definition, they
+would be delayed.
+
+57
+00:04:34,564 --> 00:04:39,559
+Then we would get into the result
+expression where we first demand the value
+
+58
+00:04:39,559 --> 00:04:44,763
+of Z, so that would print a Z.
+Then we demand the value of y so that
+
+59
+00:04:44,763 --> 00:04:48,375
+would force the lazy valid would print the
+y.
+
+60
+00:04:48,375 --> 00:04:54,422
+Then we would demand the value of x.
+This one is already evaluated, so nothing
+
+61
+00:04:54,422 --> 00:04:58,819
+would be printed.
+Then we demand the value of z again, so
+
+62
+00:04:58,819 --> 00:05:03,844
+that would give us another z of y again.
+Well, now y is evaluated.
+
+63
+00:05:03,844 --> 00:05:09,498
+So we would just reuse the result we've
+evaluated the first time around.
+
+64
+00:05:09,498 --> 00:05:15,622
+And finally the x is again evaluated.
+So the string that gets printed is x z y
+
+65
+00:05:15,622 --> 00:05:18,352
+z.
+Lazy vowels, we can adopt our
+
+66
+00:05:18,352 --> 00:05:22,741
+implementation of string.coms to make it
+more efficient.
+
+67
+00:05:22,741 --> 00:05:29,246
+And the change is again very simple, the
+only thing that changed is that instead of
+
+68
+00:05:29,246 --> 00:05:33,949
+a def tail equals tail, we use a lazy
+vowel tail equals tail.
+
+69
+00:05:33,949 --> 00:05:39,435
+And that's all that's needed.
+With the changed it means that as before,
+
+70
+00:05:39,435 --> 00:05:43,510
+we will evaluate tail only when it's first
+demanded.
+
+71
+00:05:43,510 --> 00:05:48,840
+But unlike it was before, we will reuse
+the evaluation of tail every.
+
+72
+00:05:48,840 --> 00:05:54,440
+Time after the first one so we will avoid
+the unnecessary repeated computation.
+
+73
+00:05:55,520 --> 00:06:01,260
+So, all this avoiding of unnecessary
+computations looks really great, but maybe
+
+74
+00:06:01,260 --> 00:06:05,706
+you're not yet convinced.
+How can we really be sure that our,
+
+75
+00:06:05,930 --> 00:06:10,846
+execution will, in fact, avoid unnecessary
+portions of computations?
+
+76
+00:06:10,846 --> 00:06:16,506
+Well, one way to be sure is to put it to a
+test using the substitution model.
+
+77
+00:06:16,506 --> 00:06:19,858
+Using evaluation with our substitution
+model.
+
+78
+00:06:19,858 --> 00:06:23,582
+Let's do that with the expression we
+started with.
+
+79
+00:06:23,582 --> 00:06:27,679
+So stream range 1,000, 10,000, filter is
+prime, apply one.
+
+80
+00:06:27,679 --> 00:06:31,180
+Let's start reducing that, and see what
+happens.
+
+81
+00:06:31,180 --> 00:06:36,431
+So the first thing that happens here is
+that we have to expand string range.
+
+82
+00:06:36,431 --> 00:06:41,683
+And here, I've given you the expanded
+definitions with the actual parameters
+
+83
+00:06:41,683 --> 00:06:46,243
+replacing the former ones.
+The next thing that happens is that the
+
+84
+00:06:46,243 --> 00:06:51,495
+if, then, else is evaluated.
+So that would give me the cons expression
+
+85
+00:06:51,495 --> 00:06:56,308
+that we see here.
+Let's abbreviate this expression with the
+
+86
+00:06:56,308 --> 00:07:02,460
+cons to C1, so what I would have is C1,
+filter is prime, apply, one.
+
+87
+00:07:04,600 --> 00:07:08,968
+The next thing to do is, we need to expand
+the filter function.
+
+88
+00:07:08,968 --> 00:07:14,676
+So, here you see it's definition, and then
+the rest that needs to be done is apply
+
+89
+00:07:14,676 --> 00:07:18,481
+one on that.
+I have to evaluate the IF then ELSE, so C1
+
+90
+00:07:18,481 --> 00:07:23,977
+is definitely not empty, because it's a
+cons, so I would be left with this ELSE
+
+91
+00:07:23,977 --> 00:07:28,624
+part of the first IF here.
+And I have to evaluate the head of the C1,
+
+92
+00:07:28,624 --> 00:07:33,718
+the string, that would give me 1,000,
+because that's the first parameter past
+
+93
+00:07:33,718 --> 00:07:37,002
+two counts.
+So I'm left with this expression here.
+
+94
+00:07:37,002 --> 00:07:40,219
+Now the next thing to do is evaluating is
+prime.
+
+95
+00:07:40,219 --> 00:07:45,715
+I'll leave that out, because we've done
+that already, but it's pretty clear that
+
+96
+00:07:45,715 --> 00:07:50,340
+is prime of 1,000 should return false.
+So I replace the call by false.
+
+97
+00:07:51,460 --> 00:07:57,120
+I evaluate the F which gives me the, this
+expression here.
+
+98
+00:07:58,040 --> 00:08:01,351
+And I've evaluated the tail of the C1
+constant.
+
+99
+00:08:01,351 --> 00:08:04,874
+Now if you go back to the C1 constant what
+it was.
+
+100
+00:08:04,874 --> 00:08:08,679
+It was a [inaudible] with the stream range
+expression.
+
+101
+00:08:08,679 --> 00:08:12,273
+So when I evaluate the tail, that's what I
+will get.
+
+102
+00:08:12,273 --> 00:08:17,205
+But what I'm left with is the expression
+string range of 1,001, 10,000.
+
+103
+00:08:17,205 --> 00:08:20,235
+And then the same thing as filter is
+prime.
+
+104
+00:08:20,235 --> 00:08:23,785
+Apply one.
+In other words, the same expression I
+
+105
+00:08:23,785 --> 00:08:28,475
+started with, only instead of the 1,000, I
+have the 1,001 here.
+
+106
+00:08:28,475 --> 00:08:34,627
+And that evaluation sequence continues
+until I hit the first prime number, which
+
+107
+00:08:34,627 --> 00:08:39,625
+in this case would be 1,009.
+So this expression would expand by a
+
+108
+00:08:39,625 --> 00:08:45,392
+sequence of reduction steps, to finally
+stream range 1,009, 10,000, filter is
+
+109
+00:08:45,392 --> 00:08:48,930
+prime, apply one.
+I evaluate stream range again.
+
+110
+00:08:48,930 --> 00:08:53,860
+Is the expression.
+And I want to abbreviate that expression
+
+111
+00:08:53,860 --> 00:08:57,705
+to c2.
+So I'm left with c2 filters prime apply
+
+112
+00:08:57,705 --> 00:09:01,466
+one.
+I evaluate the filter function on c2, and
+
+113
+00:09:01,466 --> 00:09:05,060
+that gives me an, a sequence of
+expressions.
+
+114
+00:09:07,120 --> 00:09:13,670
+Cons 1,009, and then this here, because
+1,009 is a prime number, so it would be
+
+115
+00:09:13,670 --> 00:09:20,051
+included in the result of filter.
+So the next thing to evaluate is the call
+
+116
+00:09:20,051 --> 00:09:24,390
+of the apply function on this cons
+expression here.
+
+117
+00:09:24,390 --> 00:09:29,977
+I've plugged in here the definition of
+apply, which I have given you below, it's
+
+118
+00:09:29,977 --> 00:09:33,301
+the usual definition where a body would
+expect.
+
+119
+00:09:33,301 --> 00:09:39,030
+So we are left with an expression, like
+this one here, which is an if then else to
+
+120
+00:09:39,030 --> 00:09:42,071
+ask whether one equals zero, which is
+false.
+
+121
+00:09:42,071 --> 00:09:47,800
+So that would simplify to the second part
+of the if then else, which you see here.
+
+122
+00:09:48,160 --> 00:09:52,354
+Now, what we need to do is we need to
+evaluate tail.
+
+123
+00:09:52,354 --> 00:09:58,357
+That would in turn, force the express tail
+part of these, this console.
+
+124
+00:09:58,357 --> 00:10:02,798
+So we would get C2 tail at filter is
+prime, apply zero.
+
+125
+00:10:02,798 --> 00:10:07,403
+The next thing to calculate, again, is the
+tail over here.
+
+126
+00:10:07,403 --> 00:10:11,351
+So that now would give us the next stream
+range.
+
+127
+00:10:11,351 --> 00:10:13,016
+The.
+Tail part of c2.
+
+128
+00:10:13,016 --> 00:10:18,863
+Again, filter is prime apply zero.
+So what we see is we again, left with
+
+129
+00:10:18,863 --> 00:10:24,210
+essentially, the expression we started
+with, only now we have.
+
+130
+00:10:24,210 --> 00:10:30,167
+1,010 here and we have zero here.
+Where we started with 1,000 on the left
+
+131
+00:10:30,167 --> 00:10:35,145
+and one on the right.
+So that process would continue until we
+
+132
+00:10:35,145 --> 00:10:41,266
+hit the second prime number, 1,013.
+And now the computation is about to wrap
+
+133
+00:10:41,266 --> 00:10:44,938
+up.
+So the stream range function would expand
+
+134
+00:10:44,938 --> 00:10:47,795
+as usual.
+We make it a shorthand.
+
+135
+00:10:48,039 --> 00:10:54,731
+Call it C3, for this expression.
+So we, we have C3 filter is prime, apply
+
+136
+00:10:54,731 --> 00:10:58,583
+zero.
+We apply the filter function that would
+
+137
+00:10:58,583 --> 00:11:03,549
+say, well, 1013 is a prime number so let's
+include it in the list.
+
+138
+00:11:03,781 --> 00:11:07,583
+Have the tile expression here.
+Apply zero of that.
+
+139
+00:11:07,583 --> 00:11:13,713
+We apply, evaulate the apply function and
+that would pull out the first element
+
+140
+00:11:13,713 --> 00:11:17,282
+1013.
+And that's the result of the computation.
+
+141
+00:11:17,282 --> 00:11:20,405
+Poof.
+That was quite tedious to follow that far,
+
+142
+00:11:20,405 --> 00:11:25,812
+but imagine how more tedious it would have
+been if we had to evaluate actually all
+
+143
+00:11:25,812 --> 00:11:28,613
+the prime numbers between 1,000 and
+10,000.
+
+144
+00:11:28,613 --> 00:11:33,563
+Here you could convince yourself that
+indeed, we never look beyond 1,013, all
+
+145
+00:11:33,563 --> 00:11:37,992
+the other prime numbers remain
+undiscovered and unevaluated in this

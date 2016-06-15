@@ -1,0 +1,1809 @@
+1
+00:00:00,000 --> 00:00:04,582
+We have now put the lot of the material
+developed in this course to work in a
+
+2
+00:00:04,582 --> 00:00:07,989
+concrete case study.
+The task is to find a pure functional
+
+3
+00:00:07,989 --> 00:00:11,690
+solution to run on problem the so-called
+water pouring problem.
+
+4
+00:00:11,690 --> 00:00:17,125
+Another variant of the problem is found in
+the course by Peter Norvig, called Designs
+
+5
+00:00:17,125 --> 00:00:22,176
+of Computer Programs and Udacity where
+Peter develops a very nice solution in
+
+6
+00:00:22,176 --> 00:00:24,990
+Python.
+The solution developed in our course
+
+7
+00:00:24,990 --> 00:00:30,041
+differs from his in some respects, first,
+it's purely functional, and second, it's
+
+8
+00:00:30,041 --> 00:00:33,814
+also more general.
+You might find it instructive to compare
+
+9
+00:00:33,814 --> 00:00:38,610
+the two solutions, if only to see that
+there's different ways to skin a cat.
+
+10
+00:00:38,610 --> 00:00:43,923
+The final program we are going to develop
+in this course is the solution to a
+
+11
+00:00:43,923 --> 00:00:47,465
+well-known problem called the
+water-pouring problem.
+
+12
+00:00:47,465 --> 00:01:00,460
+The idea is as follows, let's say you are
+given a faucet and a sink,
+
+13
+00:01:01,140 --> 00:01:06,687
+And a number of glasses.
+Right now, I will just draw two of them,
+
+14
+00:01:06,687 --> 00:01:11,310
+of different sizes.
+So, just for the sake of the example,
+
+15
+00:01:11,310 --> 00:01:17,866
+let's assume this glass has size four
+deciliters, and this glass has size nine
+
+16
+00:01:17,866 --> 00:01:22,069
+deciliters.
+What you need to do is put use of a given
+
+17
+00:01:22,069 --> 00:01:28,889
+quantity, let's say, for the sake of the
+argument, six deciliters of liquid in one
+
+18
+00:01:28,889 --> 00:01:31,611
+of the glasses,
+It doesn't matter which one.
+
+19
+00:01:31,611 --> 00:01:35,217
+However, you're not giving any marking on
+the glasses.
+
+20
+00:01:35,217 --> 00:01:39,844
+So, the only knowledge you have is the
+total capacity of the glasses.
+
+21
+00:01:39,844 --> 00:01:45,424
+And the moves that are available to you
+is, you can either fill a glass completely
+
+22
+00:01:45,424 --> 00:01:51,071
+using the faucet or you can empty it in
+the sink or you can pour from one glass to
+
+23
+00:01:51,071 --> 00:01:56,515
+the other, until either the glass from
+which you pour is empty, or the glass into
+
+24
+00:01:56,515 --> 00:02:00,856
+which you pour is full.
+Now, the classical water pouring problem
+
+25
+00:02:00,856 --> 00:02:06,703
+uses two glasses of the given sizes and
+the given target size of six deciliters.
+
+26
+00:02:06,703 --> 00:02:09,626
+But we are going to generalize that a
+little bit.
+
+27
+00:02:09,845 --> 00:02:15,764
+We want to have an arbitrary number of
+glasses of arbitrary given capacities, and
+
+28
+00:02:15,764 --> 00:02:19,491
+an arbitrary target capacity in one of the
+glasses.
+
+29
+00:02:19,491 --> 00:02:22,780
+So, let's see how we would model this
+problem.
+
+30
+00:02:22,780 --> 00:02:26,360
+First, how do we represent the state of
+the glasses?
+
+31
+00:02:26,360 --> 00:02:31,907
+Well, the idea would be to represent a
+glass as an int ranging from zero to the
+
+32
+00:02:31,907 --> 00:02:37,735
+number of glasses minus one and then our
+state would be a vector of int that would
+
+33
+00:02:37,735 --> 00:02:42,720
+give us, for each glass, the number of
+decilitres that are in that glass.
+
+34
+00:02:42,720 --> 00:02:46,495
+And then the question is what kind of
+moves do we have?
+
+35
+00:02:46,495 --> 00:02:52,192
+Well, we have three, we can empty a glass,
+you can fill a glass, or you can pour from
+
+36
+00:02:52,192 --> 00:02:56,516
+a glass to another glass.
+So, let's see if we have, let's say, the
+
+37
+00:02:56,516 --> 00:03:03,501
+two glasses of size four and nine, and we
+start in a state where both glasses are
+
+38
+00:03:03,501 --> 00:03:10,193
+empty so that would be state zero and zero
+how that would evolve? So, one thing we
+
+39
+00:03:10,193 --> 00:03:14,160
+can could do is we could fill glass number
+zero.
+
+40
+00:03:14,500 --> 00:03:18,974
+And that will bring us into the state four
+and zero.
+
+41
+00:03:18,974 --> 00:03:25,753
+Or we could fill glass number one.
+And that would bring us into the state,
+
+42
+00:03:25,753 --> 00:03:29,825
+zero and nine.
+From there on, we could pour, starting
+
+43
+00:03:29,825 --> 00:03:36,292
+from this state here, from glass zero into
+glass one, that could, would give us the
+
+44
+00:03:36,292 --> 00:03:40,444
+state zero, four, the action with be pour
+zero to one.
+
+45
+00:03:40,444 --> 00:03:46,280
+Or, we could for instance, pour one to
+zero here.
+
+46
+00:03:46,640 --> 00:03:52,503
+Then, we would end in a state where the
+first glass has capacity four its full.
+
+47
+00:03:52,503 --> 00:03:57,840
+And the second glass, has five ounces in
+it because that's what remains.
+
+48
+00:03:59,140 --> 00:04:04,523
+Sometimes, moves lead back to state that
+we've visited before.
+
+49
+00:04:04,523 --> 00:04:09,642
+For instance, if we empty the glass one in
+this state here,
+
+50
+00:04:09,642 --> 00:04:16,261
+Then we would be left with a state four,
+Zero, which we can also reach shorter by
+
+51
+00:04:16,261 --> 00:04:21,349
+just a single move here.
+Now, you've seen how moves span out.
+
+52
+00:04:21,349 --> 00:04:24,980
+Question is, how do we find now the right
+solution?
+
+53
+00:04:24,980 --> 00:04:31,007
+How do we generate moves so that we find
+the right sequence of moves to lead us to
+
+54
+00:04:31,007 --> 00:04:34,348
+our target capacity, let's say, that's six
+here?
+
+55
+00:04:34,348 --> 00:04:39,940
+So now, that we know what moves are, let's
+see how we can use them to find the
+
+56
+00:04:39,940 --> 00:04:44,515
+solution to our problem.
+The idea would be that we generate all
+
+57
+00:04:44,515 --> 00:04:51,298
+possible move sequences, call them paths,
+Until we hit on one that contains one of
+
+58
+00:04:51,298 --> 00:04:55,995
+the glasses with the right target amount
+of liquid in it.
+
+59
+00:04:55,995 --> 00:05:01,434
+So, we would then start from an initial
+state of all glasses empty.
+
+60
+00:05:01,434 --> 00:05:05,720
+And then, generate all possible moves to
+new glasses.
+
+61
+00:05:08,420 --> 00:05:15,745
+Once we have generated all possible moves
+of length one, we will generate then all
+
+62
+00:05:15,745 --> 00:05:20,481
+possible moves of length two and so on,
+Like an onion,
+
+63
+00:05:20,481 --> 00:05:27,353
+Until possibly we hit on a path where we
+would have one of the glasses with the
+
+64
+00:05:27,353 --> 00:05:30,911
+target amount of liquid in it, in this
+case, six.
+
+65
+00:05:30,911 --> 00:05:36,967
+The idea then, is that we generate these
+path sets from inside out, starting with
+
+66
+00:05:36,967 --> 00:05:42,871
+the shortest ones and progressively
+lengthening the paths until we hit one
+
+67
+00:05:42,871 --> 00:05:49,003
+which is the right one, or, that's another
+possibility, until we have exhausted our
+
+68
+00:05:49,003 --> 00:05:54,968
+search space and there is no solution.
+So now that we have an idea for a
+
+69
+00:05:54,968 --> 00:06:00,870
+solution, let's see how we can put it in
+code using the Scala Eclipse IDE.
+
+70
+00:06:01,113 --> 00:06:05,560
+What I going to do is I will, I am going
+to create a glass.
+
+71
+00:06:07,320 --> 00:06:12,860
+I'll call it pouring to contain the
+elements of the problem.
+
+72
+00:06:16,860 --> 00:06:24,694
+So, pouring should take as a parameter, a
+vector of all the glasses and their
+
+73
+00:06:24,694 --> 00:06:29,539
+capacity.
+So, that would be a vector a vector of
+
+74
+00:06:29,539 --> 00:06:34,899
+int.
+One entry per glass, and for each entry,
+
+75
+00:06:34,899 --> 00:06:39,577
+its capacity.
+The first thing I'm going to do is, I'm
+
+76
+00:06:39,577 --> 00:06:43,257
+going to work on states.
+So what is a state?
+
+77
+00:06:43,257 --> 00:06:49,933
+Well, a state is a vector of integers.
+One thing we could do to make that clear
+
+78
+00:06:49,933 --> 00:06:54,640
+is make a type alias, saying, state equals
+vector of int.
+
+79
+00:06:54,640 --> 00:06:59,444
+The next thing to do is, well, let's
+define what the initial state is.
+
+80
+00:06:59,444 --> 00:07:03,400
+So, the initial state would consist of all
+empty glasses.
+
+81
+00:07:03,400 --> 00:07:08,769
+So, what we're after is a vector of the
+length of capacity consisting of all
+
+82
+00:07:08,769 --> 00:07:11,666
+zeroes.
+There are several ways to do that.
+
+83
+00:07:11,666 --> 00:07:15,340
+Probably, the most elegant way would be to
+use a map.
+
+84
+00:07:16,900 --> 00:07:23,203
+So, what should I apply in the map while
+it's a function that takes a glass, an
+
+85
+00:07:23,203 --> 00:07:27,267
+integer, and returns zero for any integer
+it gets.
+
+86
+00:07:27,267 --> 00:07:33,074
+Good. So now, we have the initial stat,
+how can we move from that state?
+
+87
+00:07:33,074 --> 00:07:39,713
+Let's define what are our moves are.
+The idea there is that I would have a
+
+88
+00:07:39,713 --> 00:07:43,544
+glass for each move.
+Let's make it a case glass for
+
+89
+00:07:43,544 --> 00:07:47,524
+convenience.
+And they all would inherit from a common
+
+90
+00:07:47,524 --> 00:07:51,129
+base trait move.
+So, I would have trait move here.
+
+91
+00:07:51,129 --> 00:07:54,810
+And I would then define three case
+glasses, empty.
+
+92
+00:07:54,810 --> 00:08:01,253
+Fill and pour that all extend move.
+So now, that we know what types of moves
+
+93
+00:08:01,253 --> 00:08:07,440
+are available to us, we still need to
+generate all possible moves, so all
+
+94
+00:08:07,440 --> 00:08:11,650
+possible moves would be empty, an
+arbitrary glass.
+
+95
+00:08:11,650 --> 00:08:17,539
+Fill an arbitrary glass or pour from an
+arbitrary glass into another.
+
+96
+00:08:17,539 --> 00:08:23,087
+So, let's generate those.
+As a, as an eight here, I have defined one
+
+97
+00:08:23,087 --> 00:08:30,000
+auxiliary state of structure, all glasses
+that will be arranged, that goes from one
+
+98
+00:08:30,000 --> 00:08:35,820
+until capacity length..
+So, what would the possible moves are?
+
+99
+00:08:35,820 --> 00:08:42,243
+Well, one way to do that would be to
+define it as for-expressions.
+
+100
+00:08:42,243 --> 00:08:47,110
+Let me do that.
+So, let's say for g taken from glasses,
+
+101
+00:08:47,110 --> 00:08:53,403
+Yield empty g.
+So, those are the first moves available to
+
+102
+00:08:53,403 --> 00:09:01,511
+me, empty and arbitrary glass.
+Other moves are for g taken from glasses,
+
+103
+00:09:01,511 --> 00:09:10,516
+fill g.
+And finally, for from, taken from glasses
+
+104
+00:09:10,516 --> 00:09:13,304
+to,
+Taken from glasses if.
+
+105
+00:09:13,304 --> 00:09:20,275
+From is different from to.
+We can't pour from one glass into the
+
+106
+00:09:20,275 --> 00:09:24,457
+same.
+Then yield, pour from and to Okay.
+
+107
+00:09:24,457 --> 00:09:29,819
+So, let's set up a test to see what we
+have so far.
+
+108
+00:09:29,819 --> 00:09:36,960
+I'm going to create a new worksheet.
+Call it test.
+
+109
+00:09:37,800 --> 00:09:48,180
+And what I am going to do is, I will set
+up an instance of my glass.
+
+110
+00:09:49,255 --> 00:09:53,799
+We have to define a vector of initial
+capacity of glasses.
+
+111
+00:09:53,799 --> 00:09:59,910
+Let's say, the first glass has capacity
+four and the second has capacity seven.
+
+112
+00:09:59,910 --> 00:10:06,100
+And now, what I want to do is I want to
+say, well, what moves are available to me?
+
+113
+00:10:08,040 --> 00:10:14,036
+And what we see here is I get a vector to
+say empty zero, empty one, fill zero, fill
+
+114
+00:10:14,036 --> 00:10:18,340
+one, pour zero, one pour one, zero.
+So, those are all the moves that I have.
+
+115
+00:10:18,340 --> 00:10:21,867
+But, of course, I could also generate
+another glass.
+
+116
+00:10:21,867 --> 00:10:27,436
+Let's put another glass nine in here.
+And then I would have more moves that you
+
+117
+00:10:27,436 --> 00:10:31,303
+can see over here.
+So, three empties, three fills, and six
+
+118
+00:10:31,303 --> 00:10:32,991
+pours.
+Back to our glass.
+
+119
+00:10:32,991 --> 00:10:36,788
+The next thing to consider is how moves
+change states.
+
+120
+00:10:36,788 --> 00:10:40,163
+There are a number of ways we could record
+that.
+
+121
+00:10:40,163 --> 00:10:45,929
+What I'm going to do here is I'm going to
+write a method change in the move trait
+
+122
+00:10:45,929 --> 00:10:49,585
+that will have to be implemented by each
+case glass.
+
+123
+00:10:49,585 --> 00:10:54,260
+So, change is defined on a move and it
+takes a state.
+
+124
+00:10:56,580 --> 00:11:03,701
+And it gives us a new state.
+So, that would track how each move changes
+
+125
+00:11:03,701 --> 00:11:08,788
+the state.
+Let's implement this method for each of
+
+126
+00:11:08,788 --> 00:11:14,485
+our case glasses.
+So, for the empty case glass, how is the
+
+127
+00:11:15,095 --> 00:11:20,189
+state changed?
+Well, we thought the new state would be
+
+128
+00:11:20,189 --> 00:11:24,152
+the old state.
+With the updated methods, so that, there's
+
+129
+00:11:24,152 --> 00:11:27,885
+a change at one point in the state.
+At what point is it?
+
+130
+00:11:27,885 --> 00:11:30,668
+Well, at my glass, which now will be
+empty.
+
+131
+00:11:30,668 --> 00:11:35,894
+So, it's the old state updated at the
+point of the glass where it's now empty.
+
+132
+00:11:35,894 --> 00:11:41,324
+But remember, that updated doesn't destroy
+the state, the old state will still be
+
+133
+00:11:41,324 --> 00:11:46,753
+available, it's just that, a new state
+object that gets generated by this updated
+
+134
+00:11:46,753 --> 00:11:49,808
+method.
+Updated is a purely functional method
+
+135
+00:11:49,808 --> 00:11:50,486
+here.
+Good.
+
+136
+00:11:50,486 --> 00:11:57,337
+So, let's see for fill.
+Here, our change would be that the glass
+
+137
+00:11:57,337 --> 00:12:03,603
+is updated not to be zero, but to be full
+to its capacity.
+
+138
+00:12:03,603 --> 00:12:08,331
+So, glass gets updated to capacity of
+glass.
+
+139
+00:12:08,331 --> 00:12:19,333
+And finally, for pour,
+There, the problem is a bit more
+
+140
+00:12:19,333 --> 00:12:25,562
+complicated, because it depends whether
+one glass can fully fit into another or
+
+141
+00:12:25,562 --> 00:12:29,032
+not.
+So, what I want to do is, I want to first
+
+142
+00:12:29,032 --> 00:12:33,999
+define the amount that gets poured from
+one glass to the other.
+
+143
+00:12:33,999 --> 00:12:36,050
+So, what would that be?
+Well,
+
+144
+00:12:36,050 --> 00:12:42,716
+It could be that we take everything that
+is in the from glass in the given state,
+
+145
+00:12:42,716 --> 00:12:46,831
+provided that there's enough room in the
+to glass.
+
+146
+00:12:46,831 --> 00:12:53,827
+Or if there's not, then it could also be
+that we fill the to glass to its capacity.
+
+147
+00:12:53,827 --> 00:13:02,289
+So, it would be state of capacity of to
+minus state of to.
+
+148
+00:13:02,289 --> 00:13:09,131
+So, the amount is the smaller of the
+current filling grade of the glass we pour
+
+149
+00:13:09,131 --> 00:13:14,363
+from and the free space in the glass in
+which, into which we pour.
+
+150
+00:13:14,363 --> 00:13:20,722
+Now, that we know the amount to pour, the
+state can be updated straightforwardly.
+
+151
+00:13:20,722 --> 00:13:27,162
+So, it's the old state updated at the from
+glass, where the new value of the from
+
+152
+00:13:27,162 --> 00:13:33,861
+glass is the previous value minus amount.
+And the new value of the to glass is the
+
+153
+00:13:33,861 --> 00:13:38,082
+previous value of the to glass plus the
+amount.
+
+154
+00:13:38,082 --> 00:13:43,888
+So now, that we've seen moves and the
+changes they do to states, it's time to
+
+155
+00:13:43,888 --> 00:13:47,784
+look at paths.
+So, paths would be sequences of moves.
+
+156
+00:13:47,784 --> 00:13:53,667
+I'm also going to define a class for
+paths, so I define a path by its history,
+
+157
+00:13:53,667 --> 00:13:58,785
+which is a list of moves.
+And the idea would be that the history is
+
+158
+00:13:58,785 --> 00:14:04,821
+taken in reverse that makes it easier to
+extend the path with the new moves.
+
+159
+00:14:04,821 --> 00:14:10,780
+So, that means that the last move in the
+path comes first in that history list.
+
+160
+00:14:11,910 --> 00:14:17,587
+So, what I use for operations on our path?
+Well, one operation I would be interested
+
+161
+00:14:17,587 --> 00:14:22,180
+in is, what state does it lead to?
+So, let's define that end state.
+
+162
+00:14:22,180 --> 00:14:26,771
+And will, that would be a state.
+How do I define that?
+
+163
+00:14:26,771 --> 00:14:33,482
+Well, one way to do it would be by a
+pattern match over the history list, and
+
+164
+00:14:33,482 --> 00:14:38,162
+that would be a recursive function.
+So, let's try that.
+
+165
+00:14:38,162 --> 00:14:42,136
+So, let's call this, track state of
+history.
+
+166
+00:14:42,136 --> 00:14:53,730
+And we would have a auxiliary function,
+Which would be defined by a pattern match
+
+167
+00:14:53,730 --> 00:14:59,286
+over an argument list.
+If the argument list is Nil, then we
+
+168
+00:14:59,286 --> 00:15:04,939
+return the initial state.
+If it consists of a move and some
+
+169
+00:15:04,939 --> 00:15:11,261
+remainder excess one,
+Then what we would do is we would track
+
+170
+00:15:11,261 --> 00:15:19,500
+the state of the rest, remaining list.
+Remember, the last move comes first in the
+
+171
+00:15:19,500 --> 00:15:23,328
+list.
+And then, we would apply the first move to
+
+172
+00:15:23,328 --> 00:15:28,055
+change the result of that.
+So, that's simply move, change the result
+
+173
+00:15:28,055 --> 00:15:32,137
+of track state.
+Because track state returns the state, and
+
+174
+00:15:32,137 --> 00:15:37,080
+move is a change method that changes the
+state to give the new state.
+
+175
+00:15:41,200 --> 00:15:47,280
+So, that computation of end state works,
+but let's look at it closer for a moment.
+
+176
+00:15:47,280 --> 00:15:51,916
+Let's look at it graphically.
+So, what we have here is we have
+
+177
+00:15:51,916 --> 00:16:00,958
+essentially done a set of changes with
+moves, where each cursive call is a
+
+178
+00:16:00,958 --> 00:16:10,881
+previous version of the history, until
+initially when the list is Nil, we return
+
+179
+00:16:10,881 --> 00:16:16,352
+initial state.
+So, what does that remind you of?
+
+180
+00:16:16,352 --> 00:16:22,068
+Well, it's a foldRight.
+So, it's a foldRight where we go through
+
+181
+00:16:22,068 --> 00:16:27,130
+the list, and we combine it each time with
+the change operator.
+
+182
+00:16:27,130 --> 00:16:33,091
+But we can reformulate it as follows.
+We take the history, we do a foldRight.
+
+183
+00:16:33,581 --> 00:16:38,725
+We state the initial state at the lower
+right as initial state.
+
+184
+00:16:38,725 --> 00:16:46,053
+And our operation is,
+The one way we take each move from the
+
+185
+00:16:46,053 --> 00:16:50,610
+history and we change each state on the
+right.
+
+186
+00:16:50,610 --> 00:16:55,404
+And that will do exactly the same thing.
+Now, the new formulation is, without a
+
+187
+00:16:55,404 --> 00:17:00,386
+doubt, much shorter and some would argue
+more elegant, than the recursive pattern
+
+188
+00:17:00,386 --> 00:17:03,687
+matching solution.
+But for most people and particular
+
+189
+00:17:03,687 --> 00:17:07,485
+beginners, it's also much harder to come
+up with and maybe to read.
+
+190
+00:17:07,485 --> 00:17:12,467
+So, if you or your team would decide at
+some point that you prefer the recursive
+
+191
+00:17:12,467 --> 00:17:16,016
+explicit pattern matching solution, that's
+perfectly okay.
+
+192
+00:17:16,016 --> 00:17:21,060
+So, what we can do now is we can delete
+our previous auxiliary method track state.
+
+193
+00:17:21,060 --> 00:17:26,375
+We have now condensed it into the
+foldRight and obtain a solution that's
+
+194
+00:17:26,375 --> 00:17:31,090
+much shorter for pass.
+So, what else do we need to do on a path?
+
+195
+00:17:31,090 --> 00:17:36,180
+Well, one useful operation is no doubt to
+extend it with another move.
+
+196
+00:17:37,300 --> 00:17:45,941
+And that would just be a new path where
+the move precedes the history that we have
+
+197
+00:17:45,941 --> 00:17:49,902
+so far.
+And finally, it's always good to be able
+
+198
+00:17:49,902 --> 00:17:56,880
+to print objects in an intelligible manner
+so let's define a two-string function.
+
+199
+00:17:56,880 --> 00:18:01,179
+So, to print the path, we want to print
+its history.
+
+200
+00:18:01,179 --> 00:18:08,073
+But you probably want to reverse it first,
+so first moves first and later moves,
+
+201
+00:18:08,073 --> 00:18:11,886
+later.
+And we want to print it, let's say, with a
+
+202
+00:18:11,886 --> 00:18:17,645
+space between different moves.
+And finally, it's also good to know where
+
+203
+00:18:17,645 --> 00:18:24,215
+the path leads to, so we are, interested
+in its end state, so let me write it this
+
+204
+00:18:24,215 --> 00:18:27,620
+way.
+.
+
+205
+00:18:28,180 --> 00:18:33,097
+So, that was paths.
+Well, that's defining the initial path.
+
+206
+00:18:33,097 --> 00:18:39,420
+The initial path then would be the path
+that contains the empty history.
+
+207
+00:18:41,200 --> 00:18:45,584
+Now, we have all the elements that we need
+for our solution.
+
+208
+00:18:45,584 --> 00:18:51,231
+Let's take a quick look at the diagram.
+So, you see here that we would have a
+
+209
+00:18:51,231 --> 00:18:56,952
+method that extends a set of paths with
+new moves, successively of longer and
+
+210
+00:18:56,952 --> 00:19:00,965
+longer lengths.
+So, the way we will put that in code is
+
+211
+00:19:00,965 --> 00:19:05,646
+that we have a function very similar to
+the from, from integers.
+
+212
+00:19:05,646 --> 00:19:11,665
+Only now, we don't start from an integer
+and say, generate all successive integers,
+
+213
+00:19:11,888 --> 00:19:19,685
+We from a set of paths.
+And we generate a stream of set of paths,
+
+214
+00:19:19,685 --> 00:19:27,420
+so that means you generate longer and
+longer set of sets of paths in a string.
+
+215
+00:19:27,420 --> 00:19:33,210
+So, one thing to take care of is the
+boundary condition what if path is empty.
+
+216
+00:19:33,210 --> 00:19:38,927
+In that case, there is nothing to evolve
+so we should return the empty string.
+
+217
+00:19:38,927 --> 00:19:42,510
+If paths is not empty, what do we do?
+Well,
+
+218
+00:19:42,510 --> 00:19:49,541
+The idea is we need to generate all the
+possible new paths that, I have the paths
+
+219
+00:19:49,541 --> 00:19:55,358
+in the set as a prefix.
+And from then on further more, evolve the
+
+220
+00:19:55,358 --> 00:19:58,917
+stream.
+So, let's do the first thing first.
+
+221
+00:19:58,917 --> 00:20:04,212
+So, let's call the new paths, more.
+So more gets generated by a
+
+222
+00:20:04,212 --> 00:20:09,855
+for-expression.
+We let path iterate over all the paths in
+
+223
+00:20:09,855 --> 00:20:14,835
+our set.
+And then for each of them, we generate a
+
+224
+00:20:14,835 --> 00:20:22,578
+next path by extending the current path.
+And extending the current path, we do with
+
+225
+00:20:22,578 --> 00:20:27,601
+all possible moves.
+So, the way we do that is that we have the
+
+226
+00:20:27,601 --> 00:20:33,119
+call moves map path.extend.
+For each of the possible moves, we apply
+
+227
+00:20:33,119 --> 00:20:39,460
+the operation extent with that move to the
+path and that gives us a new path.
+
+228
+00:20:41,670 --> 00:20:45,979
+And all those mixed paths would yield my
+more set.
+
+229
+00:20:45,979 --> 00:20:52,656
+Now, that I have my next generation set
+more, I can use that to define the full
+
+230
+00:20:52,656 --> 00:20:56,290
+stream that starts with the given path
+set.
+
+231
+00:20:56,290 --> 00:21:01,363
+And that is followed by the evolution of
+my next generation more.
+
+232
+00:21:01,363 --> 00:21:04,563
+So, I, it would start with paths, then
+more.
+
+233
+00:21:04,563 --> 00:21:09,637
+Because that would be the paths for the
+next iteration from more.
+
+234
+00:21:09,637 --> 00:21:15,256
+Then more of more.
+So, twice paths of, of lengths two added
+
+235
+00:21:15,256 --> 00:21:21,479
+to paths, and so on.
+So, that's my path-generating function
+
+236
+00:21:21,479 --> 00:01:31,896
+from, I can use that to now define the set
+of all possible paths.
+
+237
+00:21:28,113 --> 00:21:39,237
+So, let me call that pathSets.
+And that would be from applied to the set
+
+238
+00:21:39,237 --> 00:21:46,675
+that consists only of the initial path.
+So, what that set gives us is, in the
+
+239
+00:21:46,675 --> 00:21:49,680
+first set, it gives me set of initial
+path.
+
+240
+00:21:49,680 --> 00:21:55,762
+In the second element, it gives me the set
+of all paths of length one that start with
+
+241
+00:21:55,762 --> 00:21:59,482
+initial path.
+Then, all paths of length two and so on,
+
+242
+00:21:59,482 --> 00:22:03,417
+until infinity.
+So now, that we've that much, we can have
+
+243
+00:22:03,417 --> 00:22:06,923
+a quick look in the worksheet to see what
+we get.
+
+244
+00:22:06,923 --> 00:22:10,572
+So, let's take a problem, and take all the
+path sets.
+
+245
+00:22:10,572 --> 00:22:17,560
+Maybe reduce the size of the problem like
+this. So, we would get a stream,
+
+246
+00:22:18,400 --> 00:22:22,893
+Which is the vector of 0,0.
+And then, because it's a stream, it
+
+247
+00:22:22,893 --> 00:22:27,611
+doesn't evolve any further.
+So, let's do the usual trick, and say,
+
+248
+00:22:27,611 --> 00:22:32,704
+let's take three elements and convert to a
+list, and see what we get.
+
+249
+00:22:32,704 --> 00:22:38,761
+And we get an impressively long list of
+possible moves that are all the moves that
+
+250
+00:22:38,761 --> 00:22:44,028
+we generate here in the int states.
+So now, that we have all possible paths,
+
+251
+00:22:44,028 --> 00:22:49,581
+let's see how we would find the solutions.
+So, let's define a function solution.
+
+252
+00:22:49,581 --> 00:22:55,276
+It takes a target, which is the volume
+that we want to see in one of the glasses,
+
+253
+00:22:55,276 --> 00:23:00,473
+an int, and it should give us back a
+stream of paths that have the target
+
+254
+00:23:00,473 --> 00:23:05,029
+volume in the end states.
+So, how would we go about defining that
+
+255
+00:23:05,029 --> 00:23:08,333
+function?
+Well, the idea is to go through all the
+
+256
+00:23:08,333 --> 00:23:13,941
+pathSets and from each of the pathSets,
+pick the paths that are solutions, that
+
+257
+00:23:13,941 --> 00:23:19,829
+have the target volume in their end state,
+and finally, to concatinate them all in
+
+258
+00:23:19,829 --> 00:23:23,685
+another stream.
+So, the result stream would then consist
+
+259
+00:23:23,685 --> 00:23:27,120
+of all solution paths ordered by their
+length.
+
+260
+00:23:27,120 --> 00:23:32,526
+So, let's do that.
+So, it would be a for-expression where we
+
+261
+00:23:32,526 --> 00:23:39,583
+first go through the pathSets which are
+taken from the pathSets value here.
+
+262
+00:23:39,583 --> 00:23:46,090
+And then, for each pathSets, we go through
+all of the paths in that set.
+
+263
+00:23:46,090 --> 00:23:51,130
+And then, we want to demand that the path
+is a solution.
+
+264
+00:23:51,130 --> 00:23:56,720
+So, what would that be?
+Well, it would be that the end state of
+
+265
+00:23:56,720 --> 00:24:04,777
+the path contains the target volume.
+Then, the path is a solution and, in that
+
+266
+00:24:04,777 --> 00:24:08,680
+case, we return it in the resulting
+string.
+
+267
+00:24:09,000 --> 00:24:15,480
+Now, that we have the solution sets, let's
+put it to a test in our worksheet.
+
+268
+00:24:18,120 --> 00:24:25,160
+Let me define problem that solutions of,
+of let's say, six.
+
+269
+00:24:27,380 --> 00:24:30,754
+And I get the solution, let's see what it
+is.
+
+270
+00:24:30,754 --> 00:24:36,277
+So here, we would have a sequence of moves
+that yields to the vector 4,6.
+
+271
+00:24:36,277 --> 00:24:39,115
+That's fine.
+Let's try something else.
+
+272
+00:24:39,115 --> 00:24:42,720
+Let's maybe try the original problem with
+nine.
+
+273
+00:24:44,840 --> 00:24:48,265
+Then, we see it, unfortunately, it takes
+already a long time.
+
+274
+00:24:48,265 --> 00:24:53,310
+That's not so good so it seems we have
+found a solution but not a very efficient
+
+275
+00:24:53,310 --> 00:24:57,035
+one.
+So, let's go back and see what the problem
+
+276
+00:24:57,035 --> 00:25:00,090
+could be.
+So, one problem is if we look at the
+
+277
+00:25:00,090 --> 00:25:04,647
+diagram, that we move blindly.
+That means we generate from each possible
+
+278
+00:25:04,647 --> 00:25:07,021
+state,
+Let's say, we have a state here,
+
+279
+00:25:07,021 --> 00:25:11,449
+We generate new states, but we will also
+generate a lot of old states.
+
+280
+00:25:11,449 --> 00:25:16,327
+So, we do a sort of random walk on the
+states, constantly revisiting also old
+
+281
+00:25:16,327 --> 00:25:19,343
+states.
+And these old btates don't really bring
+
+282
+00:25:19,343 --> 00:25:24,670
+anything to the solution Because when we
+go back to an old state, that's not a path
+
+283
+00:25:24,670 --> 00:25:29,419
+we want to consider because we, by
+definition, there is a shorter path that
+
+284
+00:25:29,419 --> 00:25:33,981
+leads to the same state.
+So, the problem we have is that all this
+
+285
+00:25:33,981 --> 00:25:39,345
+exploration is rather aimless.
+And a better way to do it would be to
+
+286
+00:25:39,345 --> 00:25:42,820
+exclude an state that we have visited
+before.
+
+287
+00:25:42,820 --> 00:25:47,579
+So, let's try to do that.
+So, the idea would be that, in my stream
+
+288
+00:25:47,579 --> 00:25:53,699
+generating function, I would have a second
+set, now a set of states that represent
+
+289
+00:25:53,699 --> 00:26:00,383
+the explored states.
+And I will now restrict my moves to those
+
+290
+00:26:00,383 --> 00:26:04,765
+that don't lead to a state that's already
+explored.
+
+291
+00:26:04,765 --> 00:26:11,897
+So, what I would write here is, let's say,
+explored is not allowed to contain the end
+
+292
+00:26:11,897 --> 00:26:17,092
+state of next.
+Now, it, I still have to fix up some bits
+
+293
+00:26:17,092 --> 00:26:22,097
+that now yield type errors.
+So, the first thing is in the recursive
+
+294
+00:26:22,097 --> 00:26:27,556
+call to from, I have to pass a new
+explored set, so that would be the old
+
+295
+00:26:27,556 --> 00:26:32,162
+one.
+And also for each of our moves, our path,
+
+296
+00:26:32,162 --> 00:26:37,296
+and also, for each of the paths in more,
+its end states.
+
+297
+00:26:37,296 --> 00:26:43,000
+So,
+That would be more map end state.
+
+298
+00:26:44,300 --> 00:26:50,725
+Finally, for the initial call to from, I
+would have the set of states that's
+
+299
+00:26:50,725 --> 00:26:54,580
+initially explored is just the initial
+state.
+
+300
+00:26:55,880 --> 00:27:01,360
+Okay, so with that solution, we can try
+again.
+
+301
+00:27:02,740 --> 00:27:08,906
+And now, we have a solution to this
+problem, which is slightly longer than the
+
+302
+00:27:08,906 --> 00:27:12,283
+one we've seen before, also, in very
+little time.
+
+303
+00:27:12,283 --> 00:27:17,241
+We can also try something else.
+We can add more glasses, such as, let's
+
+304
+00:27:17,241 --> 00:27:20,546
+say, nineteen.
+And we want to find seventeen.
+
+305
+00:27:20,546 --> 00:27:24,570
+We can try that.
+And again, we would get solutions fairly
+
+306
+00:27:24,570 --> 00:27:27,444
+quickly.
+Let's look at the problem again.
+
+307
+00:27:27,444 --> 00:27:31,323
+We have a workable solution.
+It's reasonably efficient.
+
+308
+00:27:31,323 --> 00:27:36,353
+Can we make it more efficient?
+Is there, is there room for optimization?
+
+309
+00:27:36,353 --> 00:27:40,682
+Well, one area where we could optimize is
+the endState method.
+
+310
+00:27:40,682 --> 00:27:46,314
+So, endState gets called a lot, you see,
+in the, in the exploration of possible
+
+311
+00:27:46,314 --> 00:27:50,141
+solutions.
+And each endState is a foldRight over a
+
+312
+00:27:50,141 --> 00:27:54,329
+complete history.
+So, a recursive function over the history
+
+313
+00:27:54,329 --> 00:27:59,744
+as paths get longer, and state becomes
+more and more complicated to compute.
+
+314
+00:27:59,744 --> 00:28:04,582
+There again, you could say, well, why
+recompute the end state of a path?
+
+315
+00:28:04,582 --> 00:28:10,155
+Can't we just restore the end state once
+and for all in the path and that would
+
+316
+00:28:10,155 --> 00:28:13,029
+avoid the recomputation? So, let's try
+that.
+
+317
+00:28:13,029 --> 00:28:16,313
+So,
+What I'm going to do is I'm going to put
+
+318
+00:28:16,313 --> 00:28:21,018
+the endState in the path.
+That means, I can remove it here.
+
+319
+00:28:21,018 --> 00:28:27,671
+And because it should be available from
+the outside, I make it a L parameter, so
+
+320
+00:28:27,671 --> 00:28:31,809
+now I can see it.
+And now, I have to compute a new endState
+
+321
+00:28:32,296 --> 00:28:38,077
+when I compute a new path.
+So, what would be the endState be of the
+
+322
+00:28:38,077 --> 00:28:43,178
+path that consists of the given move last,
+and the history before that.
+
+323
+00:28:43,178 --> 00:28:48,352
+Well, it would be the change effect on the
+move, on the previous endState.
+
+324
+00:28:48,352 --> 00:28:53,890
+So, that's the new one, where if you add a
+move to a path, then we add the new
+
+325
+00:28:53,890 --> 00:28:59,282
+endState that consists of the change
+effect of the move on that endState.
+
+326
+00:28:59,720 --> 00:29:06,980
+And the initial path then would be,
+The endState is the initial state.
+
+327
+00:29:09,200 --> 00:29:14,204
+And if we do that and tested again, we
+find the same solutions.
+
+328
+00:29:14,204 --> 00:29:19,443
+And maybe, it's a tad quicker.
+It definitely will become more apparent as
+
+329
+00:29:19,443 --> 00:29:23,216
+paths would get longer.
+So, that completes the solution.
+
+330
+00:29:23,216 --> 00:29:27,408
+So, what we did is, we modeled the problem
+in a glass pouring.
+
+331
+00:29:27,408 --> 00:29:33,067
+We first modeled states, and we modeled
+moves and the changes they have on states.
+
+332
+00:29:33,067 --> 00:29:36,770
+And we generated all the moves in this
+variable here.
+
+333
+00:29:36,770 --> 00:29:42,229
+Then, we modeled paths as their own class.
+And finally, we modeled the state
+
+334
+00:29:42,229 --> 00:29:45,793
+exploration function from as a
+for-expression.
+
+335
+00:29:45,793 --> 00:29:51,480
+And the function that picked out all
+solutions from the generated paths as
+
+336
+00:29:51,480 --> 00:29:56,501
+another for-expression.
+So, this was quite a complex program. In
+
+337
+00:29:56,501 --> 00:30:00,390
+particular, there is a lot of choice of
+representations.
+
+338
+00:30:00,390 --> 00:30:06,187
+So, we picked specific glasses for moves
+and paths but we could also have taken
+
+339
+00:30:06,187 --> 00:30:09,930
+some encoding.
+We picked object-oriented methods.
+
+340
+00:30:09,930 --> 00:30:14,006
+We could also have done some naked data
+structures with functions.
+
+341
+00:30:14,006 --> 00:30:19,506
+Present elaboration is just one solution
+not necessarily the shortest ones but I
+
+342
+00:30:19,506 --> 00:30:23,906
+believe it's actually quite clear from a
+domain modeling standpoint.
+
+343
+00:30:23,906 --> 00:30:28,760
+Now, you might ask what are good guiding
+principles for a program like that?
+
+344
+00:30:28,760 --> 00:30:33,163
+In the end, it comes down to experience.
+As the saying goes, you can learn
+
+345
+00:30:33,163 --> 00:30:36,771
+programming in ten days, and then you
+improve for ten years.
+
+346
+00:30:36,771 --> 00:30:40,441
+But there are a couple of guidelines
+anyway, that are useful.
+
+347
+00:30:40,441 --> 00:30:44,111
+So, I believe the first guideline is, name
+everything you can.
+
+348
+00:30:44,111 --> 00:30:49,064
+Function programming is great because it
+allows you to break up things in really
+
+349
+00:30:49,064 --> 00:30:52,388
+small pieces,
+Expressions that consist of maybe just
+
+350
+00:30:52,388 --> 00:30:54,268
+three words.
+Make use of that.
+
+351
+00:30:54,268 --> 00:30:59,196
+Some of the assignments I've seen have
+crammed dozen or more operators on a
+
+352
+00:30:59,196 --> 00:31:02,503
+single line.
+Taking advantage of the conciseness of
+
+353
+00:31:02,503 --> 00:31:07,106
+functional programming in Scala.
+But I don't actually think that's good
+
+354
+00:31:07,106 --> 00:31:09,829
+style.
+So, break things up in little pieces,
+
+355
+00:31:09,829 --> 00:31:14,627
+Give a name for each piece, that makes
+programs much more intelligible and
+
+356
+00:31:14,627 --> 00:31:17,869
+readable.
+So, for instance, we put the change method
+
+357
+00:31:17,869 --> 00:31:21,370
+inside the move classes, because a move
+changes things.
+
+358
+00:31:21,370 --> 00:31:25,760
+So, it makes sense to define change right
+where you have the move.
+
+359
+00:31:25,760 --> 00:31:30,874
+And finally, when you do a design, keep in
+mind that you always want to keep degrees
+
+360
+00:31:30,874 --> 00:31:35,249
+of freedom for future refinements.
+So, think of what might change in the
+
+361
+00:31:35,249 --> 00:31:40,549
+future and how you could encapsulate this,
+the implementations from clients so that
+
+362
+00:31:40,549 --> 00:31:45,109
+you could change it in the future without
+changing any of the client code.

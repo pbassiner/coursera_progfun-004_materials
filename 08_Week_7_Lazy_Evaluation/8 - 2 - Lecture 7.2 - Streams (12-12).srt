@@ -1,0 +1,739 @@
+1
+00:00:00,000 --> 00:00:04,379
+In this session, we will introduce stream
+as a new data structure.
+
+2
+00:00:04,379 --> 00:00:08,759
+Streams are like list but they tailored
+evaluated only on demand.
+
+3
+00:00:08,759 --> 00:00:13,880
+We would see how this lets you write very
+elegant solutions to search problem.
+
+4
+00:00:13,880 --> 00:00:18,796
+In the previous sessions, you've seen a
+number of operations on immutable
+
+5
+00:00:18,796 --> 00:00:23,174
+collections that provide powerful tools
+for communitorial search.
+
+6
+00:00:23,174 --> 00:00:28,360
+For instance, if you wanted to find the
+second prime number between 1,000 and
+
+7
+00:00:28,360 --> 00:00:33,614
+10,000, you could write an expression
+strictly according to this specification.
+
+8
+00:00:33,614 --> 00:00:37,453
+Go from 1000 to 10000,
+Filter with this prime predicate,
+
+9
+00:00:37,453 --> 00:00:41,632
+Take the second element.
+This is much shorter than the recursive
+
+10
+00:00:41,632 --> 00:00:46,373
+alternative, which you see down here,
+where there's a function second prime,
+
+11
+00:00:46,373 --> 00:00:51,498
+which finds the second prime number in a
+given interval between from and to, and
+
+12
+00:00:51,498 --> 00:00:57,007
+that in turn calls a more general function
+nthPrime, which takes the nthPrime number
+
+13
+00:00:57,007 --> 00:01:03,060
+in again, an interval between from and to,
+and that nthPrime has the usual recursive
+
+14
+00:01:03,060 --> 00:01:07,437
+set up to iterate through the interval
+between from and to.
+
+15
+00:01:07,437 --> 00:01:13,156
+Feasible, but definitely much archaic and
+less elegant than the simple expression
+
+16
+00:01:13,156 --> 00:01:16,681
+here.
+However, the shorter expression also has a
+
+17
+00:01:16,681 --> 00:01:20,517
+serious problem.
+It's is evaluation is very, very
+
+18
+00:01:20,517 --> 00:01:26,461
+inefficient, because what we do here is we
+construct all the prime numbers between
+
+19
+00:01:26,461 --> 00:01:30,366
+1000 and 10000, only ever to take its
+second element.
+
+20
+00:01:30,366 --> 00:01:35,428
+Presumably there are many more prime
+numbers between 1000 and 10000.
+
+21
+00:01:35,428 --> 00:01:39,399
+So you could say, well,
+Maybe my bound, 10,000, is too high, I
+
+22
+00:01:39,399 --> 00:01:43,232
+should reduce that,
+But without knowing a priori where the
+
+23
+00:01:43,232 --> 00:01:48,585
+prime numbers are, I would always risk
+that the bound is too low and I would miss
+
+24
+00:01:48,585 --> 00:01:53,079
+finding the prime number.
+So we are in the uncomfortable position to
+
+25
+00:01:53,079 --> 00:01:58,168
+be either really bad in performance
+because the bound is too high or risking
+
+26
+00:01:58,168 --> 00:02:02,200
+finding the prime number at all because
+the bound is too low.
+
+27
+00:02:03,580 --> 00:02:09,094
+However, there's a special trick that can
+make the short code also efficient.
+
+28
+00:02:09,094 --> 00:02:14,463
+The idea is that we want to avoid
+computing the tail of a sequence until
+
+29
+00:02:14,463 --> 00:02:19,904
+that tail is needed for the evaluation
+result, and of course, that might be
+
+30
+00:02:19,904 --> 00:02:23,434
+never.
+That idea is implemented in a new class
+
+31
+00:02:23,434 --> 00:02:28,385
+which is called the stream.
+Streams are similar to lists but their
+
+32
+00:02:28,385 --> 00:02:33,722
+tail is evaluated only on demand.
+So, here's how it can define streams.
+
+33
+00:02:33,722 --> 00:02:39,678
+They are, can be built from a constant
+Stream.empty, so the empty value and the
+
+34
+00:02:39,678 --> 00:02:43,082
+stream object, and a constructor
+Stream.cons.
+
+35
+00:02:43,082 --> 00:02:49,038
+So to build a stream that consists of the
+number one and two, you could write
+
+36
+00:02:49,038 --> 00:02:52,055
+Stream.cons one, Stream.cons two,
+Stream.empty.
+
+37
+00:02:52,520 --> 00:02:56,973
+And, of course, streams can also be
+defined like the other collections by
+
+38
+00:02:56,973 --> 00:03:01,551
+using the stream object as a factory,
+So you could write simply stream of one,
+
+39
+00:03:01,551 --> 00:03:04,991
+two, three.
+A third way to produce streams is with a
+
+40
+00:03:05,247 --> 00:03:09,923
+toStream method, which can be applied to
+any collection to produce a stream.
+
+41
+00:03:09,923 --> 00:03:14,662
+So in example, you see here, we have a
+range one to 1000 and turn it into a
+
+42
+00:03:14,662 --> 00:03:19,465
+stream with a toStream method.
+It's interesting to see what the result of
+
+43
+00:03:19,465 --> 00:03:24,524
+that call is so what we see here is a
+stream of Int, which is written like this.
+
+44
+00:03:24,524 --> 00:03:29,712
+It's a, it's a Stream(1, ).?
+What that mean is that a stream is
+
+45
+00:03:29,712 --> 00:03:34,900
+essentially a, recursive structure like a
+list so we have a one here, but the tail
+
+46
+00:03:34,900 --> 00:03:40,543
+is not yet evaluated, so that's why the
+interpretor worksheet has printed a
+
+47
+00:03:40,543 --> 00:03:44,706
+question mark here.
+The tail will be evaluated if somebody
+
+48
+00:03:44,706 --> 00:03:49,037
+wants to know explicitly.
+Let's look at stream evaluation in a
+
+49
+00:03:49,037 --> 00:03:52,507
+little bit more detail using ranges as an
+example.
+
+50
+00:03:52,507 --> 00:03:58,058
+Instead of the usual range and then
+toStream expression, I have decided that I
+
+51
+00:03:58,058 --> 00:04:03,749
+wanted to work from first principles and I
+wrote a streamRange function directly
+
+52
+00:04:03,749 --> 00:04:07,010
+here.
+So that's the usual recursive function, if
+
+53
+00:04:07,010 --> 00:04:12,423
+the lower bound is greater or equal to
+higher bound, I return the empty stream,
+
+54
+00:04:12,423 --> 00:04:18,710
+Otherwise, it's a cons of the lower bound
+and a recursive call of streamRange(lo +
+
+55
+00:04:18,710 --> 00:04:22,692
+one, Hi)).
+If you compare that to the function that
+
+56
+00:04:22,692 --> 00:04:28,220
+does the same thing for lists, here is
+listRange and turns out that the two
+
+57
+00:04:28,220 --> 00:04:31,493
+functions are actually completely
+isomorphic.
+
+58
+00:04:31,711 --> 00:04:37,021
+They have exactly the same structure,
+Only one returns a stream, the other
+
+59
+00:04:37,021 --> 00:04:41,094
+returns a list,
+And the empty stream here corresponds to
+
+60
+00:04:41,094 --> 00:04:46,913
+the Nil case for the lists and the cons
+case for the streams corresponds to the
+
+61
+00:04:46,913 --> 00:04:51,487
+cons operator for the lists.
+Yet their operational behavior is
+
+62
+00:04:51,487 --> 00:04:56,189
+completely different.
+If we look at listRaange first, what would
+
+63
+00:04:56,189 --> 00:05:02,860
+that function do if we have listRange
+(one, ten).
+
+64
+00:05:02,866 --> 00:05:09,954
+What would the thing do?
+Well, it would create a list with the one
+
+65
+00:05:09,954 --> 00:05:14,355
+here and so on,
+Until I have the ten here and I have a
+
+66
+00:05:14,355 --> 00:05:17,546
+Nil,
+So it would generate the complete list in
+
+67
+00:05:17,546 --> 00:05:20,737
+one go.
+Whereas for a streamRange, what would
+
+68
+00:05:20,737 --> 00:05:26,197
+happen is it would create a first cons
+pair with a one here and then the rest
+
+69
+00:05:26,197 --> 00:05:30,522
+would be a ?.
+So it wouldn't be generated, instead,
+
+70
+00:05:30,522 --> 00:05:36,479
+there would be an object that would know
+how to reconstitute the stream if somebody
+
+71
+00:05:36,479 --> 00:05:39,528
+demands it.
+If I take the tail then of this
+
+72
+00:05:39,528 --> 00:05:43,456
+streamRange result,
+Then, somebody wants to know I would
+
+73
+00:05:43,456 --> 00:05:49,677
+create the second element of the stream
+and the third element would have a ?,
+
+74
+00:05:49,677 --> 00:05:55,130
+And so on until potentially somebody
+forces wants to know all the elements in
+
+75
+00:05:55,130 --> 00:06:00,653
+this stream, in which case, in the end, I
+would have the same structure as for the
+
+76
+00:06:00,653 --> 00:06:06,176
+lists. But before I would have partially
+constructed streams, it always end in,
+
+77
+00:06:06,176 --> 00:06:10,790
+essentially the ?, which stands for
+unevaluated stream.
+
+78
+00:06:10,790 --> 00:06:16,047
+In most respects, Streams are actually
+like List, in particular, Streams support
+
+79
+00:06:16,047 --> 00:06:20,792
+almost all the methods of a List.
+So for instance, to find the second prime
+
+80
+00:06:20,792 --> 00:06:25,665
+number between 1000 and 10,000, the
+problem we started with, it could simply
+
+81
+00:06:25,665 --> 00:06:30,602
+write it this way, so instead of writing
+the range directly, we convert the range
+
+82
+00:06:30,602 --> 00:06:35,539
+to a string, then we apply the filter
+method on stream and we apply the apply
+
+83
+00:06:35,539 --> 00:06:38,810
+method on a stream with the one as the
+argument.
+
+84
+00:06:38,810 --> 00:06:44,406
+There's only one exception where streams
+don't follow list and that's the cons
+
+85
+00:06:44,406 --> 00:06:48,296
+operator.
+So if you write x :: xs, that's always
+
+86
+00:06:48,296 --> 00:06:53,278
+produces a list, never a stream.
+But there is an alternative operator which
+
+87
+00:06:53,278 --> 00:06:57,510
+is written #, :: which produces a stream.
+So x.
+
+88
+00:06:57,510 --> 00:07:02,865
+#, :: xs is actually the same as
+Stream.cons (x, xs),
+
+89
+00:07:03,108 --> 00:07:09,032
+And that operator can be used in
+expressions, as you see here, but also in
+
+90
+00:07:09,032 --> 00:07:12,786
+patterns..
+So let's look at the implementation of
+
+91
+00:07:12,786 --> 00:07:15,778
+Streams.
+It's actually quite close to the
+
+92
+00:07:15,778 --> 00:07:20,522
+implementation of Lists.
+So let's start with a base trait, there's
+
+93
+00:07:20,522 --> 00:07:28,915
+a trait Stream[+A] and it extends a Seq[A]
+just like lists do, and it has the same
+
+94
+00:07:28,915 --> 00:07:33,440
+fundamental operations as lists, namely
+isEmpty, head and tail.
+
+95
+00:07:33,440 --> 00:07:39,004
+And again as for lists all other methods
+can be defined in terms of these three
+
+96
+00:07:39,004 --> 00:07:43,039
+fundamental ones.
+So if we look at complete implementation
+
+97
+00:07:43,039 --> 00:07:47,908
+of Streams than actually these also follow
+closely the ones for lists.
+
+98
+00:07:47,908 --> 00:07:53,403
+There's one difference, however, that for
+Streams, the economical implementations
+
+99
+00:07:53,403 --> 00:07:58,064
+are defined as members of the Stream
+object, so that's why we write
+
+100
+00:07:58,064 --> 00:08:06,600
+Stream.empty, which corresponds to list
+Nil and Stream.cons,
+
+101
+00:08:07,940 --> 00:08:15,175
+Which corresponds to the :: class.
+The implementations of the empty and cons
+
+102
+00:08:15,175 --> 00:08:20,467
+is actually very close to the ones in
+List, so, cons would have the following
+
+103
+00:08:20,467 --> 00:08:24,715
+implementations of isEmpty head and tail,
+isEmpty is falls.
+
+104
+00:08:24,715 --> 00:08:30,426
+Head is the first parameter you pass and
+tail is the second parameter you pass in.
+
+105
+00:08:30,426 --> 00:08:35,858
+For empty, it's the same thing as for
+lists again, isEmpty is true in head and
+
+106
+00:08:35,858 --> 00:08:41,151
+tail, were true exceptions because, of
+course, they're not define for, empty
+
+107
+00:08:41,151 --> 00:08:44,814
+strings.
+So the one thing where the cons class and
+
+108
+00:08:44,814 --> 00:08:49,087
+the cons method here differ fundamentally
+is this here.
+
+109
+00:08:49,087 --> 00:08:55,789
+So for the cons method for streams, the
+tail parameter is a by name parameter,
+
+110
+00:08:55,789 --> 00:08:59,379
+As you, as it shown by the leading arrow
+here.
+
+111
+00:08:59,379 --> 00:09:06,082
+Whereas for the list cons class, the tail
+parameter is a normal call by value
+
+112
+00:09:06,082 --> 00:09:09,452
+parameter.
+That's the only difference that matters
+
+113
+00:09:09,452 --> 00:09:14,596
+between strings and lists, and that's the
+only thing that explains this dramatic
+
+114
+00:09:14,596 --> 00:09:19,541
+difference in runtime behavior.
+So because of, tail is a call by name
+
+115
+00:09:19,541 --> 00:09:25,604
+parameter, it means that, when I first
+construct a cons cell for a stream, the
+
+116
+00:09:25,604 --> 00:09:30,471
+tail is not evaluated.
+It, it will be evaluated the first time
+
+117
+00:09:30,471 --> 00:09:34,858
+somebody dereferences the name tail, and
+that's here.
+
+118
+00:09:34,858 --> 00:09:41,640
+So that if somebody calls a tail method,
+the tail parameter will be dereferenced
+
+119
+00:09:41,640 --> 00:09:45,230
+and the rest of the stream will be
+evaluated.
+
+120
+00:09:45,230 --> 00:09:48,525
+That's it.
+The other stream methods are then
+
+121
+00:09:48,525 --> 00:09:51,961
+implemented analogously to the list
+counterparts.
+
+122
+00:09:51,961 --> 00:09:56,940
+So for instance here, you see the filter
+method, it does the usual thing.
+
+123
+00:09:56,940 --> 00:10:02,760
+If the string is empty it returns it. If
+the head satisfies the predicate P, then
+
+124
+00:10:02,760 --> 00:10:08,150
+we do a cons(head, tail.filter(p)), and
+otherwise we do a tail.filter(p).
+
+125
+00:10:08,159 --> 00:10:13,980
+So what in particular happens here is that
+if I do a filter on a stream whose head
+
+126
+00:10:13,980 --> 00:10:20,012
+satisfies the predicate, then I do a
+computation tail.filter(p) here, but that
+
+127
+00:10:20,012 --> 00:10:25,091
+computation is the second tail parameter
+of a cons construction.
+
+128
+00:10:25,091 --> 00:10:31,282
+So that means that the evaluation of
+filter down the spine of the stream will
+
+129
+00:10:31,282 --> 00:10:38,188
+be delayed again, until somebody wants to
+find out what the result of the taking the
+
+130
+00:10:38,188 --> 00:10:43,449
+tail of the result stream is.
+So here's a little quiz where you can test
+
+131
+00:10:43,449 --> 00:10:46,477
+whether you understood how streams
+evaluate.
+
+132
+00:10:46,477 --> 00:10:52,327
+I have modified the StreamRange method by
+adding a print statement here that prints
+
+133
+00:10:52,327 --> 00:10:56,938
+out the low bound every time stream
+streamRange is called.
+
+134
+00:10:56,938 --> 00:11:02,995
+So, when you now write streamRange of 110
+with this method and then take(3) and then
+
+135
+00:11:03,270 --> 00:11:06,023
+toList,
+What would you expect gets printed?
+
+136
+00:11:06,023 --> 00:11:11,638
+Nothing or one of these results here?
+So let's see how we would reason about it.
+
+137
+00:11:11,858 --> 00:11:17,757
+Have you seen when we take the
+streamRange(1, ten), we just evaluate the
+
+138
+00:11:17,757 --> 00:11:21,233
+first element here and the rest is, is yet
+unknown.
+
+139
+00:11:21,233 --> 00:11:26,795
+The take method on Streams, if we look at
+its definition and evaluate it, then it
+
+140
+00:11:26,795 --> 00:11:32,357
+would do nothing special, it would
+essentially again return as a stream where
+
+141
+00:11:32,357 --> 00:11:37,432
+the only node the first element.
+But then if we finally convert the stream
+
+142
+00:11:37,432 --> 00:11:42,715
+to a list, then of course, we need to
+force it because our list can't be left
+
+143
+00:11:42,715 --> 00:11:46,191
+unevaluated.
+So by the time we do that, we create a
+
+144
+00:11:46,191 --> 00:11:50,350
+list with three elements one, two, three
+and the rest is Nil,
+
+145
+00:11:50,350 --> 00:11:54,408
+That's the result.
+And to produce that list, we have to go
+
+146
+00:11:54,408 --> 00:11:59,890
+down three elements in the orig, original
+argument stream in the streamRange.
+
+147
+00:11:59,890 --> 00:12:05,301
+So what I expect is that we would print
+one, two, three, And you can test that
+
+148
+00:12:05,301 --> 00:12:11,140
+yourself by submitting the streamRange
+program at this expression to a worksheet.

@@ -1,0 +1,393 @@
+1
+00:00:00,000 --> 00:00:04,091
+This concludes the course.
+Thank you for making it through to the
+
+2
+00:00:04,091 --> 00:00:06,357
+end.
+I hope you had fun following it.
+
+3
+00:00:06,357 --> 00:00:09,945
+There's, of course, much more to be said
+and to be learned.
+
+4
+00:00:09,945 --> 00:00:13,596
+I will leave you with a quick overview of
+what we covered.
+
+5
+00:00:13,596 --> 00:00:18,191
+I'll point out some topics that might be
+interesting for a future course.
+
+6
+00:00:18,191 --> 00:00:22,912
+And, I will also give you some links to
+get further material, and to stay in
+
+7
+00:00:22,912 --> 00:00:25,524
+touch.
+So, over the last seven weeks we have
+
+8
+00:00:25,524 --> 00:00:29,871
+explored the traits of functional
+programming and then brought it in the
+
+9
+00:00:29,871 --> 00:00:33,253
+Scala language.
+The most important ones of these include
+
+10
+00:00:33,253 --> 00:00:38,319
+the use of high-order functions
+everywhere, the use pattern matching and
+
+11
+00:00:38,319 --> 00:00:41,206
+case classes,
+The absence of mutability,
+
+12
+00:00:41,206 --> 00:00:45,584
+So no mutable state,
+And immutable collections is the workhorse
+
+13
+00:00:45,584 --> 00:00:49,336
+of most algorithms,
+And finally, the flexible play with
+
+14
+00:00:49,336 --> 00:00:53,367
+evaluation strategies.
+You've seen strict, lazy and by name
+
+15
+00:00:53,367 --> 00:00:58,995
+evaluation, including a method to reason
+about evaluations using the substitution
+
+16
+00:00:58,995 --> 00:01:01,914
+model.
+I hope you've experienced that as a
+
+17
+00:01:01,914 --> 00:01:07,403
+coherent set of notations and methods,
+that's a useful toolkit for you and your
+
+18
+00:01:07,403 --> 00:01:11,712
+daily programming practice.
+And that's also a different way of
+
+19
+00:01:11,712 --> 00:01:16,136
+thinking about programs.
+But if you want to find some more material
+
+20
+00:01:16,136 --> 00:01:19,020
+on Scala, there's a wealth of stuff out
+there.
+
+21
+00:01:19,020 --> 00:01:24,340
+There's actually, we've a Scala Ref Card
+or a cheatsheet that's been produced by a
+
+22
+00:01:24,340 --> 00:01:27,417
+student in this course.
+Thank you [inaudible].
+
+23
+00:01:27,417 --> 00:01:30,250
+So,
+We are going to put that up on the site.
+
+24
+00:01:30,250 --> 00:01:34,475
+Here's his initial version that appeared
+in a discussion thread.
+
+25
+00:01:34,475 --> 00:01:38,502
+And it gives a very useful summary of, the
+course contents.
+
+26
+00:01:38,701 --> 00:01:43,850
+For a slightly different outlook, you
+could also go to Twitter and their Scala
+
+27
+00:01:43,850 --> 00:01:46,623
+School.
+So they use that to teach Scala to
+
+28
+00:01:46,623 --> 00:01:50,980
+essentially all the new programmers who
+have to use Scala,
+
+29
+00:01:50,980 --> 00:01:53,026
+Twitter.
+It's a fairly concise, but also
+
+30
+00:01:53,026 --> 00:01:57,120
+comprehensive tour through most of the
+core concepts of Scala.
+
+31
+00:01:57,120 --> 00:02:02,425
+And also, a lot of practical matters like
+how to build it, how to test it, how to
+
+32
+00:02:02,425 --> 00:02:07,798
+interoperate with Java, how to use
+Twitter's core concurrency libraries that
+
+33
+00:02:07,798 --> 00:02:14,764
+are written in Scala and so on.
+If you prefer a book, then I believe the
+
+34
+00:02:14,764 --> 00:02:20,078
+standard reference book for Scala is the
+book I cowrote, Programming in Scala." It
+
+35
+00:02:20,078 --> 00:02:24,015
+appeared at Artima.
+There's a link to the free first edition
+
+36
+00:02:24,015 --> 00:02:29,395
+from the resources page of this course and
+there's also a discount coupon for the
+
+37
+00:02:29,395 --> 00:02:33,160
+second edition.
+Or if you want something shorter there's
+
+38
+00:02:33,160 --> 00:02:39,621
+the Scala tour in the Scala documentation
+that gives you a quick overview of all the
+
+39
+00:02:39,621 --> 00:02:44,298
+core concepts of Scala.
+If you want to stay current in Scala, then
+
+40
+00:02:44,298 --> 00:02:50,054
+one good idea is to just join a meetup.
+There are 85 groups of Scala users out in
+
+41
+00:02:50,054 --> 00:02:53,564
+the world.
+The largest ones has over a 1,000 users,
+
+42
+00:02:53,564 --> 00:02:59,511
+that's a New York group and it might to
+fun to spend some evening with other Scala
+
+43
+00:02:59,511 --> 00:03:02,654
+enthusiasts, and to exchange ideas and
+tricks.
+
+44
+00:03:02,654 --> 00:03:08,103
+Another thing you could do is go to the
+typesafe.com site, and follow the blog
+
+45
+00:03:08,103 --> 00:03:13,481
+there, which contains a lot of cutting
+edge material on, Scala and also the
+
+46
+00:03:13,481 --> 00:03:19,139
+middleware built on it, which is akka and
+play! or you could also subscribe to the
+
+47
+00:03:19,139 --> 00:03:24,447
+newsletter and get news, by e-mail.
+Finally, another interesting blog is the
+
+48
+00:03:24,447 --> 00:03:30,016
+one put together by Cake Solutions, which
+gives you a weekly update of everything
+
+49
+00:03:30,016 --> 00:03:34,548
+that's new in the land of Scala.
+So, it was quite a tour what we did over
+
+50
+00:03:34,548 --> 00:03:39,345
+the last seven weeks and I believe that
+you have learned a lot about functional
+
+51
+00:03:39,345 --> 00:03:42,583
+programming,
+But there's also a lot that still remains
+
+52
+00:03:42,583 --> 00:03:45,881
+to be covered.
+I see several topics that I would really
+
+53
+00:03:45,881 --> 00:03:49,899
+love to cover in another course that
+didn't have space in this one.
+
+54
+00:03:50,079 --> 00:03:53,437
+The first one would be functional
+programming and state.
+
+55
+00:03:53,437 --> 00:03:57,335
+So, so far, we've explored functional
+programming in its pure form.
+
+56
+00:03:57,335 --> 00:04:00,393
+There wasn't a single assignable variable
+anywhere.
+
+57
+00:04:00,393 --> 00:04:05,190
+In actual programs out there and most of
+them, there would be some state portions.
+
+58
+00:04:05,190 --> 00:04:11,739
+So the question poses itself, what does it
+mean to mix functions in mutable state?
+
+59
+00:04:11,739 --> 00:04:15,390
+And what changes if we add mutable state
+to functional programming?
+
+60
+00:04:15,390 --> 00:04:19,066
+Does anything break?
+Do we have to be careful with some things?
+
+61
+00:04:19,066 --> 00:04:23,216
+What exactly is it that would change and
+what that would be different?
+
+62
+00:04:23,216 --> 00:04:26,833
+The next topic that's also fascinating is
+parallel execution.
+
+63
+00:04:26,833 --> 00:04:31,457
+I've argued in the introduction of this
+course that functional programming is
+
+64
+00:04:31,457 --> 00:04:34,422
+relevant, because it makes parallel
+execution easy.
+
+65
+00:04:34,422 --> 00:04:38,928
+We didn't have the time to go into that.
+We didn't write parallel functional
+
+66
+00:04:38,928 --> 00:04:42,067
+programs.
+That's something reserved for another
+
+67
+00:04:42,067 --> 00:04:45,168
+course.
+And funnily there's the topic of domain
+
+68
+00:04:45,168 --> 00:04:49,020
+specific languages.
+You've already seen that Scala let's you
+
+69
+00:04:49,020 --> 00:04:53,964
+write very high-level libraries that
+really model the user's domain from the
+
+70
+00:04:53,964 --> 00:04:58,330
+user's stand point rather than exposing
+many implementation details.
+
+71
+00:04:58,330 --> 00:05:03,488
+If you push that further, you would arrive
+at, through domain-specific languages that
+
+72
+00:05:03,488 --> 00:05:07,268
+could be expressed as libraries in Scala
+as a host language.
+
+73
+00:05:07,268 --> 00:05:12,371
+Another angle on the problem is to write
+your domain-specific language not as an
+
+74
+00:05:12,371 --> 00:05:15,332
+embedded library, but as a standalone
+language.
+
+75
+00:05:15,332 --> 00:05:20,310
+And then, you would be interested to read
+and evaluate programs written in that
+
+76
+00:05:20,310 --> 00:05:23,271
+language.
+The programming class I teach at EPFL
+
+77
+00:05:23,271 --> 00:05:26,925
+covers these three topics in a separate
+seven week module.
+
+78
+00:05:26,925 --> 00:05:31,965
+If there's enough interest, I hope to be
+able to present these topics in another
+
+79
+00:05:31,965 --> 00:05:34,549
+online class at some point in the future.

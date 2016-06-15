@@ -1,0 +1,534 @@
+1
+00:00:00,000 --> 00:00:05,110
+One nice aspect of laziness, is that it
+makes it easy to deal with infinite amount
+
+2
+00:00:05,110 --> 00:00:07,915
+of works.
+Just do everything only when it is
+
+3
+00:00:07,915 --> 00:00:11,032
+demanded.
+Following this principle, we look at ways
+
+4
+00:00:11,032 --> 00:00:15,892
+to define and manipulate infinite streams.
+You saw that all elements of the stream
+
+5
+00:00:15,892 --> 00:00:20,320
+except the first one are computed only
+when they're needed to produce a result.
+
+6
+00:00:20,320 --> 00:00:26,420
+One maybe surprising possibility this
+opens is to define infinite streams.
+
+7
+00:00:26,420 --> 00:00:32,428
+So, for instance the stream of all
+integers starting from a given number,
+
+8
+00:00:32,428 --> 00:00:37,555
+could be define like this.
+It would say, def from of an n equals the
+
+9
+00:00:37,555 --> 00:00:41,410
+stream consisting of n followed by from n
++ one.
+
+10
+00:00:41,412 --> 00:00:47,497
+And normally, of course, this would be a
+non-terminating recursive computation but
+
+11
+00:00:47,497 --> 00:00:53,291
+because the stream const operator is lazy
+in its right operands, the from n + one
+
+12
+00:00:53,293 --> 00:00:59,016
+here would be actually calculated only if
+somebody is interested in the second
+
+13
+00:00:59,016 --> 00:01:05,252
+element of the stream that's defined here.
+So, using from, we can now write infinite
+
+14
+00:01:05,252 --> 00:01:11,442
+streams, for instance, the string of all
+natural number would be from zero or the
+
+15
+00:01:11,442 --> 00:01:17,787
+stream of all multiples of four could be
+the stream of all natural numbers, mapped
+
+16
+00:01:17,787 --> 00:01:21,505
+by times four.
+So, each, take each the natural number,
+
+17
+00:01:21,505 --> 00:01:26,880
+multiply it by four, that gives the stream
+that returns all multiples of four.
+
+18
+00:01:26,880 --> 00:01:33,570
+So, let's see this in a worksheet.
+I've already define from, so,
+
+19
+00:01:33,570 --> 00:01:38,196
+And the stream of natural numbers would be
+from zero,
+
+20
+00:01:38,196 --> 00:01:48,563
+Stream of multiples by four,
+Would be the natural numbers mapped by
+
+21
+00:01:48,563 --> 00:01:56,157
+times four.
+To see it in action, I could then take m4s
+
+22
+00:01:56,854 --> 00:02:01,620
+and take, let's say, first hundred
+elements,
+
+23
+00:02:02,680 --> 00:02:08,265
+And convert the whole thing to a list
+which would force it so there would indeed
+
+24
+00:02:08,265 --> 00:02:12,541
+see the list that contains the first
+hundred multiples of fours.
+
+25
+00:02:12,541 --> 00:02:18,057
+But, of course, I could go higher I could
+take, take the first thousand and I would
+
+26
+00:02:18,057 --> 00:02:23,334
+get the first thousand elements and so on.
+Now, one problem where we can put these
+
+27
+00:02:23,334 --> 00:02:27,542
+techniques to good use is in the
+calculation of prime numbers.
+
+28
+00:02:27,542 --> 00:02:32,837
+There's actually a very ancient algorithm
+called the Sieve of Eratosthenes to
+
+29
+00:02:32,837 --> 00:02:37,249
+calculate these numbers.
+The idea is as follows, we start with all
+
+30
+00:02:37,249 --> 00:02:45,240
+integers starting from two. So, three,
+four, five, six,
+
+31
+00:02:48,200 --> 00:02:55,589
+And so on.
+We take the first number, that's a two and
+
+32
+00:02:55,589 --> 00:03:00,948
+that's a prime number.
+We will then eliminate all multiples of
+
+33
+00:03:00,948 --> 00:03:04,738
+two so that will be the six, the eight,
+the ten.
+
+34
+00:03:04,738 --> 00:03:10,388
+The first number left in the resulting
+output stream is three, and that's a prime
+
+35
+00:03:10,388 --> 00:03:13,699
+number.
+We then eliminate all multiples of three,
+
+36
+00:03:13,699 --> 00:03:18,529
+so the six, is already eliminated, twelve
+is already eliminated, fifteen.
+
+37
+00:03:18,529 --> 00:03:23,841
+The first number that's left in the stream
+is five, and that's a prime number.
+
+38
+00:03:23,841 --> 00:03:26,946
+We eliminate all multiples of five, and so
+on.
+
+39
+00:03:26,946 --> 00:03:32,319
+So, each step, we take the first element
+of the remaining stream of numbers.
+
+40
+00:03:32,319 --> 00:03:37,003
+That one is a prime number.
+We eliminate all its multiples and we
+
+41
+00:03:37,003 --> 00:03:40,829
+repeat.
+So, here's a function that implements this
+
+42
+00:03:40,829 --> 00:03:46,068
+principle to the letter.
+To sieve a given stream of numbers S, what
+
+43
+00:03:46,068 --> 00:03:49,696
+we do is we take the first number in the
+stream,
+
+44
+00:03:49,696 --> 00:03:53,173
+So that would be our presumed prime
+number.
+
+45
+00:03:53,173 --> 00:03:58,992
+And we follow it with all numbers that are
+not multiples of the first number.
+
+46
+00:03:58,992 --> 00:04:05,190
+So, we take the rest of the stream, and we
+filter it with the predicate that we say,
+
+47
+00:04:05,190 --> 00:04:08,742
+well, the number [unknown] the S, the
+first number.
+
+48
+00:04:08,742 --> 00:04:14,516
+The s.head, must be different from zero.
+So, once we have the sieving method,
+
+49
+00:04:14,516 --> 00:04:17,987
+obtaining all prime numbers is really
+easy.
+
+50
+00:04:17,987 --> 00:04:23,640
+We simply say the prime numbers is sieve
+of all the integers from two.
+
+51
+00:04:26,360 --> 00:04:31,702
+Let's try it out.
+Primes takes, let's take the first prime
+
+52
+00:04:31,702 --> 00:04:35,474
+numbers and convert it to a list.
+And there you go.
+
+53
+00:04:35,474 --> 00:04:41,189
+The first prime numbers here on the right.
+So, let's get back to square roots one
+
+54
+00:04:41,189 --> 00:04:44,975
+more time.
+The previous algorithms we've seen for the
+
+55
+00:04:44,975 --> 00:04:50,262
+square root algorithm always mixed
+determination criterion is good enough
+
+56
+00:04:50,262 --> 00:04:53,905
+with the method to calculate new
+approximations.
+
+57
+00:04:53,905 --> 00:04:59,334
+With streams at our disposal, we can now
+express the concept of a converging
+
+58
+00:04:59,334 --> 00:05:03,764
+sequence without having to worry about
+determination criteria.
+
+59
+00:05:03,764 --> 00:05:08,262
+So, we could write a stream that
+represents all the successive
+
+60
+00:05:08,262 --> 00:05:12,131
+approximations of, of a square root of a
+given number.
+
+61
+00:05:12,131 --> 00:05:16,876
+The thing we would do is we would have the
+usual improved method.
+
+62
+00:05:16,876 --> 00:05:22,424
+And then, we would say, well, we have a
+lazy val guesses which is a stream of
+
+63
+00:05:22,424 --> 00:05:28,191
+double, and the guesses start with one.
+And each successive value is obtained by
+
+64
+00:05:28,191 --> 00:05:31,330
+mapping the improved function over
+guesses.
+
+65
+00:05:31,330 --> 00:05:36,797
+So, this might look highly alarming to
+you, a little bit like a snake eating it's
+
+66
+00:05:36,797 --> 00:05:41,967
+tail, because what happens here is that
+you apply a map operation on the value
+
+67
+00:05:41,967 --> 00:05:46,456
+that you're about to define.
+So, won't this blow up in an infinite
+
+68
+00:05:46,456 --> 00:05:48,113
+recursion?
+Well, again, no.
+
+69
+00:05:48,113 --> 00:05:54,259
+Because we have the operation stream cons
+here, which is lazy in its right operand
+
+70
+00:05:54,259 --> 00:05:57,435
+So, everything actually works out as it
+should.
+
+71
+00:05:57,435 --> 00:06:01,026
+You can convince yourself by going to the
+worksheet.
+
+72
+00:06:01,026 --> 00:06:04,341
+I have given you precisely the same stream
+method.
+
+73
+00:06:04,341 --> 00:06:08,070
+So, let's try to apply this to a number.
+Let's say four.
+
+74
+00:06:08,070 --> 00:06:12,980
+Take the first ten elements and print it
+out.
+
+75
+00:06:12,980 --> 00:06:19,920
+So, what we would get is a perfectly good
+stream of approximations to the number
+
+76
+00:06:19,920 --> 00:06:23,390
+four,
+Which after a couple of iterations,
+
+77
+00:06:23,390 --> 00:06:27,909
+converges to 2.0.
+So now, we have decoupled the idea of a
+
+78
+00:06:27,909 --> 00:06:31,782
+converging sequence from determination
+criterion.
+
+79
+00:06:31,782 --> 00:06:36,060
+Of course, we can add determination
+criterion later.
+
+80
+00:06:36,060 --> 00:06:40,159
+We see that here.
+So, we have to find the is good enough
+
+81
+00:06:40,159 --> 00:06:45,973
+function as before, and we can then
+subject our square root stream to a filter
+
+82
+00:06:45,973 --> 00:06:50,670
+method of all the elements that are good
+enough approximations.
+
+83
+00:06:50,670 --> 00:06:58,688
+So, let's do that in the worksheet.
+I've added a good enough method and then,
+
+84
+00:06:58,688 --> 00:07:05,637
+let me just filter that.
+Filter is good enough with respect to my
+
+85
+00:07:05,637 --> 00:07:10,956
+number four.
+And again, I want to show, again, I want
+
+86
+00:07:10,956 --> 00:07:17,017
+to show the first ten elements.
+So, what you see now is you get a stream
+
+87
+00:07:17,017 --> 00:07:22,691
+of solutions that are all already good
+enough approximations to the actual square
+
+88
+00:07:22,691 --> 00:07:28,157
+root value, so you could just take the
+first one of that stream, and return that
+
+89
+00:07:28,157 --> 00:07:32,240
+as the result of your computation.
+So, here's a quiz for you.
+
+90
+00:07:32,240 --> 00:07:39,389
+Consider the following two equivalent ways
+to define an infinite stream of multiples
+
+91
+00:07:39,389 --> 00:07:44,436
+of a given number N.
+You could write, from one map times n, as
+
+92
+00:07:44,436 --> 00:07:48,810
+we've seen,
+But you could also write from one filter
+
+93
+00:07:48,810 --> 00:07:53,772
+modular N equals zero.
+Both expressions would give you the stream
+
+94
+00:07:53,772 --> 00:07:58,903
+of multiples of N.
+But which of the two expressions generates
+
+95
+00:07:58,903 --> 00:08:03,865
+its results faster?
+Would it be that expression here or the
+
+96
+00:08:03,865 --> 00:08:08,718
+filter down there?
+So, let's see how these two expressions
+
+97
+00:08:08,718 --> 00:08:12,952
+would behave.
+Let's take, for the sake of the example, N
+
+98
+00:08:12,952 --> 00:08:16,952
+equals three.
+So, the first expression would produce,
+
+99
+00:08:16,952 --> 00:08:23,225
+first, all the elements of the natural
+numbers starting from one, and immediately
+
+100
+00:08:23,225 --> 00:08:28,714
+multiply each of these by three.
+So, it would yield, in that order, three,
+
+101
+00:08:28,714 --> 00:08:33,890
+six, nine, twelve, and so on.
+The second expression would produce all
+
+102
+00:08:33,890 --> 00:08:38,870
+natural numbers as before.
+And then, it would filter these numbers to
+
+103
+00:08:38,870 --> 00:08:42,093
+keep only those that are divisible by
+three.
+
+104
+00:08:42,093 --> 00:08:47,659
+So, it would keep the filter operations
+that would now keep every third number in
+
+105
+00:08:47,659 --> 00:08:51,468
+the stream.
+So, by that argument, the map operation is
+
+106
+00:08:51,468 --> 00:08:57,327
+more efficient because it doesn't generate
+unnecessary stream elements that are
+
+107
+00:08:57,327 --> 00:09:01,283
+filtered out afterwards.
+So, my vote goes to answer one.
