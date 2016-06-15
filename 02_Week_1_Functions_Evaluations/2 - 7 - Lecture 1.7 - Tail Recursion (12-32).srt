@@ -1,0 +1,753 @@
+1
+00:00:00,000 --> 00:00:04,079
+Last week, you have gotten to know
+functions as essential building blocks of
+
+2
+00:00:04,079 --> 00:00:07,089
+programs.
+This week, we'll still be concerned with
+
+3
+00:00:07,089 --> 00:00:10,079
+functions.
+We will get to know several ways to
+
+4
+00:00:10,079 --> 00:00:15,046
+construct them and to compose them.
+Finally, next week, we are going to look
+
+5
+00:00:15,046 --> 00:00:19,031
+at data and objects.
+In the first session of this week, we are
+
+6
+00:00:19,031 --> 00:00:24,024
+going to look again at recursion, and we
+will find out that there are actually
+
+7
+00:00:24,024 --> 00:00:29,051
+several ways to express recursion.
+First let's review function application.
+
+8
+00:00:29,051 --> 00:00:34,019
+You know from the last session that
+there's one simple rule.
+
+9
+00:00:34,019 --> 00:00:39,058
+You evaluate a function application F
+applied to arguments E1 to EN
+
+10
+00:00:39,058 --> 00:00:45,098
+by evaluating the arguments, expressions
+E1 to EN they would resulting the values
+
+11
+00:00:45,098 --> 00:00:50,027
+V1 to VM say.
+And then replacing the application of the
+
+12
+00:00:50,027 --> 00:00:55,027
+function by its body.
+And at the same time replacing the forming
+
+13
+00:00:55,027 --> 00:00:59,096
+parameters of the function by the actual
+arguments V1 to VM.
+
+14
+00:01:01,047 --> 00:01:07,000
+This rewriting rule can be formalized by
+rewriting the program itself.
+
+15
+00:01:07,000 --> 00:01:13,036
+Say, you have a program with a function
+definition def f with parameters x one to
+
+16
+00:01:13,036 --> 00:01:17,058
+x n and a body b.
+And then, somewhere else eh, you have a
+
+17
+00:01:17,058 --> 00:01:22,034
+function call f applied to value argument
+values v 1 to v n.
+
+18
+00:01:22,034 --> 00:01:28,040
+That program can be rewritten to a
+programme that contains the same function
+
+19
+00:01:28,040 --> 00:01:34,045
+definition but the function application has
+now being replaced by the body of f,
+
+20
+00:01:34,045 --> 00:01:40,057
+B, and at the same time the former
+parameters x 1 to x n have been replaced
+
+21
+00:01:40,057 --> 00:01:45,065
+by the argument values.
+And the rest of the programme is assumed
+
+22
+00:01:45,065 --> 00:01:50,058
+to be unchanged, which is assumed to be
+these triple dots here.
+
+23
+00:01:50,058 --> 00:01:54,095
+That's areas of the programs that we do
+not touch.
+
+24
+00:01:54,095 --> 00:02:00,075
+This notation, we want for x 1 the end
+for x n is called a substitution.
+
+25
+00:02:00,075 --> 00:02:06,055
+What we mean by it, is that all
+occurrences in b of the values x one to x
+
+26
+00:02:06,055 --> 00:02:13,005
+n have been replaced by
+the corresponding values v1 to vn.
+
+27
+00:02:13,005 --> 00:02:18,008
+Here's an example,
+consider GCD, the function that computes
+
+28
+00:02:18,008 --> 00:02:21,014
+the greatest common divisor of two
+numbers.
+
+29
+00:02:21,014 --> 00:02:26,056
+We know an implementation for GCD it is
+since a way long time, since ancient
+
+30
+00:02:26,056 --> 00:02:32,047
+greek, its known as Euclid's algorithm.
+To compute the greatest common divisor of
+
+31
+00:02:32,047 --> 00:02:37,067
+two numbers A and B, what do you do.
+First if B is zero then A is a common
+
+32
+00:02:37,067 --> 00:02:43,044
+divisor of both A and B and otherwise you
+compute the greatest common divisor of.
+
+33
+00:02:43,044 --> 00:02:50,037
+First b, and then a modular b.
+Percent sign here is as in Java and C,
+
+34
+00:02:50,037 --> 00:02:54,097
+means that A modular B, the modulus of A
+and B.
+
+35
+00:02:55,059 --> 00:03:00,088
+Let's try this algorithm in action.
+Gcd, fourteen, 21.
+
+36
+00:03:00,088 --> 00:03:07,040
+How is that evaluated?
+Well, you would expand GCD, so that would
+
+37
+00:03:07,040 --> 00:03:14,034
+give you, if 21 = zero, fourteen else GCD,
+21 and fourteen modular 21.
+
+38
+00:03:14,034 --> 00:03:19,050
+And you simplify the condition, 21 = zero
+is false.
+
+39
+00:03:20,093 --> 00:03:27,032
+Next you simplify the if-then-else using
+the rule we have developed previously.
+
+40
+00:03:27,032 --> 00:03:32,025
+So if false, fourteen else, GCD of 21 and
+fourteen modular,
+
+41
+00:03:32,025 --> 00:03:38,024
+21 would give the else part.
+Once we have the else part, we reduce its
+
+42
+00:03:38,024 --> 00:03:43,073
+arguments to values.
+That gives us an other call to GCD which
+
+43
+00:03:43,073 --> 00:03:49,066
+we expand, and the process repeats.
+I have signified that here with a multiple
+
+44
+00:03:49,066 --> 00:03:54,059
+errors to say these are reductions that
+take more than one step.
+
+45
+00:03:54,059 --> 00:04:00,037
+We get GCD fourteen to seven, we get GCD
+seven, zero, and finally you get the
+
+46
+00:04:00,037 --> 00:04:05,030
+condition if zero equals zero, seven else
+some other call to GCD.
+
+47
+00:04:05,030 --> 00:04:10,015
+And that finally, since the condition is
+true here, we get seven.
+
+48
+00:04:13,053 --> 00:04:16,088
+Okay.
+Let's look at another rewriting example.
+
+49
+00:04:16,088 --> 00:04:20,066
+Factorial.
+Classical algorythm for factorial is the
+
+50
+00:04:20,066 --> 00:04:24,030
+following.
+You're said to take the factorial of a
+
+51
+00:04:24,030 --> 00:04:27,027
+number n.
+You ask again if n equals zero,
+
+52
+00:04:27,027 --> 00:04:32,084
+then the factorial would be one.
+Otherwise it would be n times factorial of
+
+53
+00:04:32,084 --> 00:04:36,092
+n minus one.
+Let's apply that algorythm to factorial of
+
+54
+00:04:36,092 --> 00:04:40,018
+four.
+So that would expand to the following
+
+55
+00:04:40,018 --> 00:04:44,019
+conditional.
+If four equal zero, one, that's four times
+
+56
+00:04:44,019 --> 00:04:49,019
+factorial four minus one.
+You evaluate the if then else, that gives
+
+57
+00:04:49,019 --> 00:04:53,036
+you in a couple of steps, four times
+factorial of three.
+
+58
+00:04:53,036 --> 00:04:57,072
+The second part.
+Reducing further gives you four times
+
+59
+00:04:57,072 --> 00:05:03,036
+three times factorial of two.
+And so on, until you finally reach four
+
+60
+00:05:03,036 --> 00:05:09,082
+times three times two times one times one.
+That was the last, the first case of
+
+61
+00:05:09,082 --> 00:05:13,075
+factorial and that reduces to 120.
+Question,
+
+62
+00:05:13,075 --> 00:05:17,068
+what is the difference between these two
+sequences?
+
+63
+00:05:18,066 --> 00:05:29,004
+GCD and factorial?
+Well, one important difference is that if
+
+64
+00:05:29,004 --> 00:05:33,010
+we come back to GCD, we see that.
+The,
+
+65
+00:05:33,010 --> 00:05:38,075
+reduction sequence essentially oscillates.
+It goes from one call to GCD to the next
+
+66
+00:05:38,075 --> 00:05:43,099
+one here, to the next one here, to the
+next one here and finally it terminates.
+
+67
+00:05:43,099 --> 00:05:49,057
+In between we have expressions that are
+different from the simple call like if
+
+68
+00:05:49,057 --> 00:05:54,095
+then else's but we always
+come back to this shape to the call of
+
+69
+00:05:54,095 --> 00:05:58,008
+GCD.
+If we look at factorial, on the other hand
+
+70
+00:05:58,008 --> 00:06:03,046
+we see that in each couple of steps we add
+one more element to our expressions.
+
+71
+00:06:03,046 --> 00:06:06,093
+Our expressions becomes bigger and bigger
+until we
+
+72
+00:06:06,093 --> 00:06:10,093
+end when we finally reduce it to the final
+value.
+
+73
+00:06:14,025 --> 00:06:19,053
+So, that difference in the rewriting rules
+actually translates directly to a
+
+74
+00:06:19,053 --> 00:06:24,095
+difference in the execution, in the actual,
+ execution on a computer.
+
+75
+00:06:24,095 --> 00:06:30,051
+In fact, it turns out that if you have a
+recursive function that calls itself as
+
+76
+00:06:30,051 --> 00:06:35,023
+its last action, then you can reuse the
+stack frame of that function.
+
+77
+00:06:35,023 --> 00:06:40,027
+This is called tail recursion.
+And by applying that trick, it means that
+
+78
+00:06:40,027 --> 00:06:46,017
+a tail recursive function can execute in
+constant stuck space, so it's really just
+
+79
+00:06:46,017 --> 00:06:49,027
+another formulation of an iterative
+process.
+
+80
+00:06:49,027 --> 00:06:55,039
+Could say a tail recursive function is the
+functional form of a loop, and it executes
+
+81
+00:06:55,039 --> 00:07:01,015
+just as efficiently as a loop.
+So if we go back to GCD, we see that in
+
+82
+00:07:01,015 --> 00:07:05,009
+the else part, GCD calls itself as its
+last action.
+
+83
+00:07:05,009 --> 00:07:11,040
+And that translate its, to a rewriting
+sequence that was essentially constant
+
+84
+00:07:11,040 --> 00:07:17,023
+size, and that will, in the actual
+execution on a computer, translate into a
+
+85
+00:07:17,023 --> 00:07:21,056
+tail recursive call that can execute in
+constant space.
+
+86
+00:07:21,056 --> 00:07:26,004
+On the other hand, if you look at
+factorial again, then you'll see that
+
+87
+00:07:26,004 --> 00:07:31,009
+after the call to factorial n minus one,
+there was still work to be done, namely,
+
+88
+00:07:31,009 --> 00:07:34,099
+we had to multiply the result of that call
+with the number N.
+
+89
+00:07:34,099 --> 00:07:39,091
+So that call here is not a tail recursive
+call, and it becomes evident in the
+
+90
+00:07:39,091 --> 00:07:45,009
+reduction sequence, where you see that
+actually there's a buildup of intermediate
+
+91
+00:07:45,009 --> 00:07:49,056
+results that we all have to keep until we
+can compute the final value.
+
+92
+00:07:49,056 --> 00:07:53,020
+So that factorial would not be a tail
+recursive function.
+
+93
+00:07:53,020 --> 00:07:55,090
+Both
+factorial and GCD only call itself
+
+94
+00:07:55,090 --> 00:08:00,016
+but in general, of course, a function
+could call other functions.
+
+95
+00:08:00,016 --> 00:08:05,052
+So the generalization of tail
+recursion is that, if the last action of a
+
+96
+00:08:05,052 --> 00:08:10,080
+function consists of calling another
+function, maybe the same, maybe some other
+
+97
+00:08:10,080 --> 00:08:14,019
+function.
+The stack frame could be reused for both
+
+98
+00:08:14,019 --> 00:08:17,057
+functions.
+Such calls are called tail calls.
+
+99
+00:08:17,092 --> 00:08:23,052
+After having gone through the exercise,
+you might ask yourself, should every
+
+100
+00:08:23,052 --> 00:08:26,074
+function be tail recursive?
+Well, not really.
+
+101
+00:08:26,074 --> 00:08:32,050
+The interest of tail recursion is mostly
+to avoid very deep recursive chains.
+
+102
+00:08:32,073 --> 00:08:38,034
+Most implementations of, the JBM, for
+instance, limit the maximal depth of
+
+103
+00:08:38,034 --> 00:08:41,085
+recursion to a couple of thousand stack
+frames.
+
+104
+00:08:41,085 --> 00:08:47,065
+So if your, the input data is such that
+these deep recursive chains could happen,
+
+105
+00:08:47,065 --> 00:08:53,064
+then yes it's a good idea to reformulate
+your function to be tail recursive, to run
+
+106
+00:08:53,064 --> 00:08:58,034
+in constant stack frame, so as to avoid
+stack overflow exceptions.
+
+107
+00:08:58,034 --> 00:09:01,059
+On the other hand, if your input data are
+not,
+
+108
+00:09:01,059 --> 00:09:04,064
+susceptible to deep precausive chains
+then
+
+109
+00:09:04,064 --> 00:09:10,041
+clarity trumps efficiency evert time, so
+write your function the clearest way you
+
+110
+00:09:10,041 --> 00:09:12,090
+can.
+Which often is not terricosive.
+
+111
+00:09:12,090 --> 00:09:16,074
+And don't worry about the steck frames
+that are spent.
+
+112
+00:09:16,074 --> 00:09:22,000
+As Donald Knuth has said, premature
+optimization is the source of all evil.
+
+113
+00:09:22,000 --> 00:09:25,071
+And that's the model that's very valuable
+to follow.
+
+114
+00:09:26,075 --> 00:09:31,014
+Coming back to factorial.
+You might have observed that factorial
+
+115
+00:09:31,014 --> 00:09:35,072
+grows really very, very quickly.
+So, even after very low number of
+
+116
+00:09:35,072 --> 00:09:41,006
+recursive steps it will already the,
+exceed the range of integers, or even long
+
+117
+00:09:41,006 --> 00:09:44,028
+integers.
+So, in that case definitely it was not
+
+118
+00:09:44,028 --> 00:09:47,063
+worth making factorial a tail recursive
+function.
+
+119
+00:09:47,063 --> 00:09:53,011
+So, we did that only as a, an exercise so
+that you have the techniques ready when
+
+120
+00:09:53,011 --> 00:09:56,095
+you need them.
+So let's do an exercise on tail recursion.
+
+121
+00:09:56,095 --> 00:10:01,090
+You've seen factorial, and we've seen
+that, that version of the function was not
+
+122
+00:10:01,090 --> 00:10:05,011
+tail recursive.
+So now the task is to design a tail
+
+123
+00:10:05,011 --> 00:10:08,049
+recursive version of the same function.
+Okay,
+
+124
+00:10:08,049 --> 00:10:14,090
+so the most convenient way to solve this
+exercise is using another worksheet.
+
+125
+00:10:14,090 --> 00:10:21,089
+I have already created a new package in
+our proc fun project called week two, and
+
+126
+00:10:21,089 --> 00:10:27,005
+in that package we have a
+worksheet excercise in which I have
+
+127
+00:10:27,005 --> 00:10:32,085
+already written the signature of factorial
+but I've left out the implementation.
+
+128
+00:10:32,085 --> 00:10:37,028
+So, how would we implement that in a
+tail recursive fashion?
+
+129
+00:10:37,028 --> 00:10:42,072
+Actually, it turns out that we need
+another function, called loop, that takes
+
+130
+00:10:42,072 --> 00:10:47,014
+two parameters, not one.
+I'll give you an outline of loop here.
+
+131
+00:10:47,014 --> 00:10:50,034
+So, the idea is, it would take an
+accumulator.
+
+132
+00:10:50,087 --> 00:10:57,064
+That's also an int, and the current value
+and it would ask if, the current value is
+
+133
+00:10:57,064 --> 00:11:01,006
+zero then it wouldn't return one as
+before.
+
+134
+00:11:01,006 --> 00:11:05,084
+But the accumulator
+and otherwise, it would return something
+
+135
+00:11:05,084 --> 00:11:09,050
+else.
+And we would start the program with loop
+
+136
+00:11:09,050 --> 00:11:14,075
+of an initial value of the accumulator and
+the current value of n.
+
+137
+00:11:14,075 --> 00:11:20,079
+So the question is, what do we need to do
+to fill in the question marks here?
+
+138
+00:11:21,048 --> 00:11:27,057
+The first task is to fill in something for
+the initial value of the accumulator.
+
+139
+00:11:27,057 --> 00:11:33,047
+Here it's pretty clear that, we say, well,
+if n equals zero then the accumulator is
+
+140
+00:11:33,047 --> 00:11:37,077
+returned so it has to be the right value
+for n equals zero.
+
+141
+00:11:37,077 --> 00:11:40,083
+And that would be one.
+So we pass one here.
+
+142
+00:11:40,083 --> 00:11:46,051
+The second question is, what do we do in
+the case where n is not equal to zero.
+
+143
+00:11:46,051 --> 00:11:52,056
+And the idea there is we would call again
+into the loop with the accumulator times
+
+144
+00:11:52,056 --> 00:11:55,070
+and the current value and n reduced by
+one.
+
+145
+00:11:55,098 --> 00:12:03,019
+And the thing still doesn't compile
+because we have forgotten to give a result
+
+146
+00:12:03,019 --> 00:12:07,041
+type to loop.
+Once we do that, factorial compiles.
+
+147
+00:12:07,041 --> 00:12:10,058
+And we can test it
+so let's do that.
+
+148
+00:12:15,055 --> 00:12:22,055
+So that would give 24 as expected.
+In this session we've gotten to know tail
+
+149
+00:12:22,055 --> 00:12:27,022
+recursion as a special case of recursion
+that corresponds to a loop in an
+
+150
+00:12:27,022 --> 00:12:31,008
+imperative program.
+In the next session, we are going to cover
+
+151
+00:12:31,008 --> 00:12:32,097
+new ways to compose functions.

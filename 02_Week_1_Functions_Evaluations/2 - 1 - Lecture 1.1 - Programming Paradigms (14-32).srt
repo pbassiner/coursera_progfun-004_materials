@@ -1,0 +1,988 @@
+1
+00:00:00,000 --> 00:00:04,024
+Welcome to my course on function
+programming principles in Scala.
+
+2
+00:00:04,024 --> 00:00:08,320
+As the name implies we're going to do
+quite a bit of scala programming, but
+
+3
+00:00:08,320 --> 00:00:11,090
+that's not the primary objective of the
+course.
+
+4
+00:00:11,090 --> 00:00:16,020
+The primary objective is to teach you
+functional programming from first
+
+5
+00:00:16,020 --> 00:00:19,014
+principles.
+You're going to see function programs,
+
+6
+00:00:19,014 --> 00:00:22,048
+methods to construct them, and ways to
+reason about them.
+
+7
+00:00:22,048 --> 00:00:27,006
+You're gonna find that functional
+programming is a paradigm that's quite
+
+8
+00:00:27,006 --> 00:00:32,026
+different from the classical imperative
+paradigm that you know from languages such
+
+9
+00:00:32,026 --> 00:00:35,008
+as Java or C.
+In fact, you can combine the two
+
+10
+00:00:35,008 --> 00:00:39,071
+paradigms, and it's one of Scala's
+strengths, that it provides a gradual
+
+11
+00:00:39,071 --> 00:00:44,047
+migration path from a more concise
+travel-light language to full-functional
+
+12
+00:00:44,047 --> 00:00:47,079
+programming.
+But in this course we're not going to be
+
+13
+00:00:47,079 --> 00:00:50,042
+gradual, we're going to take a clean
+break.
+
+14
+00:00:50,042 --> 00:00:54,098
+I'd like to, you to suspend for the time
+being most of what you know about
+
+15
+00:00:54,098 --> 00:00:58,000
+programming and look at programs with
+fresh eyes.
+
+16
+00:00:58,000 --> 00:01:03,011
+That way, I believe you'll be better able
+to absorb this new way of thinking, that's
+
+17
+00:01:03,011 --> 00:01:08,035
+function programming, and once you've done
+that you'll also be able to integrate that
+
+18
+00:01:08,035 --> 00:01:13,040
+back into your daily programming practice.
+In face, Scala is a great tool both to
+
+19
+00:01:13,040 --> 00:01:18,021
+learn function programming from first
+principles and later on to integrate it
+
+20
+00:01:18,021 --> 00:01:20,085
+with classical object oriented
+programming.
+
+21
+00:01:20,085 --> 00:01:24,098
+So let's get started.
+So I have talked about functional
+
+22
+00:01:24,098 --> 00:01:30,048
+programming as a different paradigm.
+If we go back to the meaning of the word,
+
+23
+00:01:30,048 --> 00:01:35,074
+in science, a paradigm describes distant
+concepts or thought patterns in some
+
+24
+00:01:35,074 --> 00:01:39,077
+scientific discipline.
+In programming we can distinguish three
+
+25
+00:01:39,077 --> 00:01:42,073
+main paradigms.
+There is imperative programming.
+
+26
+00:01:42,073 --> 00:01:46,070
+That's what you probably know from
+languages such as Java or C.
+
+27
+00:01:46,070 --> 00:01:51,005
+There's functional programming.
+And there is a lesser known one called
+
+28
+00:01:51,005 --> 00:01:54,033
+logic programming.
+Some people call object oriented
+
+29
+00:01:54,033 --> 00:01:58,023
+programming a paradigm.
+But in my mind, it's really something
+
+30
+00:01:58,023 --> 00:02:01,022
+that's orthogonal to the three paradigms
+here.
+
+31
+00:02:01,022 --> 00:02:06,009
+In the sense that it can be combined well
+with both imperative programming.
+
+32
+00:02:06,009 --> 00:02:09,080
+That's what you, essentially the current
+state of the art.
+
+33
+00:02:09,080 --> 00:02:13,090
+But also with functional programming or
+even logic programming.
+
+34
+00:02:14,069 --> 00:02:19,060
+So let's review what imperative
+programming is as a paradigm.
+
+35
+00:02:19,060 --> 00:02:25,046
+Imperative programming is really about
+modifying mutable variables using
+
+36
+00:02:25,046 --> 00:02:29,064
+assignments.
+And those will be composed with control
+
+37
+00:02:29,064 --> 00:02:34,094
+structures such if then L's, loops, right
+continue, return, and so on.
+
+38
+00:02:34,094 --> 00:02:40,063
+The most common informal way to understand
+imperative programs is as instruction
+
+39
+00:02:40,063 --> 00:02:45,083
+sequences for a Von Neumann computer.
+Von Neuman was one of the pioneers of the
+
+40
+00:02:45,083 --> 00:02:49,006
+computer, built the first computer around
+1945.
+
+41
+00:02:49,006 --> 00:03:00,109
+So a Von Neumann computer, it consists
+essentially of a processor and memory, and
+
+42
+00:03:00,109 --> 00:03:08,438
+then there's a bus that reads both
+instructions and data.
+
+43
+00:03:08,438 --> 00:03:14,477
+From the memory into the processor.
+And what's important is this, that the
+
+44
+00:03:14,477 --> 00:03:19,441
+width of that bus is about one machine
+word so 32 bits or 64 bits nowadays.
+
+45
+00:03:19,441 --> 00:03:24,265
+Now it turns out that, that model of a
+computer has shaped programming to no
+
+46
+00:03:24,265 --> 00:03:27,392
+small degree.
+There's a very strong correspondence
+
+47
+00:03:27,392 --> 00:03:32,687
+between the memory cells of a Von Neumann
+computer and the mutable variables in a
+
+48
+00:03:32,687 --> 00:03:36,830
+programming language.
+Variable de-references correspond them to
+
+49
+00:03:36,830 --> 00:03:41,310
+load instructions in the computer.
+Variable assignments relate to store
+
+50
+00:03:41,310 --> 00:03:45,568
+instructions.
+Controlled structures all translate into a
+
+51
+00:03:45,568 --> 00:03:49,969
+sequence of loops.
+So that's all very well, but the scaling
+
+52
+00:03:49,969 --> 00:03:53,817
+is getting up.
+We want to avoid conceptualizing programs
+
+53
+00:03:53,817 --> 00:03:57,464
+just word by word.
+We want to reason in larger structures.
+
+54
+00:03:57,464 --> 00:04:02,906
+That was the argument made by John Backus,
+in his Turing award lecture, titled Can
+
+55
+00:04:02,906 --> 00:04:06,495
+Programming Be Liberated From the Von
+Neumann Style.
+
+56
+00:04:06,495 --> 00:04:11,973
+It's noteworthy that John Backus was in
+fact the inventor of the first high level
+
+57
+00:04:11,973 --> 00:04:16,224
+language at all.
+It was Fortran in the 1950's, so more than
+
+58
+00:04:16,224 --> 00:04:21,737
+twenty years later he found that the
+traditional course of action of imperative
+
+59
+00:04:21,737 --> 00:04:26,260
+programming had run it's course, was
+running out of steam, and that something
+
+60
+00:04:26,260 --> 00:04:29,935
+new was needed.
+And the new thing that he was proposing
+
+61
+00:04:29,935 --> 00:04:35,140
+then was function programming.
+So John Backus argued that in the end pure
+
+62
+00:04:35,140 --> 00:04:40,261
+imperative program it is limited by the
+Von Neumann bottleneck, which means, which
+
+63
+00:04:40,261 --> 00:04:43,629
+means that we conceptualize data
+structures word by word.
+
+64
+00:04:43,629 --> 00:04:48,807
+If you want to scale up, we'll need to
+define higher level abstractions such as
+
+65
+00:04:48,807 --> 00:04:53,544
+collections, polynomials, geometric
+shapes, strings, documents, and so on.
+
+66
+00:04:53,544 --> 00:04:57,815
+And to be thorough, we need to have
+theories of these higher level
+
+67
+00:04:57,815 --> 00:05:02,718
+abstractions, collections, shapes, and so
+on so that we are able to reason about
+
+68
+00:05:02,718 --> 00:05:04,715
+them.
+So what is a theory?
+
+69
+00:05:04,715 --> 00:05:10,775
+In mathematics, a theory consists of one
+or more data types, operations on these
+
+70
+00:05:10,775 --> 00:05:16,967
+types, and laws that describe the
+relationships between the values and the
+
+71
+00:05:16,967 --> 00:05:20,892
+operations.
+So what's important is that a theory
+
+72
+00:05:20,892 --> 00:05:26,431
+mathematics does not describe mutations.
+A mutation means that I have changed
+
+73
+00:05:26,431 --> 00:05:30,300
+something while keeping the identity of
+the thing the same.
+
+74
+00:05:30,300 --> 00:05:36,034
+So for instance the theory of polynomials
+describes the sum of two polynomials by
+
+75
+00:05:36,034 --> 00:05:40,837
+laws such as this one here.
+Here we say to sum two polynomial of
+
+76
+00:05:40,837 --> 00:05:46,412
+degree one, we Take the two coefficient of
+the same degree and the sum of those
+
+77
+00:05:46,412 --> 00:05:50,561
+coefficients, and there would be laws of
+all the other useful operators for
+
+78
+00:05:50,561 --> 00:05:53,950
+polynomials.
+But one thing the theory does not do is
+
+79
+00:05:53,950 --> 00:05:59,161
+define an operator to change a coefficient
+while keeping the polynomial the same.
+
+80
+00:05:59,161 --> 00:06:03,174
+Whereas if we look at programming,
+imperative programming, one can do
+
+81
+00:06:03,174 --> 00:06:06,944
+precisely that.
+One can write a class polynomial that
+
+82
+00:06:06,944 --> 00:06:10,902
+would have an array of tables containing
+the coefficients.
+
+83
+00:06:10,902 --> 00:06:16,325
+One can then define a concrete polynomial
+p and one can set the coefficient zero of
+
+84
+00:06:16,325 --> 00:06:20,220
+that polynomial to 42.
+When one does that the polynomial p is
+
+85
+00:06:20,220 --> 00:06:23,379
+still the same.
+That in mathematics simply is not
+
+86
+00:06:23,379 --> 00:06:26,655
+available.
+It would detract from the theory of, in
+
+87
+00:06:26,655 --> 00:06:31,753
+mathematics and in fact would, could
+damage this theory by breaking laws.
+
+88
+00:06:31,753 --> 00:06:34,563
+Let's look at another example.
+Strings.
+
+89
+00:06:34,563 --> 00:06:37,488
+So most programming languages have
+strings.
+
+90
+00:06:37,488 --> 00:06:40,646
+And they would also define a concatenation
+operator.
+
+91
+00:06:40,646 --> 00:06:45,296
+Let's wite that ++ here.
+And one of the laws for concatenation is
+
+92
+00:06:45,296 --> 00:06:49,518
+that it's associative.
+So, a++b with parents to the left, ++c is
+
+93
+00:06:49,518 --> 00:06:52,771
+the same as, as a++ b ++ c, with parents
+to the right.
+
+94
+00:06:52,771 --> 00:06:58,137
+But again, the theory does not define an
+operator to change a sequence element,
+
+95
+00:06:58,137 --> 00:07:03,645
+while keeping the sequence the same.
+This one actually, some languages do get
+
+96
+00:07:03,645 --> 00:07:07,056
+right.
+For instance, in Java, the type of strings
+
+97
+00:07:07,056 --> 00:07:10,602
+is immutable.
+It also does not give you an operator to
+
+98
+00:07:10,602 --> 00:07:15,060
+change a character in the string while
+keeping the string the same.
+
+99
+00:07:15,060 --> 00:07:19,102
+So these were observations about theories
+in mathematics.
+
+100
+00:07:19,102 --> 00:07:24,698
+What are the consequences for programming?
+Well, if you want to implement high level
+
+101
+00:07:24,698 --> 00:07:29,746
+concepts following the mathematical
+theories, you find that there's really no
+
+102
+00:07:29,746 --> 00:07:33,640
+place for mutation.
+First the theories do not admit they don't
+
+103
+00:07:33,640 --> 00:07:37,693
+have a mutation operator, and second if
+you add it, then it could.
+
+104
+00:07:37,693 --> 00:07:40,544
+In fact, destroy useful laws in the
+theory.
+
+105
+00:07:40,544 --> 00:07:45,392
+And that leads to a new style of
+programming, where we say, well, we want
+
+106
+00:07:45,392 --> 00:07:50,440
+to concentrate in defining these theories.
+So, operators, which quote in the mp,
+
+107
+00:07:50,440 --> 00:07:53,794
+expressed as functions.
+We want to avoid mutations.
+
+108
+00:07:53,794 --> 00:07:58,497
+And if we are going to do without
+something, we want to gain something else.
+
+109
+00:07:58,497 --> 00:08:03,851
+The things we gain is to get powerful race
+traps, tracked and compose functions.
+
+110
+00:08:03,851 --> 00:08:08,213
+So, a start of function programming means
+avoid mutations.
+
+111
+00:08:08,213 --> 00:08:11,647
+Get new ways to abstract and compose
+functions.
+
+112
+00:08:11,647 --> 00:08:15,978
+In fact, there are two ways to look at
+functional programming, a restricted one
+
+113
+00:08:15,978 --> 00:08:19,323
+and a more general one.
+In the restricted sense, functional
+
+114
+00:08:19,323 --> 00:08:24,632
+programming just means programming without
+mutable variables, without assignments to
+
+115
+00:08:24,632 --> 00:08:29,109
+those variables, without loops and the
+other imperative control structures.
+
+116
+00:08:29,109 --> 00:08:33,132
+So it takes a lot of things away.
+In the more general sense, functional
+
+117
+00:08:33,132 --> 00:08:36,833
+programming means focusing on the
+functions in the program.
+
+118
+00:08:36,833 --> 00:08:41,645
+So, in a sense, it gives you new
+capabilities to work with these functions.
+
+119
+00:08:41,645 --> 00:08:46,521
+In particular, functions can be values
+that are produced, consumed and composed.
+
+120
+00:08:46,521 --> 00:08:49,545
+All this can be done in any programming
+language.
+
+121
+00:08:49,545 --> 00:08:52,627
+But it becomes much easier in a functional
+language.
+
+122
+00:08:52,627 --> 00:08:57,068
+So then we can also look at functual
+languages in a restricted sense or in a
+
+123
+00:08:57,068 --> 00:09:00,440
+more general sense.
+In the restricted sense then a functual
+
+124
+00:09:00,440 --> 00:09:05,122
+programming language is one which does not
+have an immutable variables assignments or
+
+125
+00:09:05,122 --> 00:09:09,512
+imperative control structure and in the
+wider sense the functual programming
+
+126
+00:09:09,512 --> 00:09:13,903
+language is one with that enables the
+construction of elegant programs that
+
+127
+00:09:13,903 --> 00:09:17,114
+focus on the functions.
+In particular functions in a functual
+
+128
+00:09:17,114 --> 00:09:19,720
+programming language or first class
+citizens.
+
+129
+00:09:19,720 --> 00:09:23,149
+What does it mean?
+It means that essentially you can do with
+
+130
+00:09:23,149 --> 00:09:26,582
+a function that you could do with any
+other piece of data so.
+
+131
+00:09:26,582 --> 00:09:30,873
+You can define a string anywhere you
+should be able to define a function
+
+132
+00:09:30,873 --> 00:09:35,659
+anywhere including inside other functions.
+Like any other value, you should be able
+
+133
+00:09:35,659 --> 00:09:41,175
+to pass a function as a parameter to
+another function and return it f-, as a
+
+134
+00:09:41,175 --> 00:09:45,446
+result from a function.
+And as for other values, there will be a
+
+135
+00:09:45,446 --> 00:09:49,317
+set of operators to compose functions into
+greater functions.
+
+136
+00:09:49,317 --> 00:09:52,900
+So what are some functional programming
+languages?
+
+137
+00:09:52,900 --> 00:09:56,347
+In the restricted sense, there are not
+many.
+
+138
+00:09:56,347 --> 00:10:02,193
+There are some subsets, such as Pure Lisp
+or Haskell without the IO monad, or unsafe
+
+139
+00:10:02,193 --> 00:10:05,461
+perform IO.
+There's an experimental language FP.
+
+140
+00:10:05,461 --> 00:10:10,538
+That was the one that Backus proposed.
+And there are some domain specific
+
+141
+00:10:10,538 --> 00:10:15,929
+languages, mostly in the XML domain.
+So examples are XSLT, XPath, or XQuery.
+
+142
+00:10:15,929 --> 00:10:22,458
+In the wider sense, we will see the Lisp
+family of languages, starting with Lisp
+
+143
+00:10:22,458 --> 00:10:26,744
+with prominent dialect Scheme, Record and
+Clojure.
+
+144
+00:10:26,744 --> 00:10:33,119
+The ML family that has SML or Caml, F#,
+has the most popular variants, Haskell.
+
+145
+00:10:33,119 --> 00:10:37,524
+The full language, Scala.
+And also Smalltalk or Ruby, so you might
+
+146
+00:10:37,524 --> 00:10:42,527
+be surprised to see the last ones in the
+list of, of functional languages because
+
+147
+00:10:42,527 --> 00:10:45,600
+they generally count as object oriented
+languages.
+
+148
+00:10:45,600 --> 00:10:50,101
+But since both of these languages have a
+construct of blocks, which are essentially
+
+149
+00:10:50,101 --> 00:10:54,625
+first class function values that we can
+pass around, I think it's fair to also
+
+150
+00:10:54,625 --> 00:10:59,321
+adopt them in the functional family.
+Another example of that would be Java
+
+151
+00:10:59,321 --> 00:11:01,868
+Script, which has, is similar
+capabilities.
+
+152
+00:11:01,868 --> 00:11:07,301
+So if you look at the history of
+functional programming languages, we find
+
+153
+00:11:07,301 --> 00:11:12,525
+that they date back to almost the
+beginning of programming languages in
+
+154
+00:11:12,525 --> 00:11:16,062
+general.
+The first functional language was LISP,
+
+155
+00:11:16,062 --> 00:11:19,564
+invented by McCarthy at the end of the
+1950s.
+
+156
+00:11:19,564 --> 00:11:25,850
+Then there was a lot of activities in the
+1970's and'80s with, ML, FP, Scheme, Small
+
+157
+00:11:25,850 --> 00:11:30,484
+Talk, Standard ML.
+Reaching into the'90s with Haskell and
+
+158
+00:11:30,484 --> 00:11:34,645
+Erlang.
+Later languages include OCML, 2000, Scala,
+
+159
+00:11:34,645 --> 00:11:38,745
+2003.
+F sharp 2005 and Clojure, 2007.
+
+160
+00:11:38,745 --> 00:11:45,279
+So, to find out more about function
+programming, I recommend this book,
+
+161
+00:11:45,279 --> 00:11:50,552
+Structure and Interpretation of Computer
+Programs, by Harold Ibelson and Gerald
+
+162
+00:11:50,552 --> 00:11:53,650
+Susman.
+The second edition appeared at MIT Press
+
+163
+00:11:53,650 --> 00:11:56,910
+in'96.
+That book is an absolute classic when it
+
+164
+00:11:56,910 --> 00:12:01,476
+comes to function programming.
+Many parts of our course and also the
+
+165
+00:12:01,476 --> 00:12:05,671
+quizzes are based on it.
+But we change the language from Scheme to
+
+166
+00:12:05,671 --> 00:12:09,073
+Scala.
+If you want to find out more about Scala
+
+167
+00:12:09,073 --> 00:12:12,513
+then I have to recommend my own book of
+course.
+
+168
+00:12:12,513 --> 00:12:17,395
+It's called Programming in Scala by
+myself, Lex Spoon, and Bill Venners.
+
+169
+00:12:17,395 --> 00:12:21,390
+Its also appears in second edition at
+Artima Press 2010.
+
+170
+00:12:21,390 --> 00:12:26,297
+And that's in a sense the standard
+language introduction for Scala and
+
+171
+00:12:26,297 --> 00:12:31,689
+standard language reference.
+So then, many other books published about
+
+172
+00:12:31,689 --> 00:12:35,532
+functional programming in general, and
+scala in particular.
+
+173
+00:12:35,532 --> 00:12:40,731
+I only pick out three to recommend.
+But there would be many other choices as
+
+174
+00:12:40,731 --> 00:12:43,403
+well.
+First recommendation is Scala For The
+
+175
+00:12:43,403 --> 00:12:47,790
+Impatient, by Cay Horstmann.
+That gives a fast paced introduction for
+
+176
+00:12:47,790 --> 00:12:52,549
+people who already know Java well.
+The second one is the O'Reilly book,
+
+177
+00:12:52,549 --> 00:12:56,746
+Programming in Scala.
+And the third one is called Scullah in
+
+178
+00:12:56,746 --> 00:12:59,098
+Depth by Josureth.
+That's the name.
+
+179
+00:12:59,098 --> 00:13:04,282
+Implies that book goes quite a bit further
+than the other introductory text.
+
+180
+00:13:04,282 --> 00:13:08,645
+You can find links to all of these books
+on the course site.
+
+181
+00:13:08,645 --> 00:13:13,891
+So if I open up the course site, and go to
+additional resources.
+
+182
+00:13:13,891 --> 00:13:21,163
+And I see the text, the links for all the
+books here, and quite a few of them are
+
+183
+00:13:21,163 --> 00:13:26,051
+actually available online, either as the
+full text or in parts.
+
+184
+00:13:27,000 --> 00:13:31,072
+Now I've given you a quick introduction to
+functional programming, and why it
+
+185
+00:13:31,072 --> 00:13:34,048
+matters.
+I've stressed that there are simpler
+
+186
+00:13:34,048 --> 00:13:37,011
+reasoning principles, and better
+modularity.
+
+187
+00:13:37,011 --> 00:13:41,071
+But there's actually a third reason why
+functional programming is becoming
+
+188
+00:13:41,071 --> 00:13:45,033
+increasingly popular.
+And that's because it's very good for
+
+189
+00:13:45,033 --> 00:13:48,083
+exploiting parallelism on multi call and
+cloud computing.
+
+190
+00:13:48,083 --> 00:13:53,091
+To find out more about this third aspect,
+there's actually a video that I gave last
+
+191
+00:13:53,091 --> 00:13:58,082
+year at the OSCON Java conference.
+The video's called, Working Hard to Keep
+
+192
+00:13:58,082 --> 00:14:02,082
+it Simple.
+And you get that also from the site.
+
+193
+00:14:03,041 --> 00:14:11,053
+So, you find the slides of the video here.
+And, and to talk.
+
+194
+00:14:12,020 --> 00:14:15,075
+You find here.
+I recommend that you go now to that talk
+
+195
+00:14:15,075 --> 00:14:20,347
+to find out a little bit more about Scala
+what its role is, what its purpose is, and
+
+196
+00:14:20,347 --> 00:14:25,076
+why functional programming is important
+for parallelism and concurrency.
+
+197
+00:14:25,076 --> 00:14:31,000
+After you've done that, you can come to
+the next lecture, where we are going to do
+
+198
+00:14:31,000 --> 00:14:32,048
+some Scala programming.

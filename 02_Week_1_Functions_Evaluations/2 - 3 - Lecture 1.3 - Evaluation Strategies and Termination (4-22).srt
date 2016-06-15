@@ -1,0 +1,289 @@
+1
+00:00:00,000 --> 00:00:05,013
+In the last session, we have explored a
+formal model of evaluation of expressions
+
+2
+00:00:05,013 --> 00:00:10,019
+which was called the substitution model.
+And we have seen that there's more than
+
+3
+00:00:10,019 --> 00:00:14,088
+one way to evaluate an expression.
+We have identified the call by name and
+
+4
+00:00:14,088 --> 00:00:18,996
+call by value evaluation strategies.
+And in this session, we're going to
+
+5
+00:00:18,996 --> 00:00:24,019
+compare them a little bit further in
+particular in what regards termination.
+
+6
+00:00:24,019 --> 00:00:29,007
+If you look at call by name and call by
+value and how their related termination
+
+7
+00:00:29,007 --> 00:00:33,458
+then, we know that both of our
+reevaluation strategies will always reduce
+
+8
+00:00:33,458 --> 00:00:36,539
+the same value provided term evaluations
+terminate.
+
+9
+00:00:36,539 --> 00:00:41,560
+But, what if evaluations do not terminate?
+We have seen in the last session that some
+
+10
+00:00:41,560 --> 00:00:45,955
+of the expressions actually do not give a
+value in a finite number of steps.
+
+11
+00:00:45,955 --> 00:00:50,509
+So, there we have an important theorem
+which says that if the call by value
+
+12
+00:00:50,509 --> 00:00:55,927
+evaluation of an expression terminates,
+then the call by name evaluation of that
+
+13
+00:00:55,927 --> 00:01:01,064
+same expression will terminate also.
+And furthermore, the other direction is
+
+14
+00:01:01,064 --> 00:01:05,000
+not true.
+So, call by name termination does not
+
+15
+00:01:05,000 --> 00:01:09,031
+imply call by value termination.
+So, let's see an example.
+
+16
+00:01:10,007 --> 00:01:16,015
+Can we find an expression that terminates
+on the call by name, but not on the call
+
+17
+00:01:16,015 --> 00:01:21,036
+by value?
+Okay, so let's see how we would go about
+
+18
+00:01:21,036 --> 00:01:25,007
+that.
+We define a function first that takes
+
+19
+00:01:25,007 --> 00:01:31,013
+simply two parameters, x and y and returns
+the first one x, so it forgets about y.
+
+20
+00:01:31,035 --> 00:01:36,073
+And then, we consider the expression first
+of one and loop, so we pass a
+
+21
+00:01:36,073 --> 00:01:40,081
+non-terminating computation into the
+second parameter.
+
+22
+00:01:40,081 --> 00:01:43,092
+And a call by name, what, what will
+happen?
+
+23
+00:01:43,092 --> 00:01:50,005
+Well, call by name will reduce the first
+expression without reducing the argument.
+
+24
+00:01:50,005 --> 00:01:54,341
+So, it would just yield one in a single
+step, the first argument.
+
+25
+00:01:54,341 --> 00:01:57,846
+And the variation would stop in a value,
+obviously.
+
+26
+00:01:57,846 --> 00:02:04,228
+And a call by value, we have to reduce the
+arguments to this expression so we have to
+
+27
+00:02:04,228 --> 00:02:07,600
+reduce loop.
+And, well, we know that loop reduces to
+
+28
+00:02:07,600 --> 00:02:12,844
+itself, so we would reduce the arguments.
+Infinitely often, the whole expression
+
+29
+00:02:12,844 --> 00:02:16,909
+would always reduce to itself and we would
+make no progress.
+
+30
+00:02:16,909 --> 00:02:19,436
+So, that's another example of an infinite
+loop.
+
+31
+00:02:19,436 --> 00:02:24,584
+In Scala, we normally use call by value.
+You might ask, well, given the advantages
+
+32
+00:02:24,584 --> 00:02:28,589
+of call by name that it terminates more
+often, why call by value?
+
+33
+00:02:28,589 --> 00:02:33,306
+Well, it turns out that, for expressions
+in practice, call by value is often
+
+34
+00:02:33,306 --> 00:02:38,034
+exponentially more efficient than call by
+name because it avoids this repeated
+
+35
+00:02:38,034 --> 00:02:42,017
+recomputation of argument expressions that
+call by name entails.
+
+36
+00:02:42,035 --> 00:02:47,038
+The other argument for call by value is
+that it plays much nicer with, imperative
+
+37
+00:02:47,038 --> 00:02:52,041
+effects and side effects because you tend
+to know much better when expressions will
+
+38
+00:02:52,041 --> 00:02:55,040
+be evaluated.
+Since Scala is also an, an imperative
+
+39
+00:02:55,040 --> 00:02:58,576
+side, call by value is the standard
+choice.
+
+40
+00:02:58,576 --> 00:03:04,468
+Except that, sometimes you really want to
+force call by name, and Scala lets you do
+
+41
+00:03:04,468 --> 00:03:07,702
+that also.
+You do that by adding a, an arrow in front
+
+42
+00:03:07,702 --> 00:03:11,944
+of the parameter type.
+So, this function constOne takes an x
+
+43
+00:03:11,944 --> 00:03:15,652
+parameter int and a y parameter of type
+arrow int.
+
+44
+00:03:15,652 --> 00:03:20,720
+And that means that the parameter y is
+also an int, but it will be past call by
+
+45
+00:03:20,720 --> 00:03:24,276
+name.
+So, to demonstrate the difference between
+
+46
+00:03:24,276 --> 00:03:29,578
+the two parameters, let's trace the
+evaluations of two expressions, constOne
+
+47
+00:03:29,578 --> 00:03:33,295
+one plus two loop, and constOne of loop
+and one plus two.
+
+48
+00:03:33,295 --> 00:03:39,282
+So, the first one, constOne, one plus two
+loop is, well the first parameter is call
+
+49
+00:03:39,282 --> 00:03:44,606
+by value, so we have to reduce that to
+three, so that will be three and the rest
+
+50
+00:03:44,606 --> 00:03:49,077
+will be kept as it was before.
+The second parameter, we do not need to
+
+51
+00:03:49,077 --> 00:03:54,016
+reduce because it's a call by name
+parameter, so we are done with the
+
+52
+00:03:54,016 --> 00:03:57,091
+argument lists.
+We can apply the function and the function
+
+53
+00:03:57,091 --> 00:04:01,712
+would just always reduce to one.
+So, it would in fact, would ignore both of
+
+54
+00:04:01,712 --> 00:04:04,077
+it's parameters.
+That's the first expression.
+
+55
+00:04:04,077 --> 00:04:09,099
+The second expression here we would have
+constOne of loop and one plus two.
+
+56
+00:04:09,099 --> 00:04:14,306
+While here we have to reduce the first
+argument because it's call by value, and
+
+57
+00:04:14,306 --> 00:04:18,056
+we get into the same situation that loop
+produces to itself.
+
+58
+00:04:18,056 --> 00:04:23,053
+So, no progress and we get another
+infinite cycle.

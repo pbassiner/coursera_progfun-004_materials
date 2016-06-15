@@ -1,0 +1,724 @@
+1
+00:00:00,000 --> 00:00:04,061
+In this session, we are going to apply
+what we learned so far in a larger
+
+2
+00:00:04,061 --> 00:00:07,045
+example.
+The task is to develop a square root
+
+3
+00:00:07,045 --> 00:00:11,094
+function using Newton's method.
+That's the first time that we need more
+
+4
+00:00:11,094 --> 00:00:17,217
+than a couple of lines to actually express
+a program and we will learn new techniques
+
+5
+00:00:17,217 --> 00:00:21,562
+and new tools for doing so.
+So, what that means is that we want to
+
+6
+00:00:21,562 --> 00:00:26,596
+define a function with the signature.
+It takes a double and gives me back a
+
+7
+00:00:26,596 --> 00:00:32,012
+double, and return the value is the square
+root of its parameter x.
+
+8
+00:00:32,012 --> 00:00:38,010
+The classical way to compute that is by
+successive approximations using the method
+
+9
+00:00:38,010 --> 00:00:41,063
+of Isaac Newton.
+So, let's see what this method is.
+
+10
+00:00:41,063 --> 00:00:46,053
+To compute square root of x, we start with
+an initial estimate value.
+
+11
+00:00:46,053 --> 00:00:51,071
+It doesn't really matter what that
+estimate is as long as it's positive.
+
+12
+00:00:51,071 --> 00:00:55,040
+So, let's pick y = one.
+And then, we repeatedly improve the
+
+13
+00:00:55,040 --> 00:01:01,019
+estimate by taking the mean of the old
+estimate y and the value of x divided by
+
+14
+00:01:01,019 --> 00:01:04,730
+y, where x is the value we want to draw
+the root from.
+
+15
+00:01:04,730 --> 00:01:10,410
+So, it's, let's see that in action.
+For the value of x, in our example, would
+
+16
+00:01:10,410 --> 00:01:13,804
+be two.
+Our initial estimation is one, as usual,
+
+17
+00:01:13,804 --> 00:01:19,241
+so the initial quotient is two divided by
+one, that's two, the mean is 1.5.
+
+18
+00:01:19,241 --> 00:01:24,885
+Now, we plug in 1.5 to our estimation, we
+get a new quotient of 1.33, a new mean
+
+19
+00:01:24,885 --> 00:01:31,484
+that you'd see here and you'll see that it
+converges very quickly to the actual value
+
+20
+00:01:31,484 --> 00:01:34,487
+of two.
+So now, we have an abstract algorithm.
+
+21
+00:01:34,487 --> 00:01:39,638
+Let's see how we would put that into a
+function that computes that algorithm.
+
+22
+00:01:39,638 --> 00:01:44,723
+A typical way to code algorithms in
+functional languages is to go step by
+
+23
+00:01:44,723 --> 00:01:48,038
+step.
+So, we take a small task and formulate it
+
+24
+00:01:48,038 --> 00:01:53,585
+as a function and then probably, that task
+will need further tasks that then would be
+
+25
+00:01:53,585 --> 00:01:58,821
+defined in their own function.
+The first function we want to define is
+
+26
+00:01:59,073 --> 00:02:05,228
+the actual iteration called the square
+root Iter, which says, well, if you have a
+
+27
+00:02:05,228 --> 00:02:10,406
+guess and the value would be one to draw
+the root from, what do we do?
+
+28
+00:02:10,406 --> 00:02:16,727
+Well, either we stop the iteration and
+return the result or we go and do another
+
+29
+00:02:16,727 --> 00:02:20,775
+iteration step.
+The predicate that controls that we give
+
+30
+00:02:20,775 --> 00:02:25,434
+it a name, let's call it, isGoodEnough.
+So, if my guess is good enough, then I
+
+31
+00:02:25,434 --> 00:02:30,176
+just can return the guess.
+If my guess is not yet good enough, then I
+
+32
+00:02:30,176 --> 00:02:34,605
+have to improve my guess.
+Let's do that with another function in
+
+33
+00:02:34,605 --> 00:02:38,062
+prove and call, square root Iter again
+with the improved guess.
+
+34
+00:02:38,062 --> 00:02:43,049
+Note that square root Iter is recursive so
+its right-hand side calls itself.
+
+35
+00:02:43,049 --> 00:02:48,012
+One peculiarity in Scala is that the
+return type of a recursive function needs
+
+36
+00:02:48,012 --> 00:02:51,057
+to be given always whereas, for other
+functions, it's optional.
+
+37
+00:02:51,057 --> 00:02:56,009
+The reason for that is that to compute
+that return type, the Scala compiler would
+
+38
+00:02:56,009 --> 00:03:00,060
+have to look at the right-hand side and
+because the square root Iter function is
+
+39
+00:03:00,060 --> 00:03:05,034
+recursive it's stacked in a cycle.
+It would need the return type for that to
+
+40
+00:03:05,034 --> 00:03:08,520
+compute the type for expression.
+To break the cycle, we require that
+
+41
+00:03:08,520 --> 00:03:12,008
+recursive functions always have explicit
+return types.
+
+42
+00:03:12,008 --> 00:03:16,021
+It actually makes sense even for other
+publicly used functions to give an
+
+43
+00:03:16,021 --> 00:03:21,015
+explicitly return type because that's good
+documentation but it's not required by the
+
+44
+00:03:21,015 --> 00:03:21,871
+language.
+Okay.
+
+45
+00:03:21,871 --> 00:03:27,029
+So, let's implement this in practice.
+What we're going to see is a new way to
+
+46
+00:03:27,029 --> 00:03:30,843
+write programs.
+So far, we have done everything in the
+
+47
+00:03:30,843 --> 00:03:33,344
+repo.
+Now, for larger programs, we have
+
+48
+00:03:33,344 --> 00:03:38,015
+something that is better adapted.
+We go into Eclipse and we start a
+
+49
+00:03:38,015 --> 00:03:41,038
+worksheet.
+So, I take you through the steps one by
+
+50
+00:03:41,038 --> 00:03:44,021
+one.
+Here, we have an empty Eclipse thing.
+
+51
+00:03:44,021 --> 00:03:48,015
+We first start a new project the Scala
+project.
+
+52
+00:03:48,015 --> 00:03:52,091
+Call it, demands a name, call it [unknown]
+for the course.
+
+53
+00:03:52,091 --> 00:03:59,054
+And then, in the project what we can do is
+define a package, which is essentially a
+
+54
+00:03:59,054 --> 00:04:05,008
+directory in which we are going to put all
+the stuff from this week.
+
+55
+00:04:05,008 --> 00:04:09,085
+Call this Week one.
+We don't need to define packages but it's
+
+56
+00:04:09,085 --> 00:04:13,028
+good practice to keep stuff tidy and
+ordered.
+
+57
+00:04:13,028 --> 00:04:16,085
+And then, in that package, we define a new
+sheet.
+
+58
+00:04:16,085 --> 00:04:21,555
+It needs a name, let's call it Session.
+In a worksheet, what we can do is we can
+
+59
+00:04:21,555 --> 00:04:25,387
+type expressions and have them evaluated,
+just like in a repo.
+
+60
+00:04:25,387 --> 00:04:30,936
+So, we can do one plus two and expressions
+get reevaluated when we hit Save, that
+
+61
+00:04:30,936 --> 00:04:35,833
+will become [unknown] or Control+S.
+But the expressions show up on the right
+
+62
+00:04:35,833 --> 00:04:41,829
+in a different column that you see here.
+We can also define functions, let's say,
+
+63
+00:04:41,829 --> 00:04:46,073
+the absolute, absolute function that we've
+seen before.
+
+64
+00:04:46,073 --> 00:04:53,144
+So, we could say, well, if x is less than
+zero - x else x And the repo would answer
+
+65
+00:04:53,144 --> 00:04:57,913
+the, with the value of the absolute
+function, well, not the repo, the
+
+66
+00:04:57,913 --> 00:05:00,686
+worksheet but the two are actually
+related.
+
+67
+00:05:00,686 --> 00:05:03,740
+It's just a different mode of
+presentation.
+
+68
+00:05:03,740 --> 00:05:08,179
+One thing we can do which is nice, nicer
+in the worksheet is we can actually go
+
+69
+00:05:08,179 --> 00:05:12,637
+back and edit expressions and the
+reevaluation will then show the edited
+
+70
+00:05:12,637 --> 00:05:15,436
+value.
+So, it's not just a single line editing
+
+71
+00:05:15,436 --> 00:05:20,420
+window but a whole window that we can use.
+So, let's use the worksheet to complete
+
+72
+00:05:20,420 --> 00:05:25,077
+our square root functions.
+The first thing I'm going to do is take it
+
+73
+00:05:25,077 --> 00:05:29,994
+from the slide.
+So, I select square root Iter here and
+
+74
+00:05:29,994 --> 00:05:37,872
+paste it inside the worksheet.
+I can reformat with Control+Shift+F.
+
+75
+00:05:37,872 --> 00:05:44,787
+So, that would reformat things nicely.
+But the worksheet still doesn't compile
+
+76
+00:05:44,787 --> 00:05:50,340
+because, of course, I have two functions
+here that I haven't yet defined that would
+
+77
+00:05:50,340 --> 00:05:56,620
+be as good enough and improve.
+So, for isGoodEnough, let's do that first.
+
+78
+00:05:56,620 --> 00:06:03,107
+So, is, isGoodEnough takes these same
+parameters as square root Iter, and it
+
+79
+00:06:03,107 --> 00:06:10,465
+returns a bullion that says whether we can
+stop the iteration or whether we need more
+
+80
+00:06:10,465 --> 00:06:13,093
+steps.
+So, what could that predicate be?
+
+81
+00:06:13,093 --> 00:06:19,479
+Well, one way to do it would be to say,
+well, if we take the current guess here
+
+82
+00:06:19,479 --> 00:06:23,079
+and we square it.
+If we are close enough to the original
+
+83
+00:06:23,079 --> 00:06:29,050
+value x, then guess by itself would be
+close enough to the desired square root
+
+84
+00:06:29,050 --> 00:06:31,055
+value.
+So, let's code that up.
+
+85
+00:06:31,055 --> 00:06:36,669
+We would say, guess, guess - x, we would
+have to take the absolute value of that.
+
+86
+00:06:36,669 --> 00:06:44,059
+And it would have to be smaller than some
+epsilon value of, say, 001 for the moment.
+
+87
+00:06:44,059 --> 00:06:46,505
+Okay.
+So, that was number one.
+
+88
+00:06:46,505 --> 00:06:50,943
+The second function we need to define is
+Improve.
+
+89
+00:06:50,943 --> 00:06:58,394
+And that's now the core of the Newton
+method, we say, would say, well, it could
+
+90
+00:06:58,394 --> 00:07:03,368
+take a guess and an X.
+And to improve the guess, what do we do?
+
+91
+00:07:03,368 --> 00:07:10,943
+Well, we say, we need to take the mean of
+the value the current value of guess and
+
+92
+00:07:10,943 --> 00:07:17,395
+the quotient of x divided by guess.
+So, to take the average, we would first
+
+93
+00:07:17,395 --> 00:07:21,098
+sum the two values and then, divide by
+two.
+
+94
+00:07:23,048 --> 00:07:26,091
+Good.
+Now, we have a worksheet that compiles.
+
+95
+00:07:26,091 --> 00:07:31,037
+You see on the right-hand side, you see
+all of the types.
+
+96
+00:07:31,037 --> 00:07:35,676
+The last function we need to define is
+square root itself.
+
+97
+00:07:35,676 --> 00:07:41,051
+So, let's do that, what would that be?
+Well, it would be the square root
+
+98
+00:07:41,051 --> 00:07:44,630
+iteration.
+With our first initial value, we said,
+
+99
+00:07:44,630 --> 00:07:49,871
+that was 1.0 and x.
+Well, now, we have all the elements in
+
+100
+00:07:49,871 --> 00:07:52,092
+place and we can start to test our
+function.
+
+101
+00:07:52,092 --> 00:07:57,018
+Let's start with the square root of two
+and we get 1.4142.
+
+102
+00:07:57,018 --> 00:08:01,041
+So, that looks right.
+Let's do another one.
+
+103
+00:08:01,041 --> 00:08:08,104
+Square root of four, and we, we get
+something close to two, as we would
+
+104
+00:08:08,104 --> 00:08:12,325
+expect.
+So, as an exercise, I would like you to
+
+105
+00:08:12,325 --> 00:08:16,919
+think about the implementation we have so
+far and try to improve it.
+
+106
+00:08:16,919 --> 00:08:23,401
+One thing to improve is that the, is good
+enough test is not very precise for small
+
+107
+00:08:23,401 --> 00:08:26,549
+numbers.
+And it can lead to non-termination for
+
+108
+00:08:26,549 --> 00:08:30,480
+very, very large numbers.
+So here, let me demonstrate that.
+
+109
+00:08:30,480 --> 00:08:34,783
+And let's take a very small number.
+Let's say, one^-6.
+
+110
+00:08:34,783 --> 00:08:38,004
+So, one /
+1,000,000.
+
+111
+00:08:38,004 --> 00:08:44,083
+So our square root, the square root we
+would expect to see is one over minus
+
+112
+00:08:44,083 --> 00:08:48,018
+three.
+And actually what we see is 0.03.
+
+113
+00:08:48,018 --> 00:08:52,082
+So, that's pretty far away from where we
+want to be.
+
+114
+00:08:52,082 --> 00:08:59,362
+And the other problem we have is if we
+take a large one, let's say, one to the
+
+115
+00:08:59,362 --> 00:09:03,085
+60th power.
+What would we see then?
+
+116
+00:09:03,085 --> 00:09:07,023
+Well, actually what we'd see is
+non-termination.
+
+117
+00:09:07,023 --> 00:09:13,004
+You see this here, with this little bar?
+That's as well, it doesn't find the square
+
+118
+00:09:13,004 --> 00:09:15,029
+root.
+Not so good.
+
+119
+00:09:15,029 --> 00:09:20,097
+Let me take that out with an escape.
+So, can you explain why that is?
+
+120
+00:09:20,097 --> 00:09:26,246
+Why is the, is good enough test not
+precise for small numbers and why can it
+
+121
+00:09:26,246 --> 00:09:30,005
+lead to non-termination for very large
+numbers?
+
+122
+00:09:30,005 --> 00:09:34,392
+And secondly, can you define a different
+version of isGoodEnough that doesn't have
+
+123
+00:09:34,392 --> 00:09:38,083
+these problems?
+Here are some numbers to test your, your
+
+124
+00:09:38,083 --> 00:09:43,020
+version, some very small and some very
+large numbers.
+
+125
+00:09:43,020 --> 00:09:46,090
+So, to answer that exercise, let's go back
+to our worksheet.
+
+126
+00:09:46,090 --> 00:09:52,013
+The problem, we had for both small numbers
+and, and large numbers was that our
+
+127
+00:09:52,013 --> 00:09:55,026
+isGoodEnough test is, takes an absolute
+difference.
+
+128
+00:09:55,026 --> 00:10:00,050
+It asks whether the absolute difference
+between the square of guess and X is less
+
+129
+00:10:00,050 --> 00:10:04,065
+than some threshold value.
+And that's not very good for very, very
+
+130
+00:10:04,065 --> 00:10:09,095
+small numbers because the number we want
+to find in the square root might, might
+
+131
+00:10:09,095 --> 00:10:13,595
+even be smaller than that.
+So, that, relatively speaking, that
+
+132
+00:10:13,595 --> 00:10:17,775
+epsilon value might be huge compared to
+the number we want to find.
+
+133
+00:10:17,775 --> 00:10:23,084
+And for very large numbers, we have the
+opposite problem, which is that very large
+
+134
+00:10:23,084 --> 00:10:28,621
+floating point numbers have, can actually
+be further apart than this epsilon value.
+
+135
+00:10:28,621 --> 00:10:33,075
+That means in the 52-bits, they have
+available for the [unknown].
+
+136
+00:10:33,075 --> 00:10:39,155
+It could be that the distance between one
+number and the next is actually larger
+
+137
+00:10:39,155 --> 00:10:42,831
+than 0.001.
+And in that case, of course the iteration
+
+138
+00:10:42,831 --> 00:10:48,156
+can never stop because, simply because
+there is no value that's ever good enough.
+
+139
+00:10:48,156 --> 00:10:52,681
+So, we can solve both problems by making
+the test proportional to x.
+
+140
+00:10:52,681 --> 00:10:58,109
+And that's very simply done by saying,
+okay, let's divide the absolute difference
+
+141
+00:10:58,109 --> 00:11:03,088
+by the current value of x and let's make
+that be smaller than the threshold value.
+
+142
+00:11:03,088 --> 00:11:08,010
+So, once I've done that, I can simply
+reevaluate my spreadsheet.
+
+143
+00:11:08,010 --> 00:11:11,057
+And now, I will see that everything
+computes nicely.
+
+144
+00:11:11,057 --> 00:11:17,460
+And for the small number, I get something
+very close to one^e-3 as expected, and for
+
+145
+00:11:17,460 --> 00:11:24,045
+the large numbe, I get something like e1
+to e30, and that's also as expected.

@@ -1,0 +1,621 @@
+1
+00:00:00,130 --> 00:00:04,560
+So far our syntactic vocabulary was really
+minimal.
+
+2
+00:00:04,560 --> 00:00:09,080
+Essentially all we had were functions and
+function applications.
+
+3
+00:00:09,080 --> 00:00:11,188
+In this week we are going to introduce
+
+4
+00:00:11,188 --> 00:00:15,550
+two more syntax constructs, namely
+conditionals and value definitions.
+
+5
+00:00:16,880 --> 00:00:19,750
+In every language you need a way to choose
+between
+
+6
+00:00:19,750 --> 00:00:24,483
+two alternatives and for that Scala has
+the conditional expression if-else.
+
+7
+00:00:24,483 --> 00:00:29,830
+It looks like a if-else in Java, but it's
+used for expressions, not statements.
+
+8
+00:00:29,830 --> 00:00:31,343
+You see an example here.
+
+9
+00:00:31,343 --> 00:00:35,093
+We define an absolute function which takes
+an x, which is an
+
+10
+00:00:35,093 --> 00:00:38,665
+int, and it says while if x greater or
+equal to zero, x.
+
+11
+00:00:38,665 --> 00:00:39,854
+Otherwise, minus x.
+
+12
+00:00:42,200 --> 00:00:45,510
+What you see here is that the if-else is
+actually an expression.
+
+13
+00:00:45,510 --> 00:00:49,810
+It's not a statement where you have to set
+a variable and then return a variable.
+
+14
+00:00:49,810 --> 00:00:51,230
+It's an expression.
+
+15
+00:00:51,230 --> 00:00:53,894
+The x greater than zero here is an
+expression
+
+16
+00:00:53,894 --> 00:00:58,109
+of type Boolean and such expressions we
+sometimes call predicates.
+
+17
+00:01:00,140 --> 00:01:06,140
+So Boolean expressions are formed
+essentially in the same way as in Java.
+
+18
+00:01:06,140 --> 00:01:10,070
+So you would, could write true or false as
+Boolean constants.
+
+19
+00:01:10,070 --> 00:01:13,600
+Not b then is written then b for negation.
+
+20
+00:01:13,600 --> 00:01:16,380
+Conjunction b and b.
+
+21
+00:01:16,380 --> 00:01:20,130
+Another b would be written b and ampersand
+ampersand b.
+
+22
+00:01:20,130 --> 00:01:23,780
+This junction is written with a double bar
+and you would have
+
+23
+00:01:23,780 --> 00:01:26,554
+the usual comparison operators from equal,
+
+24
+00:01:26,554 --> 00:01:29,930
+equality, inequality to all the
+comparisons.
+
+25
+00:01:29,930 --> 00:01:35,150
+Generally if an expression is a legal
+expression in Java, then you
+
+26
+00:01:35,150 --> 00:01:39,205
+can expect it to be a legal expression in
+Scala as well.
+
+27
+00:01:39,205 --> 00:01:39,234
+Okay.
+
+28
+00:01:39,234 --> 00:01:42,502
+So, we have seen now the syntax the
+formation rules
+
+29
+00:01:42,502 --> 00:01:46,682
+of Boolean expressions, but what about
+their meaning and we
+
+30
+00:01:46,682 --> 00:01:50,330
+have come to define meaning by the
+substitution model and
+
+31
+00:01:50,330 --> 00:01:53,850
+we are going to do the same thing for
+Booleans.
+
+32
+00:01:53,850 --> 00:01:57,150
+So how do we define meaning for Boolean
+expressions?
+
+33
+00:01:57,150 --> 00:02:01,126
+Well, simply by giving rewrite rules that
+give you here on the left
+
+34
+00:02:01,126 --> 00:02:06,860
+some templates for Boolean expressions and
+on the right how they would rewrite.
+
+35
+00:02:06,860 --> 00:02:08,116
+Take the first one.
+
+36
+00:02:08,116 --> 00:02:10,220
+Not true would give you false.
+
+37
+00:02:10,220 --> 00:02:12,510
+Not false would give you true.
+
+38
+00:02:12,510 --> 00:02:16,090
+The third rule is about and conjunction.
+
+39
+00:02:16,090 --> 00:02:22,125
+It says true and some other expression e,
+doesn't matter which it is, would always
+
+40
+00:02:22,125 --> 00:02:28,500
+be the same as e, and false and some other
+expression e would always be false.
+
+41
+00:02:28,500 --> 00:02:32,570
+The rules for or are analogous to the
+rules for and.
+
+42
+00:02:32,570 --> 00:02:34,310
+They have the duals of those.
+
+43
+00:02:34,310 --> 00:02:38,890
+So true or e would then always be true of
+course.
+
+44
+00:02:38,890 --> 00:02:43,410
+Whereas false or e for any expression e
+would be e.
+
+45
+00:02:43,410 --> 00:02:46,074
+What's interesting about that is that and
+
+46
+00:02:46,074 --> 00:02:49,040
+and or don't always need their right
+operand.
+
+47
+00:02:49,040 --> 00:02:51,720
+That's the e here to be evaluated.
+
+48
+00:02:51,720 --> 00:02:56,090
+Whenever you write e in a, in a sense, you
+can just pass the arbitrary expression.
+
+49
+00:02:57,620 --> 00:03:01,834
+And here for instance with a false and e
+reducing to false,
+
+50
+00:03:01,834 --> 00:03:07,290
+we would have that always without even
+looking inside the expression e.
+
+51
+00:03:07,290 --> 00:03:09,175
+So e doesn't need to be a value.
+
+52
+00:03:09,175 --> 00:03:12,190
+It doesn't need to be reduced to a value.
+
+53
+00:03:12,190 --> 00:03:16,060
+And we say that these expressions use
+short-circuit evaluation.
+
+54
+00:03:16,060 --> 00:03:18,652
+Of course in expressions in most other
+
+55
+00:03:18,652 --> 00:03:22,621
+programing languages, Java included, do
+the same thing
+
+56
+00:03:22,621 --> 00:03:28,320
+but now we have a concise model that shows
+essentially a rule for when this happens.
+
+57
+00:03:28,320 --> 00:03:30,750
+So let's see how we would go about that.
+
+58
+00:03:30,750 --> 00:03:35,250
+We're looking for rewrite rules for
+expressions of the following form.
+
+59
+00:03:35,250 --> 00:03:37,980
+It would be if some condition Boolean.
+
+60
+00:03:37,980 --> 00:03:43,612
+Some then part e1, else, some else part
+e2.
+
+61
+00:03:43,612 --> 00:03:47,820
+One good distinction as well.
+
+62
+00:03:47,820 --> 00:03:51,590
+The evaluation will depend on what the
+Boolean value b here is.
+
+63
+00:03:51,590 --> 00:03:54,840
+So let's write one rule for where b is
+true.
+
+64
+00:03:56,900 --> 00:04:02,100
+[BLANK_AUDIO].
+
+65
+00:04:02,100 --> 00:04:03,608
+What would that rewrite to?
+
+66
+00:04:03,608 --> 00:04:06,010
+Well, it would rewrite to the then part
+e1.
+
+67
+00:04:07,040 --> 00:04:12,822
+And conversely, if the Boolean condition
+is false, then
+
+68
+00:04:12,822 --> 00:04:19,110
+the conditional which we write to the else
+part, e2.
+
+69
+00:04:19,110 --> 00:04:21,240
+So those are the two rules that we are
+
+70
+00:04:21,240 --> 00:04:26,570
+after that characterize the behavior of
+the conditional completely.
+
+71
+00:04:26,570 --> 00:04:28,920
+Here's another piece of new syntax.
+
+72
+00:04:28,920 --> 00:04:32,580
+We have seen that function parameters can
+be passed by value
+
+73
+00:04:32,580 --> 00:04:37,240
+or by name and in fact the same
+distinction applies to definition.
+
+74
+00:04:37,240 --> 00:04:40,096
+The def form is in a sense called by-name
+
+75
+00:04:40,096 --> 00:04:43,900
+because its right hand side is evaluated
+on each use.
+
+76
+00:04:44,920 --> 00:04:48,030
+There's also a val form which is by-value.
+
+77
+00:04:48,030 --> 00:04:53,230
+For instance if you write val x equals 2
+and then val y equals square of x, then
+
+78
+00:04:53,230 --> 00:04:56,110
+the square of x will be evaluated right
+here
+
+79
+00:04:56,110 --> 00:04:59,260
+instead of when we first refer to the name
+y.
+
+80
+00:04:59,260 --> 00:05:02,690
+So the right hand side of a value
+definition is evaluated at the
+
+81
+00:05:02,690 --> 00:05:08,030
+point of the definition itself and
+afterwards the name refers to the value.
+
+82
+00:05:08,030 --> 00:05:11,602
+So in our case the y reference here would
+refer
+
+83
+00:05:11,602 --> 00:05:16,520
+to the number 4, not to the expression
+square of two.
+
+84
+00:05:16,520 --> 00:05:19,670
+The difference between val and def as a
+definition form
+
+85
+00:05:19,670 --> 00:05:23,480
+becomes apparent when the right hand side
+does not terminate.
+
+86
+00:05:23,480 --> 00:05:29,625
+So to do that, I can take the repo.
+
+87
+00:05:29,625 --> 00:05:37,290
+Let's generate another looping expression
+again,.
+
+88
+00:05:41,070 --> 00:05:42,147
+There we go.
+
+89
+00:05:42,147 --> 00:05:47,260
+And now if we say def x equals loop, then
+nothing happens.
+
+90
+00:05:47,260 --> 00:05:53,794
+We just defined another name for loop,
+whereas if I defined val x equals loop,
+
+91
+00:05:53,794 --> 00:06:00,530
+then my repo dies and doesn't, I have to
+take it out explicitly with a Ctrl+C.
+
+92
+00:06:02,760 --> 00:06:07,120
+So def x equals loop is okay, but val x
+equals loop will lead to an
+
+93
+00:06:07,120 --> 00:06:10,040
+infinite loop because the right hand side
+loop
+
+94
+00:06:10,040 --> 00:06:12,120
+will be evaluated at the point of the
+finishing.
+
+95
+00:06:13,940 --> 00:06:15,840
+Let's do an exercise.
+
+96
+00:06:15,840 --> 00:06:18,990
+What I want you to do is write functions
+and
+
+97
+00:06:18,990 --> 00:06:23,040
+and or such that for all argument
+expressions x and y,
+
+98
+00:06:23,040 --> 00:06:26,100
+and x y is the same as the double
+ampersand
+
+99
+00:06:26,100 --> 00:06:29,170
+and or x y is the same as the double bars.
+
+100
+00:06:29,170 --> 00:06:34,430
+And of course you shouldn't use bar or
+ampersand in your implementations.
+
+101
+00:06:36,860 --> 00:06:39,320
+When you think about it, it's also good to
+think
+
+102
+00:06:39,320 --> 00:06:42,380
+what are good operands to test that these
+equalities hold.
+
+103
+00:06:44,960 --> 00:06:48,700
+Okay, let's think about how we would write
+the and function.
+
+104
+00:06:50,250 --> 00:06:52,620
+First, give it signature here.
+
+105
+00:06:52,620 --> 00:06:56,763
+So it takes two Boolean and what should it
+return?
+
+106
+00:06:56,763 --> 00:07:03,330
+Well, one guideline would be let's just
+look at the rewrite rules for and.
+
+107
+00:07:03,330 --> 00:07:06,620
+It says, well, if the first condition is
+
+108
+00:07:06,620 --> 00:07:10,730
+true, then it would rewrite to the second
+one.
+
+109
+00:07:10,730 --> 00:07:15,070
+Y, if the first condition is false then
+the result would be false.
+
+110
+00:07:15,070 --> 00:07:21,890
+And true, false is false as expected and
+true true.
+
+111
+00:07:21,890 --> 00:07:24,640
+So here we would expect true.
+
+112
+00:07:24,640 --> 00:07:26,940
+It's true also as expected.
+
+113
+00:07:26,940 --> 00:07:30,160
+Is true and false the only value we should
+test and with?
+
+114
+00:07:31,210 --> 00:07:32,779
+Well, maybe not.
+
+115
+00:07:32,779 --> 00:07:35,660
+What about non-terminating arguments?
+
+116
+00:07:36,800 --> 00:07:37,546
+Let's try that.
+
+117
+00:07:37,546 --> 00:07:44,980
+And false and loop.
+
+118
+00:07:44,980 --> 00:07:46,670
+What would we, would we expect here?
+
+119
+00:07:48,234 --> 00:07:51,198
+Rewrite rule says false and loop you
+rewritten
+
+120
+00:07:51,198 --> 00:07:54,500
+to false so that's what we would expect
+here.
+
+121
+00:07:55,650 --> 00:07:57,405
+But what we get is nothing.
+
+122
+00:07:57,405 --> 00:08:00,650
+So, we get a, an, an infinite loop.
+
+123
+00:08:00,650 --> 00:08:04,160
+You have to interrupt the execution by a
+signal.
+
+124
+00:08:04,160 --> 00:08:06,520
+So obviously, there's something wrong
+here.
+
+125
+00:08:06,520 --> 00:08:07,390
+How do we correct it?
+
+126
+00:08:09,780 --> 00:08:13,000
+Well, if you look at it, the thing that
+went wrong here
+
+127
+00:08:13,000 --> 00:08:17,660
+is that you passed the second argument y
+as a value parameter.
+
+128
+00:08:17,660 --> 00:08:22,275
+If we do that then it means that it will
+always be evaluated, we, whereas
+
+129
+00:08:22,275 --> 00:08:26,850
+what we need is to be able to pass it just
+simply as an expression.
+
+130
+00:08:26,850 --> 00:08:28,740
+So let's try to change that.
+
+131
+00:08:30,830 --> 00:08:36,780
+We make here the second parameter a call
+by-name parameter
+
+132
+00:08:36,780 --> 00:08:42,492
+and give it the same implementation and
+now we can redo our
+
+133
+00:08:42,492 --> 00:08:47,860
+expression and false loop and get false as
+expected.
+

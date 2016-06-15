@@ -1,0 +1,524 @@
+1
+00:00:00,000 --> 00:00:04,077
+The program we developed in the last
+session consisted of many small bits and
+
+2
+00:00:04,077 --> 00:00:07,077
+pieces.
+In this session, we are going to develop a
+
+3
+00:00:07,077 --> 00:00:12,097
+fundamental structuring mechanism based on
+blocks and lexical scoping that will help
+
+4
+00:00:12,097 --> 00:00:16,083
+us clean up our program, make it more
+modular and easier to use.
+
+5
+00:00:16,083 --> 00:00:21,030
+We're going to apply that mechanism to our
+previous square root function.
+
+6
+00:00:22,010 --> 00:00:27,073
+It's good, programming style, particularly
+in functional programming, to split up a
+
+7
+00:00:27,073 --> 00:00:32,056
+task into many small functions.
+But on the other hand, names like square
+
+8
+00:00:32,056 --> 00:00:37,091
+root iter improve and is good enough, they
+really matter for only the implementation
+
+9
+00:00:37,091 --> 00:00:41,637
+of square root not for its usage.
+Normally, we would not like users to
+
+10
+00:00:41,637 --> 00:00:47,629
+access these functions directly, so we
+want to avoid name space pollution where
+
+11
+00:00:47,629 --> 00:00:53,431
+they would see these names even though
+they're not suppose to be called directly
+
+12
+00:00:53,431 --> 00:00:56,536
+by them.
+One way we can achieve that is to put
+
+13
+00:00:56,536 --> 00:01:00,096
+these auxiliary functions inside the
+function square root.
+
+14
+00:01:00,096 --> 00:01:03,100
+So, let me show you that, that with the
+worksheet.
+
+15
+00:01:03,100 --> 00:01:10,287
+What we have here so far is, all these
+functions are separate and visible on the
+
+16
+00:01:10,287 --> 00:01:14,448
+top level.
+So, what I want to do now is I take my
+
+17
+00:01:14,448 --> 00:01:21,035
+definition of square root and I wrap it
+around the functions that are on the
+
+18
+00:01:21,035 --> 00:01:24,276
+inside here.
+So, I do it like that.
+
+19
+00:01:24,276 --> 00:01:30,584
+I reformat, and there what do we see?
+So, we see the function square root that
+
+20
+00:01:30,584 --> 00:01:35,675
+now contains square root iter is good
+enough and improved, as well as the return
+
+21
+00:01:35,675 --> 00:01:38,639
+value of square root.
+Return value here comes last.
+
+22
+00:01:38,639 --> 00:01:41,802
+What that means is that, now our program
+is much cleaner.
+
+23
+00:01:41,802 --> 00:01:45,592
+The only function that is seen from the
+outside is square root.
+
+24
+00:01:45,592 --> 00:01:50,608
+We still have very good names for the
+individual sub-steps, but those are
+
+25
+00:01:50,608 --> 00:01:53,602
+accessible only from inside this
+algorithm.
+
+26
+00:01:53,602 --> 00:01:58,959
+So, the way we did that was using a block.
+A block is delimited by braces and it
+
+27
+00:01:58,959 --> 00:02:04,839
+contains as number of definitions and at
+its last element an expression that
+
+28
+00:02:04,839 --> 00:02:09,049
+defines the return value of the result of
+that block.
+
+29
+00:02:09,049 --> 00:02:15,138
+So, here you see a simple example.
+You have a defi, definition of val x as of
+
+30
+00:02:15,138 --> 00:02:18,910
+the result of f of three and we return x
+times x.
+
+31
+00:02:18,910 --> 00:02:22,559
+Blocks are, themselves, expressions in
+Scala.
+
+32
+00:02:22,559 --> 00:02:27,731
+So, they can be used everywhere.
+Other expressions can be used, including
+
+33
+00:02:27,731 --> 00:02:30,683
+the right hand side of a function
+definition.
+
+34
+00:02:30,683 --> 00:02:35,610
+That's what we have seen in the eclipse
+example here, where this block here was
+
+35
+00:02:35,610 --> 00:02:39,081
+the return expression of the function
+square root.
+
+36
+00:02:39,081 --> 00:02:45,529
+Now an interesting aspect of blocks is how
+they affect visibility of identifiers in a
+
+37
+00:02:45,529 --> 00:02:48,138
+program.
+There are two simple rules.
+
+38
+00:02:48,138 --> 00:02:53,636
+The first is the definitions inside a
+block are only visible from within the
+
+39
+00:02:53,636 --> 00:02:58,020
+block, not from the outside.
+The second rule is that the definitions
+
+40
+00:02:58,020 --> 00:03:04,080
+from outside the block are visible in the
+block as long as they are not shadowed by
+
+41
+00:03:04,080 --> 00:03:07,083
+definitions of the same names inside the
+block.
+
+42
+00:03:08,003 --> 00:03:12,847
+So, that means that for instance, here the
+name f is visible in the block, it refers
+
+43
+00:03:12,847 --> 00:03:18,013
+to this outer block named f.
+But the name x here, refers to the inner
+
+44
+00:03:18,013 --> 00:03:22,292
+name x not the outer name x.
+The inner name x shadows the occurrence of
+
+45
+00:03:22,292 --> 00:03:25,138
+the outer name.
+Let's do an exercise.
+
+46
+00:03:25,138 --> 00:03:29,086
+I take a small variation of the program
+you've just seen.
+
+47
+00:03:29,086 --> 00:03:34,050
+The question is, what is the value of
+result in this program?
+
+48
+00:03:34,050 --> 00:03:38,080
+Possible answers are here.
+Think about it and pick one.
+
+49
+00:03:38,080 --> 00:03:43,009
+So, let's see how we would find the answer
+to that one.
+
+50
+00:03:43,032 --> 00:03:49,076
+If we look at the value of result, then
+what we see is that the first thing we do
+
+51
+00:03:49,076 --> 00:03:54,983
+is we compute the value of x to be f of
+three, f is this function here.
+
+52
+00:03:54,983 --> 00:04:03,050
+It adds one to it's parameter so that
+would be give x for x the value of four.
+
+53
+00:04:03,050 --> 00:04:11,461
+So then, the value of x times x would be
+sixteen, and we take that value, and add x
+
+54
+00:04:11,461 --> 00:04:13,407
+to it.
+What's the value of x here?
+
+55
+00:04:13,407 --> 00:04:18,052
+Well, we're now outside the block so the
+value of x here is no longer visible.
+
+56
+00:04:18,052 --> 00:04:23,037
+And the value we do see here is that this
+first definition, so that would be zero.
+
+57
+00:04:23,037 --> 00:04:27,849
+So, the answer of the whole expression,
+the result of the whole expression is
+
+58
+00:04:27,849 --> 00:04:30,466
+sixteen.
+So we've seen the definitions of outer
+
+59
+00:04:30,466 --> 00:04:33,910
+scopes are visible inside a block unless
+they're shadowed.
+
+60
+00:04:33,910 --> 00:04:38,581
+You can use that to simplify square root
+by eliminating redundant occurrences of
+
+61
+00:04:38,581 --> 00:04:42,099
+the x parameter, which means, everywhere,
+the same thing.
+
+62
+00:04:42,099 --> 00:04:47,417
+So, what you see here in the worksheet is
+that the x parameter that comes into
+
+63
+00:04:47,417 --> 00:04:51,815
+square root is duplicated here, here, and
+here, but it's never changed.
+
+64
+00:04:51,815 --> 00:04:56,850
+It's always passed as it is before.
+So, we can simply eliminate it, all these
+
+65
+00:04:56,850 --> 00:05:03,544
+occurrences here.
+And eliminate the corresponding parameter
+
+66
+00:05:03,544 --> 00:05:09,721
+in the application.
+And, we have the same version of square
+
+67
+00:05:09,721 --> 00:05:15,097
+root, but now it's much cleaner.
+We have avoided the redundancy of passing
+
+68
+00:05:15,097 --> 00:05:20,917
+the parameter x around everywhere by using
+the simple trick that the value of x is
+
+69
+00:05:20,917 --> 00:05:24,058
+actually visible inside all these nested
+functions.
+
+70
+00:05:24,058 --> 00:05:29,034
+So, that gives you another reason for
+nesting things, it's not just name space
+
+71
+00:05:29,034 --> 00:05:33,061
+control but it's also reusing outer
+definitions without passing them
+
+72
+00:05:33,061 --> 00:05:37,057
+explicitly in parameters.
+Okay, one thing we haven't mentioned so
+
+73
+00:05:37,057 --> 00:05:41,053
+far were semicolons, simply because so far
+we haven't seen them.
+
+74
+00:05:41,053 --> 00:05:46,054
+Even though in Java every statement would
+be terminated by a semicolon, in Scala
+
+75
+00:05:46,054 --> 00:05:51,246
+they are in most cases optional.
+You could have written val x is equals one
+
+76
+00:05:51,246 --> 00:05:54,052
+with a semicolon but most people would
+omit that.
+
+77
+00:05:54,052 --> 00:05:59,064
+The only situation where you really need a
+semicolon is if you want to put several
+
+78
+00:05:59,064 --> 00:06:05,012
+definitions or expressions on one line.
+Then, the semicolon is needed to separate
+
+79
+00:06:05,012 --> 00:06:08,013
+them.
+So for instance, here, you have a value
+
+80
+00:06:08,013 --> 00:06:11,092
+definition of y equals x plus one.
+And then a use of the variable y in a
+
+81
+00:06:11,092 --> 00:06:16,220
+subsequent expression and you need the
+semicolon here to separate the two.
+
+82
+00:06:16,220 --> 00:06:21,357
+Being able to commit semicolons at the end
+of lines is very co, convenient, but
+
+83
+00:06:21,357 --> 00:06:25,674
+there's one issue with it.
+How would you write an expression that
+
+84
+00:06:25,674 --> 00:06:28,923
+spans several lines?
+To see the problem, consider this
+
+85
+00:06:28,923 --> 00:06:33,644
+expression here, some long expression,
+then it continued on the second line with
+
+86
+00:06:33,644 --> 00:06:37,831
+some other expressions.
+That would actually be interpreted by the
+
+87
+00:06:37,831 --> 00:06:42,527
+Scala compiler as two expressions.
+The first expression is the some wrong
+
+88
+00:06:42,527 --> 00:06:47,154
+expression then, it would be the implied
+semicolon, and then comes plus with the
+
+89
+00:06:47,154 --> 00:06:50,497
+other expression.
+There are two ways to overcome this
+
+90
+00:06:50,497 --> 00:06:53,647
+problem.
+You could write the multiline expressions
+
+91
+00:06:53,647 --> 00:06:57,756
+in parenthesis, because semicolons are
+never inserted inside a pair of
+
+92
+00:06:57,756 --> 00:07:00,740
+parenthesis.
+So, you could write some wrong expression
+
+93
+00:07:00,740 --> 00:07:05,715
+plus some other expression as long as you
+put it in parenthesis and that's fine.
+
+94
+00:07:05,715 --> 00:07:10,595
+Or, the other way to do that is to write
+the operator on the first line as the last
+
+95
+00:07:10,595 --> 00:07:15,919
+word on the first line because this tells
+the Scala compiler that the expression is
+
+96
+00:07:15,919 --> 00:07:19,543
+not yet finished.
+So, if a line ends in infix operator the
+
+97
+00:07:19,543 --> 00:07:24,396
+Scala compiler will assume the next line
+forms part of the same expression.
+
+98
+00:07:24,396 --> 00:07:29,405
+So, to summarize what we have seen this
+week, we've seen elements of functional
+
+99
+00:07:29,405 --> 00:07:33,542
+programming in Scala, arithmetic and
+Boolean expressions, conditional
+
+100
+00:07:33,542 --> 00:07:39,032
+expressions, if then else, functions with
+recursion, nesting and lexical scope.
+
+101
+00:07:39,032 --> 00:07:44,077
+You've learned the difference between call
+by name and call by value evaluation
+
+102
+00:07:44,077 --> 00:07:48,011
+strategies.
+And I believe, most importantly, you've
+
+103
+00:07:48,011 --> 00:07:51,038
+learned a way to reason about program
+execution.
+
+104
+00:07:51,038 --> 00:07:55,048
+You can now reduce expressions using the
+substitution model.
+
+105
+00:07:55,048 --> 00:08:01,022
+That model will be an important tool for
+the coming sessions.

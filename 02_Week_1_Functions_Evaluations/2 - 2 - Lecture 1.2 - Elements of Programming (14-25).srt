@@ -1,0 +1,854 @@
+1
+00:00:00,000 --> 00:00:03,011
+So in this week, we are going to do some
+Scala programming.
+
+2
+00:00:03,011 --> 00:00:07,041
+We're going to take the first steps into
+this new programming language and into
+
+3
+00:00:07,041 --> 00:00:12,020
+functional programming in general.
+A lot of the material in this session will
+
+4
+00:00:12,020 --> 00:00:14,097
+look very easy to you because it's
+familiar.
+
+5
+00:00:14,097 --> 00:00:19,082
+But there are also some things that are
+fundamental, in particular, the former
+
+6
+00:00:19,082 --> 00:00:24,055
+model of evaluation that we call the
+substitution model, which will be very
+
+7
+00:00:24,055 --> 00:00:29,028
+important for the sessions later on.
+So, it's good to pay a little attention.
+
+8
+00:00:29,028 --> 00:00:33,025
+Okay, let's get into it.
+Every non-trivial language provides
+
+9
+00:00:33,025 --> 00:00:38,060
+primitive expressions that represents the
+simplest elements of the language.
+
+10
+00:00:38,060 --> 00:00:43,087
+And then some ways to combine expressions
+and ways to abstract expressions.
+
+11
+00:00:43,087 --> 00:00:49,077
+Abstraction means that we introduce a name
+for an expression and then further on we
+
+12
+00:00:49,077 --> 00:00:56,074
+can reference the expression by its name.
+One way to approach functional programming
+
+13
+00:00:56,074 --> 00:00:59,079
+is to see it a little bit like a
+calculator.
+
+14
+00:00:59,079 --> 00:01:03,095
+In fact most functional languages have an
+interactive shell.
+
+15
+00:01:03,095 --> 00:01:09,494
+That's also sometimes called a REPL, which
+stands for read, eval, print, loop, and in
+
+16
+00:01:09,494 --> 00:01:14,686
+that shell you can type expressions, and
+it will respond with the results of
+
+17
+00:01:14,686 --> 00:01:19,076
+evaluating these expressions.
+In Scala you can start the REPL simply by
+
+18
+00:01:19,076 --> 00:01:22,996
+typing Scala.
+So if you write Scala here, Then you get
+
+19
+00:01:22,996 --> 00:01:28,002
+the ripple, that assumes that you have a
+standard Scalar distribution.
+
+20
+00:01:28,002 --> 00:01:31,040
+That's actually not a requirement for this
+course.
+
+21
+00:01:31,040 --> 00:01:36,014
+For the course, we ask you to install SVT,
+the Scala build tool instead.
+
+22
+00:01:36,014 --> 00:01:40,081
+From the SVT, you can also get the ripple
+simply by typing SVT consol.
+
+23
+00:01:40,081 --> 00:01:46,042
+It's the same REPL, so it doesn't matter
+whether you start that with Scala and SVT
+
+24
+00:01:46,042 --> 00:01:49,074
+consol.
+Once you're on the REPL, you can type an
+
+25
+00:01:49,074 --> 00:01:55,092
+expression like 42.
+You can also define values.
+
+26
+00:01:58,018 --> 00:02:01,099
+Such as radius = ten.
+Enter REPL, in each case, respond.
+
+27
+00:02:01,099 --> 00:02:07,031
+If you have an expression, with the
+expression's type, in this case that is
+
+28
+00:02:07,031 --> 00:02:12,090
+INT, and the expression's value.
+If you do have a definition like radius,
+
+29
+00:02:12,090 --> 00:02:15,761
+it would just give you the type of the
+definition.
+
+30
+00:02:15,761 --> 00:02:19,356
+You can also define floating point
+numbers.
+
+31
+00:02:19,356 --> 00:02:28,007
+And afterwards you can refer To what you
+have defined before.
+
+32
+00:02:28,007 --> 00:02:34,012
+Now, let's have a look at evaluation.
+You have seen how that these expressions
+
+33
+00:02:34,012 --> 00:02:37,050
+were evaluated.
+How exactly did that happen?
+
+34
+00:02:37,050 --> 00:02:40,060
+Well.
+The rules are well known from simple
+
+35
+00:02:40,060 --> 00:02:44,026
+algebra.
+To evaluate a non-primitive expression, we
+
+36
+00:02:44,026 --> 00:02:49,061
+typically take the left most operator,
+subject to the rules of precedence.
+
+37
+00:02:49,061 --> 00:02:54,073
+We evaluate the operands of that operator.
+Typically left before right.
+
+38
+00:02:54,073 --> 00:02:59,093
+And we apply the operator to the operands.
+What about evaluating a name?
+
+39
+00:02:59,093 --> 00:03:04,095
+Well, that's evaluated by replacing it
+with the right hand side of its
+
+40
+00:03:04,095 --> 00:03:08,061
+definition.
+We applied these steps one by one, until
+
+41
+00:03:08,061 --> 00:03:12,042
+finally, the evaluation process results in
+a value.
+
+42
+00:03:12,042 --> 00:03:18,002
+And for the moment the value is just a
+number, later on, we also consider other
+
+43
+00:03:18,002 --> 00:03:21,068
+kinds of values.
+So let's see an example, here's the
+
+44
+00:03:21,068 --> 00:03:26,041
+evaluation of the arithmetic expression,
+two times pi times radius.
+
+45
+00:03:26,041 --> 00:03:34,088
+What's happening there, first thing we do
+is we look up the name pi and we get its
+
+46
+00:03:34,088 --> 00:03:40,098
+definition, 3.14159.
+Then we perform the arithmetic operation
+
+47
+00:03:40,098 --> 00:03:45,057
+on the left.
+Then we look up the radius evaluate radius
+
+48
+00:03:45,057 --> 00:03:51,088
+yielding ten, and finally, we perform the
+final multiplication, yielding the result.
+
+49
+00:03:51,088 --> 00:03:57,036
+Definitions can also have parameters.
+For instance, we can define a square
+
+50
+00:03:57,036 --> 00:04:02,050
+function by writing def square.
+Then comes the parameter x of type double,
+
+51
+00:04:02,050 --> 00:04:05,052
+and then comes the right hand side, x
+times x.
+
+52
+00:04:05,052 --> 00:04:08,060
+The right hand side refers to the
+parameter x.
+
+53
+00:04:08,060 --> 00:04:14,017
+And the p evaluation then would yield the
+expected square of two, would give four, a
+
+54
+00:04:14,017 --> 00:04:19,001
+square of five times four would give 81,
+We can, of course, also have,
+
+55
+00:04:19,023 --> 00:04:25,011
+parameterized definitions that refer to
+parameterized functions as in the sum of
+
+56
+00:04:25,011 --> 00:04:30,078
+squares function here, that takes two
+parameters, x and y of type double, and it
+
+57
+00:04:30,078 --> 00:04:34,033
+computes the square x and square y and
+sums them.
+
+58
+00:04:35,007 --> 00:04:40,031
+We've seen in the last slide that function
+parameters come with a type, and this type
+
+59
+00:04:40,031 --> 00:04:43,648
+is given after the parameter name and a
+colon in Scala.
+
+60
+00:04:43,648 --> 00:04:46,590
+So you would write x colon double y colon
+int.
+
+61
+00:04:46,590 --> 00:04:51,695
+You can also give the return type of a
+function that follows after the parameter
+
+62
+00:04:51,695 --> 00:04:55,368
+list.
+The permative types are written as in
+
+63
+00:04:55,368 --> 00:05:01,514
+Java, but they are capitalized.
+So, int for example, is a 32-bit integer,
+
+64
+00:05:01,514 --> 00:05:08,247
+double is a 64-bit, 40-point number, and
+Boolean represents a Boolean type bit
+
+65
+00:05:08,247 --> 00:05:13,340
+value true and false.
+Now, how are function applications
+
+66
+00:05:13,340 --> 00:05:17,451
+evaluated?
+In fact, they are evaluated in a way that
+
+67
+00:05:17,451 --> 00:05:23,003
+is very similar to operators.
+We first evaluate all function arguments
+
+68
+00:05:23,003 --> 00:05:27,074
+going from left to right.
+We then replace the function application
+
+69
+00:05:27,074 --> 00:05:33,016
+by the function's right hand side, and at
+the same time, we replace the former
+
+70
+00:05:33,016 --> 00:05:36,080
+parameters of the function by the actual
+arguments.
+
+71
+00:05:38,069 --> 00:05:45,021
+Let's see how this works in an example.
+We start with sum of squares of three and
+
+72
+00:05:45,021 --> 00:05:52,047
+two + two.
+The two + two gets rewritten to a value,
+
+73
+00:05:52,047 --> 00:05:57,091
+four, and we and, we have sum of squares
+three, four.
+
+74
+00:05:57,092 --> 00:06:03,051
+Then we take the definition of sum of
+squares, that was square of x plus square
+
+75
+00:06:03,051 --> 00:06:09,003
+of y, and we replace the application by
+this right hand side, where at the same
+
+76
+00:06:09,003 --> 00:06:14,056
+time we replace the parameters x and y by
+the actual arguments three and four.
+
+77
+00:06:14,086 --> 00:06:18,060
+We then repeat the process with the square
+applications.
+
+78
+00:06:18,060 --> 00:06:21,067
+The square of three becomes three times
+three.
+
+79
+00:06:21,067 --> 00:06:26,007
+The right turn side of square where three
+replaces the promidence.
+
+80
+00:06:26,007 --> 00:06:32,058
+We get an arithmetic simplification, and
+we do the same thing for the right hand
+
+81
+00:06:32,058 --> 00:06:38,041
+operators yielding the final value 25.
+This scheme of expression evaluation is
+
+82
+00:06:38,041 --> 00:06:43,062
+called the substitution model.
+The idea underlying this model is that all
+
+83
+00:06:43,062 --> 00:06:47,025
+evaluation does is reduce an expression to
+a value.
+
+84
+00:06:47,025 --> 00:06:53,018
+And that reduction can be expressed by a
+sequence of simple rewriting steps that
+
+85
+00:06:53,018 --> 00:06:59,004
+rewrite the expression term itself until
+it is a value, very similar to what you
+
+86
+00:06:59,004 --> 00:07:03,094
+would do in algebraic simplification.
+Simple as it is, this model is very
+
+87
+00:07:03,094 --> 00:07:07,009
+powerful.
+In fact it has been shown that it can
+
+88
+00:07:07,009 --> 00:07:12,020
+express every algorithm, so it's
+equivalent to what you would call a Turing
+
+89
+00:07:12,020 --> 00:07:15,040
+machine.
+This has been shown a long time before
+
+90
+00:07:15,040 --> 00:07:20,091
+functional programming, in fact, a long
+time before computers by a logician called
+
+91
+00:07:20,091 --> 00:07:26,016
+Alonzo Church in the lambda calculus.
+He did that in the thirties of the last
+
+92
+00:07:26,016 --> 00:07:29,063
+century.
+You might have come across lambda calculus
+
+93
+00:07:29,063 --> 00:07:34,087
+in theoretical computer science, and if
+you did, then you know how to make the
+
+94
+00:07:34,087 --> 00:07:38,035
+connection to this model.
+If you didn't, don't worry.
+
+95
+00:07:38,035 --> 00:07:41,668
+We won't need the theory for following the
+course.
+
+96
+00:07:41,668 --> 00:07:47,308
+What's important though is to know that
+number calculus as a model, and the
+
+97
+00:07:47,308 --> 00:07:52,573
+substitution model, can be applied only to
+expressions that do not have a side
+
+98
+00:07:52,573 --> 00:07:54,805
+effect.
+Now, what is a side effect?
+
+99
+00:07:54,805 --> 00:07:58,375
+A typical side effect would be an
+expression called.
+
+100
+00:07:58,375 --> 00:08:03,599
+C++ where c is a variable.
+And evaluating this expression means that
+
+101
+00:08:03,599 --> 00:08:09,319
+you return the old value of c, and at the
+same time you increment the value.
+
+102
+00:08:09,319 --> 00:08:16,336
+So, at the next time you return the value,
+you would return the value one larger than
+
+103
+00:08:16,336 --> 00:08:20,255
+before.
+Turns out there's no good way to represent
+
+104
+00:08:20,255 --> 00:08:24,824
+this evaluation sequence by a simple
+rewriting of this term.
+
+105
+00:08:24,824 --> 00:08:31,174
+You need something else, like store, where
+the current value of the variable is kept.
+
+106
+00:08:31,174 --> 00:08:37,279
+In other words the expression C++ has a
+side effect on the current value of the
+
+107
+00:08:37,279 --> 00:08:41,082
+variable.
+And that side effect cannot be expressed
+
+108
+00:08:41,082 --> 00:08:46,064
+by the substitution model.
+So one of the motivations for ruling out
+
+109
+00:08:46,064 --> 00:08:51,434
+side effects in function programming is
+that we can keep to the simple model of
+
+110
+00:08:51,434 --> 00:08:56,965
+evaluation.
+Once we have the substitution model,
+
+111
+00:08:56,965 --> 00:09:02,213
+another question comes up.
+Does every expression reduce to a value in
+
+112
+00:09:02,213 --> 00:09:06,071
+a finite number of steps?
+In fact, the answer is no.
+
+113
+00:09:06,071 --> 00:09:11,922
+Here's a counter example.
+Let's write simple function def loop int
+
+114
+00:09:11,922 --> 00:09:17,034
+equals loop.
+And that's then called, referred to the
+
+115
+00:09:17,034 --> 00:09:19,844
+name loop.
+What would happen.
+
+116
+00:09:19,844 --> 00:09:27,258
+Well, according to our model we have to de
+evaluate that name which happens by
+
+117
+00:09:27,258 --> 00:09:34,276
+replacing the name by its right hand side.
+The right hand side is looped again.
+
+118
+00:09:34,276 --> 00:09:40,935
+So we have reduced the name to itself and
+this can go on ad infinitum.
+
+119
+00:09:40,935 --> 00:09:47,776
+Another way to visualize this reduction
+sequence is by starting with the loop and
+
+120
+00:09:47,776 --> 00:09:53,036
+then reducing to the same term again.
+We've seen that the Scala interpreter
+
+121
+00:09:53,036 --> 00:09:59,019
+reduces function arguments to values
+before rewriting the function application.
+
+122
+00:09:59,019 --> 00:10:02,073
+That's not the only possible reduction
+strategy.
+
+123
+00:10:02,073 --> 00:10:07,061
+Alternatively, one could apply the
+function to unreduced arguments.
+
+124
+00:10:07,061 --> 00:10:13,051
+For instance, we could start with some of
+squares three, two plus two, and then go
+
+125
+00:10:13,051 --> 00:10:16,061
+on as follows.
+We keep the right hand side.
+
+126
+00:10:16,061 --> 00:10:22,052
+We don't reduce it to four and we simply
+pass it as an expression to the square
+
+127
+00:10:22,052 --> 00:10:26,014
+function.
+We then simplify the right hand side as
+
+128
+00:10:26,014 --> 00:10:29,076
+before.
+And then do the same thing again, pass the
+
+129
+00:10:29,076 --> 00:10:35,037
+expression, two plus two to this
+occurrence of square, that gives two plus
+
+130
+00:10:35,037 --> 00:10:40,084
+two twice in the multiplication.
+We then simplify the two further steps to
+
+131
+00:10:40,084 --> 00:10:45,064
+arrive at the final result, 25.
+Now you've seen two ways to evaluate the
+
+132
+00:10:45,064 --> 00:10:49,029
+same expression.
+The first evaluation strategy is known by
+
+133
+00:10:49,029 --> 00:10:52,044
+core by value.
+The second is known as core by name.
+
+134
+00:10:52,044 --> 00:10:57,098
+An important theorem, in fact, of lambda
+calculus is that both strategies reduce to
+
+135
+00:10:57,098 --> 00:11:02,084
+the same final value as long as the
+reduced expression consists of pure
+
+136
+00:11:02,084 --> 00:11:08,051
+functions and both evaluations terminate.
+Call-by-value has the advantage that every
+
+137
+00:11:08,051 --> 00:11:13,085
+function argument is evaluated only once.
+Call-by-name has the advantage that a
+
+138
+00:11:13,085 --> 00:11:19,059
+function argument is not evaluated at all
+if the corresponding parameter is not used
+
+139
+00:11:19,059 --> 00:11:25,044
+in the evaluation of the function's body.
+Here's a question, say you're given the
+
+140
+00:11:25,044 --> 00:11:30,072
+following function definition: Def test of
+x and y equals x times x.
+
+141
+00:11:30,072 --> 00:11:36,055
+For each of the following function
+applications, indicate which evaluation
+
+142
+00:11:36,055 --> 00:11:41,090
+strategy is fastest, by which we mean, has
+the fewest reduction steps.
+
+143
+00:11:41,090 --> 00:11:46,095
+That's for test of two three then test of
+three plus four eight.
+
+144
+00:11:46,095 --> 00:11:52,086
+Test seven two times four, then finally,
+test three plus four, two times four.
+
+145
+00:11:52,086 --> 00:11:55,093
+Let's see how we would answer this
+question.
+
+146
+00:11:55,093 --> 00:12:01,046
+I have the test function here and I have
+the calls that I want to compare here.
+
+147
+00:12:01,046 --> 00:12:04,067
+Let's start with the first one, test two,
+three.
+
+148
+00:12:08,022 --> 00:12:12,002
+How would that evaluate?
+Well, test two three, we take the
+
+149
+00:12:12,002 --> 00:12:17,012
+definition of test, x times x.
+So, that would give two times two and that
+
+150
+00:12:17,012 --> 00:12:21,033
+would reduce to four.
+And in fact that would reduce to four on
+
+151
+00:12:21,033 --> 00:12:26,077
+their both evaluation strategies, both
+core by name and core by value because we
+
+152
+00:12:26,077 --> 00:12:31,087
+have started with already evaluated
+arguments so there's no choice in the
+
+153
+00:12:31,087 --> 00:12:34,086
+matter.
+So here the answer would be, they are,
+
+154
+00:12:34,086 --> 00:12:38,060
+they have the same complexity.
+Let's do the next one.
+
+155
+00:12:38,060 --> 00:12:50,077
+Test three plus four eight.
+And I call by value, we have to evaluate
+
+156
+00:12:50,077 --> 00:12:54,096
+the arguments.
+So we get test.
+
+157
+00:12:55,039 --> 00:13:01,073
+7,8.
+And that gives us seven times seven.
+
+158
+00:13:01,073 --> 00:13:07,064
+And the final result.
+Where it's under called by name we get
+
+159
+00:13:07,093 --> 00:13:15,052
+three plus four times three plus four.
+That reduces to seven times three plus
+
+160
+00:13:15,052 --> 00:13:18,047
+four.
+Seven times seven and 49.
+
+161
+00:13:18,047 --> 00:13:23,049
+In one step more than in the core by value
+version.
+
+162
+00:13:23,049 --> 00:13:30,058
+So core by value, has the advantage here.
+Let's look at the third example.
+
+163
+00:13:30,058 --> 00:13:37,000
+Test.
+Of seven and two times four.
+
+164
+00:13:37,063 --> 00:13:45,074
+Here with call by value, we would get test
+of seven and eight.
+
+165
+00:13:46,013 --> 00:13:53,609
+Finally, seven, seven.
+And the final, whereas with call by name,
+
+166
+00:13:53,609 --> 00:13:56,904
+we would get seven.
+Times 749.
+
+167
+00:13:56,904 --> 00:14:02,968
+So in this case, we have avoided the
+unnecessary computation for the second
+
+168
+00:14:02,968 --> 00:14:08,823
+argument and the call by name is faster.
+The fourth example, test three plus four
+
+169
+00:14:08,823 --> 00:14:14,274
+two, two times four combines the
+evaluation of the second and third
+
+170
+00:14:14,274 --> 00:14:18,218
+example.
+So it comes at no surprise that it's again
+
+171
+00:14:18,218 --> 00:14:24,553
+a draw, that core by value and core by
+name, reduces the same number of steps
