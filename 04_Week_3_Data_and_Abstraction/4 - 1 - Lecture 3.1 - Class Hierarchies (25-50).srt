@@ -1,0 +1,1513 @@
+1
+00:00:00,000 --> 00:00:05,091
+In the last session, we have looked in
+depth at a lot of different aspects of a
+
+2
+00:00:05,091 --> 00:00:09,081
+single class.
+What we're going to do in this session is
+
+3
+00:00:09,081 --> 00:00:15,300
+generalize that so that we now look at
+class hierarchies, where more than one
+
+4
+00:00:15,300 --> 00:00:18,080
+class cooperates to achieve a certain
+task.
+
+5
+00:00:23,001 --> 00:00:29,052
+So, as a running example in this session,
+we consider the task of writing a set of
+
+6
+00:00:29,052 --> 00:00:35,079
+classes, that implement sets of integers.
+And these integers set will be called
+
+7
+00:00:35,079 --> 00:00:41,065
+inset and support two operations.
+Include, to include an element x in the
+
+8
+00:00:41,065 --> 00:00:47,483
+inset and contain, which is a test whether
+an element x is a member of the set.
+
+9
+00:00:47,483 --> 00:00:52,478
+So, to do that, I would open a fresh
+worksheet.
+
+10
+00:00:52,478 --> 00:01:01,798
+Call it insets and the definition of the
+class here.
+
+11
+00:01:01,798 --> 00:01:07,477
+What you see, what's particular is that
+we've given you two definitions of
+
+12
+00:01:07,477 --> 00:01:13,032
+functions, but they do not have a body.
+The equals is missing and the body is
+
+13
+00:01:13,032 --> 00:01:17,986
+missing, and that's permissible as long as
+the class is abstract.
+
+14
+00:01:17,986 --> 00:01:23,799
+If I would remove the abstract, I would
+get a problem which would say, class inset
+
+15
+00:01:23,799 --> 00:01:29,520
+needs to be abstract since method contains
+is not defined and method include is not
+
+16
+00:01:29,520 --> 00:01:34,013
+defined.
+So, let's add the abstract again.
+
+17
+00:01:34,013 --> 00:01:41,878
+So, you've seen that abstract glasses can
+contain members which are missing in
+
+18
+00:01:41,878 --> 00:01:45,672
+implementation.
+On the other hand, we get instances of an
+
+19
+00:01:45,672 --> 00:01:52,969
+abstract glass with the operator new.
+So, if you would try that.
+
+20
+00:01:52,969 --> 00:02:01,110
+Write here, new inset.
+I will get an error, which says that the
+
+21
+00:02:01,110 --> 00:02:05,000
+class inset is abstract and cannot be
+instantiated.
+
+22
+00:02:05,000 --> 00:02:09,221
+So, since inset is incomplete, how would
+we implement it?
+
+23
+00:02:09,221 --> 00:02:14,975
+Well, one way to do that would be using
+the binary tree data structure.
+
+24
+00:02:14,975 --> 00:02:19,188
+In the data structure, there are two types
+of possible tree.
+
+25
+00:02:19,188 --> 00:02:25,607
+A tree that represents the empty set and a
+tree that consists of an integer and two
+
+26
+00:02:25,607 --> 00:02:32,183
+subtrees and the idea would be that you
+keep always the invariant that the trees
+
+27
+00:02:32,183 --> 00:02:35,722
+are sorted.
+So, that means if I give you an example
+
+28
+00:02:35,722 --> 00:02:42,380
+here, we would have a tree, let's say,
+with a seven, and that would have a two
+
+29
+00:02:42,380 --> 00:02:49,041
+subtrees, and here, we would have maybe an
+eleven, and here we would have five.
+
+30
+00:02:49,041 --> 00:02:59,002
+And then, the eleven could have one, nine.
+And the response would all be empty.
+
+31
+00:03:05,013 --> 00:03:10,025
+So, that's an example of a binary tree.
+And the invariant that we want to maintain
+
+32
+00:03:10,025 --> 00:03:15,338
+is that for each node, the nodes on the
+right-hand side of this node, all have
+
+33
+00:03:15,338 --> 00:03:18,059
+integer values that are higher than the
+node.
+
+34
+00:03:18,059 --> 00:03:23,090
+Whereas, the nodes on the left-hand side
+all have values that are less than the
+
+35
+00:03:23,090 --> 00:03:26,092
+node.
+Now, that this will make it easier later
+
+36
+00:03:26,092 --> 00:03:32,044
+on to implement, the contains test that
+determines whether a given value is in the
+
+37
+00:03:32,044 --> 00:03:36,017
+tree.
+So, let's start with the empty tree here.
+
+38
+00:03:36,017 --> 00:03:43,037
+The empty tree is very simple to implement
+we would simply say, the contains value.
+
+39
+00:03:43,090 --> 00:03:48,963
+The empty tree is very simple to
+implement, we would simply say that
+
+40
+00:03:48,963 --> 00:03:54,961
+contains is always false, because the
+empty tree does, cannot contain any value.
+
+41
+00:03:54,961 --> 00:03:58,812
+Whereas, include is a method that returns
+an inset.
+
+42
+00:03:58,812 --> 00:04:04,280
+So, what set would it return?
+Well, it would return a non-empty set to
+
+43
+00:04:04,280 --> 00:04:10,054
+be defined, that contains the given
+element and two empty subtrees.
+
+44
+00:04:10,054 --> 00:04:17,667
+So, going from the empty set to an include
+set, would give us a set like that, that
+
+45
+00:04:17,667 --> 00:04:21,974
+contains a single node and two empty
+subnodes.
+
+46
+00:04:21,974 --> 00:04:32,781
+Let's put that class into the worksheet.
+Now, it still remains to define what a
+
+47
+00:04:32,781 --> 00:04:39,090
+non-empty set would be.
+A non-empty set in that implementation,
+
+48
+00:04:39,090 --> 00:04:45,065
+would be represented by a class non-empty
+that takes an element, that's the integer
+
+49
+00:04:45,065 --> 00:04:51,050
+stored in the node, and the left and the
+right subtree which is, in each case, an
+
+50
+00:04:51,050 --> 00:04:54,057
+inset.
+And the implementation of contains and
+
+51
+00:04:54,057 --> 00:04:58,025
+includes now makes use of the sorted
+criterion of trees.
+
+52
+00:04:58,025 --> 00:05:03,010
+So that means that, for contains, we
+always have to look only in one of the
+
+53
+00:05:03,010 --> 00:05:06,084
+possible subtrees.
+If the given number x is less than the
+
+54
+00:05:06,084 --> 00:05:11,082
+current element value, then we know we
+will have to look in the left subtree
+
+55
+00:05:11,082 --> 00:05:14,078
+here.
+Whereas, if it's greater, we know we will
+
+56
+00:05:14,078 --> 00:05:19,070
+have to look in the right subtree.
+If it's neither less nor greater than, it
+
+57
+00:05:19,070 --> 00:05:22,091
+must be equal.
+And in this case, we have found the
+
+58
+00:05:22,091 --> 00:05:25,096
+element.
+The include method follows a similar
+
+59
+00:05:25,096 --> 00:05:29,038
+algorithm.
+If the element to be added is less than
+
+60
+00:05:29,038 --> 00:05:34,029
+the element in the tree then we need to
+include it in the left subtree.
+
+61
+00:05:34,029 --> 00:05:38,046
+If it is greater, we need to include it in
+the right subtree.
+
+62
+00:05:38,046 --> 00:05:44,006
+And otherwise, the element is already in
+the tree and we can return the tree as is.
+
+63
+00:05:44,006 --> 00:05:49,079
+There's nothing that needs to be added.
+One interesting aspect is when I say
+
+64
+00:05:49,079 --> 00:05:52,696
+include in the left or in the right
+subtree.
+
+65
+00:05:52,696 --> 00:05:59,027
+What we need to do is really construct a
+new tree around the element here.
+
+66
+00:05:59,027 --> 00:06:04,079
+One important aspect here is that we are
+still purely functional, there is no
+
+67
+00:06:04,079 --> 00:06:07,727
+mutation.
+So, when I say, we include an element in
+
+68
+00:06:07,727 --> 00:06:12,841
+the left subtree, what I really mean is
+that we create a new tree that contains
+
+69
+00:06:12,841 --> 00:06:18,575
+the previous element of the tree and a
+larger left subtree, where x is included
+
+70
+00:06:18,575 --> 00:06:25,036
+in the previous left subtree and the
+current subtree on the right.
+
+71
+00:06:25,036 --> 00:06:33,003
+So, visually, if I would say, include the
+number three in the tree that we see here.
+
+72
+00:06:33,003 --> 00:06:40,882
+Then, what would happen is I would create
+a new node three with two empty subtrees.
+
+73
+00:06:40,882 --> 00:06:49,164
+That subtree would be the left subtree of
+a new node with element five, and an empty
+
+74
+00:06:49,164 --> 00:06:55,127
+right-hand subtree.
+And, finally, my tree would be a new tree
+
+75
+00:06:55,127 --> 00:07:01,301
+with the, as before the node seven is the
+node and the same as the right-hand side
+
+76
+00:07:01,301 --> 00:07:04,474
+tree here.
+So, we see that now, we really have two
+
+77
+00:07:04,474 --> 00:07:07,967
+trees, the old one and the new one after
+the include.
+
+78
+00:07:07,967 --> 00:07:15,079
+The two trees share the sub tree here on
+the right hand side but they differ in the
+
+79
+00:07:15,079 --> 00:07:21,174
+left tree, where, on the new tree, we have
+a three in the left most bottom corner
+
+80
+00:07:21,174 --> 00:07:25,094
+whereas, for the old tree, we just have
+two empty trees.
+
+81
+00:07:25,094 --> 00:07:34,285
+One way these data structures are called,
+are called persistent data structures,
+
+82
+00:07:34,285 --> 00:07:44,051
+because even when we do changes or
+so-called changes in quotes to a data
+
+83
+00:07:44,051 --> 00:07:48,908
+structure, the old version of the data
+structure is still maintained.
+
+84
+00:07:48,908 --> 00:07:52,779
+It doesn't go away.
+And persistent data structures are
+
+85
+00:07:52,779 --> 00:07:59,113
+actually one of the cornerstone of scaling
+functional programming up to collections
+
+86
+00:07:59,113 --> 00:08:02,892
+and the like.
+So, let's take the definition of class
+
+87
+00:08:02,892 --> 00:08:11,079
+non-empty and also, add it in the
+worksheet so that we can test something.
+
+88
+00:08:11,079 --> 00:08:21,690
+So now, instead of new inset, I would
+create a set by saying, well, if this
+
+89
+00:08:21,690 --> 00:08:31,712
+would be, maybe, new non-empty of three,
+new empty, new empty, so it would be my
+
+90
+00:08:31,712 --> 00:08:39,007
+first set.
+I would give me non-empty set, and I could
+
+91
+00:08:39,007 --> 00:08:50,076
+then write things like include a four, and
+that would give me an inset, which is
+
+92
+00:08:50,076 --> 00:08:55,069
+another non-empty set.
+Now, before we go further, let's add a two
+
+93
+00:08:55,069 --> 00:09:02,010
+string operation to our set so that we can
+actually see what sets we have created
+
+94
+00:09:02,010 --> 00:09:05,046
+here.
+We need two definitions of two string.
+
+95
+00:09:05,046 --> 00:09:13,025
+One in empty, and one in non-empty.
+For empty, how would we define two string?
+
+96
+00:09:13,025 --> 00:09:21,070
+Well, let me just define it in a very
+minimalistic way to give you a period.
+
+97
+00:09:21,070 --> 00:09:29,016
+For non-empty, I want to define two string
+as follows.
+
+98
+00:09:29,016 --> 00:09:37,471
+I want to say it should be an open brace
+followed by the, the description of the
+
+99
+00:09:37,471 --> 00:09:44,067
+left element followed by the, sorry, as
+follows.
+
+100
+00:09:44,067 --> 00:09:53,123
+It should be an open brace followed by the
+string value of the left subtree and the
+
+101
+00:09:53,123 --> 00:10:00,024
+element in the middle in the right
+subtree, and then, a closing brace.
+
+102
+00:10:00,082 --> 00:10:08,010
+If we do that, then we see that here we
+get a sort of visual representation of our
+
+103
+00:10:08,010 --> 00:10:12,018
+tree.
+So, the first t1 would be an element tree,
+
+104
+00:10:12,018 --> 00:10:18,310
+and empty tree to the left and right.
+Whereas, t2 would be the root of t2 would
+
+105
+00:10:18,310 --> 00:10:24,016
+be three, the right subtree is a tree that
+has four as its element.
+
+106
+00:10:24,016 --> 00:10:30,713
+So, we see that this tree, in particular,
+has maintained the invariant that trees
+
+107
+00:10:30,713 --> 00:10:35,545
+are sorted.
+So, one new thing you see here is that
+
+108
+00:10:35,545 --> 00:10:43,026
+both empty and non-empty extend inset.
+So, extension means that these two classes
+
+109
+00:10:43,026 --> 00:10:50,072
+are subclasses of the base class inset.
+One consequence of that is that the types,
+
+110
+00:10:50,072 --> 00:10:54,090
+empty and non-empty, conform to the type
+inset.
+
+111
+00:10:54,090 --> 00:11:02,063
+What that means is that an object of type
+empty or non-empty can be used wherever an
+
+112
+00:11:02,063 --> 00:11:10,003
+object of type inset is required.
+Some more terminology.
+
+113
+00:11:10,003 --> 00:11:15,089
+We say, insert is the super class of empty
+and non-empty, and empty and nonempty are
+
+114
+00:11:15,089 --> 00:11:20,088
+the subclasses of inset.
+In Scala, any class that you can define
+
+115
+00:11:20,088 --> 00:11:25,038
+extends another class.
+Even for a class like rational, where you
+
+116
+00:11:25,038 --> 00:11:29,016
+didn't give an extends clause, there is a
+superclass.
+
+117
+00:11:29,016 --> 00:11:34,065
+So, if no explicit superclass is given,
+the standard class object in the Java
+
+118
+00:11:34,065 --> 00:11:39,464
+package, Java language is assumed.
+Object is the root class of all Java
+
+119
+00:11:39,464 --> 00:11:43,552
+class, and also of all user-defined Scala
+classes.
+
+120
+00:11:43,552 --> 00:11:48,683
+If you take the direct superclass of a
+class and then its superclass and so on,
+
+121
+00:11:48,683 --> 00:11:53,658
+so all the direct and indirect super
+classes of a class C, then these are
+
+122
+00:11:53,658 --> 00:11:58,811
+called that the base classes of C.
+So, for instance, the base classes of
+
+123
+00:11:58,811 --> 00:12:05,737
+class non-empty or insert and then object.
+So, what you've seen in the example is
+
+124
+00:12:05,737 --> 00:12:11,108
+that the definitions of, contains and
+including classes empty and non-empty,
+
+125
+00:12:11,108 --> 00:12:17,102
+implement the abstraction functions in the
+base class insert, they were not to be
+
+126
+00:12:17,102 --> 00:12:22,783
+find in insert but they, they are
+implemented in the subclasses, empty and
+
+127
+00:12:22,783 --> 00:12:27,070
+nonempty.
+It's also possible to redefine an existing
+
+128
+00:12:27,070 --> 00:12:33,992
+non-abstract definition of a superclass in
+a subclass, but then, you have to use
+
+129
+00:12:33,992 --> 00:12:37,089
+overwrite.
+So, in this example here, you see the, the
+
+130
+00:12:37,089 --> 00:12:41,050
+difference.
+If you write in the base class, foo = one.
+
+131
+00:12:41,052 --> 00:12:47,043
+And then you redefine foo in the subclass,
+which, which extends base, then you have
+
+132
+00:12:47,043 --> 00:12:52,002
+to put an overwrite.
+So, let me demonstrate that to you in this
+
+133
+00:12:52,002 --> 00:12:55,368
+worksheet.
+We have two classes, a base class and a
+
+134
+00:12:55,368 --> 00:12:59,049
+subclass.
+And each of these classes have two members
+
+135
+00:12:59,049 --> 00:13:03,726
+named foo and bar.
+The bar member in class sub, implements
+
+136
+00:13:03,726 --> 00:13:08,090
+the abstract definition of bar in class
+base.
+
+137
+00:13:08,090 --> 00:13:15,374
+Whereas, the full member replaces the
+concrete definition of who in class base.
+
+138
+00:13:15,374 --> 00:13:21,922
+If a member replaces or overwrites the
+definition in a superclass, then the
+
+139
+00:13:21,922 --> 00:13:27,299
+override here is mandatory.
+So let's say, say I leave that out,
+
+140
+00:13:27,299 --> 00:13:30,484
+compile.
+And we will get an error which says,
+
+141
+00:13:30,484 --> 00:13:36,073
+overwriting might method foo in class base
+the method foo here needs an overwrite
+
+142
+00:13:36,073 --> 00:13:38,034
+modifier.
+So, why is that?
+
+143
+00:13:38,034 --> 00:13:41,097
+Why here Scala is actually more picky than
+Java?
+
+144
+00:13:41,097 --> 00:13:47,007
+Well, the reason is that sometimes we do
+not really know what methods you do
+
+145
+00:13:47,007 --> 00:13:49,096
+inherit.
+So, you might actually accidentally
+
+146
+00:13:49,096 --> 00:13:55,033
+overwrite a method in a base class, and in
+that case, is good that you have to be
+
+147
+00:13:55,033 --> 00:13:59,029
+explicit about it.
+There's an added benefit namely when you
+
+148
+00:13:59,029 --> 00:14:04,087
+intent to overwrite but let's say, you
+can't remember the name correctly or you
+
+149
+00:14:04,087 --> 00:14:08,091
+get the numbers of parameters wrong, or
+things like that.
+
+150
+00:14:08,091 --> 00:14:13,567
+So, if I write something like that,
+overwrite the foo two, then I get an error
+
+151
+00:14:13,567 --> 00:14:16,471
+again.
+Where we say, method foo2 overwrites
+
+152
+00:14:16,471 --> 00:14:19,651
+nothing.
+So, in that case the ovewrite will give me
+
+153
+00:14:19,651 --> 00:14:25,296
+the opposite protection results when I
+write overwrite then I want to be sure
+
+154
+00:14:25,296 --> 00:14:28,864
+that, in fact, I do overwrite another
+definition.
+
+155
+00:14:28,864 --> 00:14:34,763
+For methods that implement definitions in
+base classes, the overwrite is optional,
+
+156
+00:14:34,763 --> 00:14:39,320
+you can write it if you want to.
+And, in that case, you will be warned in
+
+157
+00:14:39,320 --> 00:14:42,804
+the same way.
+So, if I write part two, I will get an
+
+158
+00:14:42,804 --> 00:14:46,198
+error as before.
+But you don't have to do that.
+
+159
+00:14:46,198 --> 00:14:51,384
+So, you don't need to write the overwrite,
+you could just write def bar.
+
+160
+00:14:51,384 --> 00:14:54,618
+And that's usually less noisy, so,
+preferred.
+
+161
+00:14:54,618 --> 00:15:00,137
+So, let's get back to the insets example.
+One thing to improve would be the status
+
+162
+00:15:00,137 --> 00:15:04,811
+of the empty inset class.
+You could argue that there's really only a
+
+163
+00:15:04,811 --> 00:15:08,902
+single empty inset.
+So, it seems overkill to have the user
+
+164
+00:15:08,902 --> 00:15:13,488
+create many instances of it.
+And, in fact, that's very easy to achieve
+
+165
+00:15:13,488 --> 00:15:16,700
+in Scala.
+You just use an object definition instead
+
+166
+00:15:16,700 --> 00:15:23,038
+of a class definition as before.
+So, this object definition is exactly the
+
+167
+00:15:23,038 --> 00:15:29,029
+same as the class definition, except that
+instead of the keyword class, you use
+
+168
+00:15:29,029 --> 00:15:33,000
+object.
+And that will define a single item object
+
+169
+00:15:33,000 --> 00:15:36,078
+named empty.
+There is only one of them and you don't
+
+170
+00:15:36,078 --> 00:15:40,011
+need or can create that explicitly with
+new.
+
+171
+00:15:40,011 --> 00:15:45,064
+So the object empty simply exists,
+technically it will be created the first
+
+172
+00:15:45,064 --> 00:15:50,097
+time you reference it.
+Your reference to the object simply by
+
+173
+00:15:50,097 --> 00:15:55,247
+naming it with empty.
+So, empty here and here replaces the
+
+174
+00:15:55,247 --> 00:16:04,042
+creation of new MT that we had before.
+In terms of evaluation, singleton objects
+
+175
+00:16:04,042 --> 00:16:08,055
+are values.
+So, empty is already a value, there's no
+
+176
+00:16:08,055 --> 00:16:12,011
+evaluation step that needs to be
+performed.
+
+177
+00:16:12,011 --> 00:16:18,675
+So, since we're already looking at objects
+let's, take a quick excursion and look at
+
+178
+00:16:18,675 --> 00:16:24,284
+what a program would be in Scala So far,
+we've executed all Scala code from the
+
+179
+00:16:24,284 --> 00:16:29,080
+RPEL or the worksheet, but it's also
+possible to create standalone
+
+180
+00:16:29,080 --> 00:16:32,526
+applications.
+Each as applications would contain an
+
+181
+00:16:32,526 --> 00:16:35,532
+object and that object contains a main
+method.
+
+182
+00:16:35,532 --> 00:16:40,548
+Let's look at this with the mandatory
+Hello World Program written in Scala.
+
+183
+00:16:40,548 --> 00:16:43,453
+So, you would write an object, name it
+Hello.
+
+184
+00:16:43,453 --> 00:16:48,453
+It has a main method, then as in java,
+that main method will have to take an
+
+185
+00:16:48,453 --> 00:16:51,815
+array of string, you can ignore that for
+the time being.
+
+186
+00:16:51,815 --> 00:16:56,057
+And the body of the main method would be a
+println with Hello World.
+
+187
+00:16:56,057 --> 00:17:01,752
+Once you compile this program, you can
+start it from the command line simply with
+
+188
+00:17:01,752 --> 00:17:06,240
+Scala, and then Hello.
+Or you could also use Java and Hello, they
+
+189
+00:17:06,240 --> 00:17:15,612
+would do the same thing in this case.
+Should we demonstrate?
+
+190
+00:17:15,612 --> 00:17:21,801
+So, let, let me demonstrate that in
+Eclipse.
+
+191
+00:17:21,801 --> 00:17:22,648
+Hm.
+Now.
+
+192
+00:17:22,648 --> 00:17:32,676
+So, let me demonstrate that in Eclipse.
+We would, in Week three, we would not
+
+193
+00:17:32,676 --> 00:17:39,898
+create a worksheet, but now a, a Scala
+object.
+
+194
+00:17:39,898 --> 00:17:50,000
+Call it, Hello.
+What do I do if it's the Scala
+
+195
+00:17:50,000 --> 00:17:54,179
+application.
+Let's see.
+
+196
+00:17:54,179 --> 00:18:00,068
+Okay.
+Now, it's up now, yeah, okay.
+
+197
+00:18:03,098 --> 00:18:10,059
+Okay.
+Okay, let's get rid of the results.
+
+198
+00:18:13,096 --> 00:18:16,084
+What should we do?
+Okay.
+
+199
+00:18:16,084 --> 00:18:24,075
+So, let's demonstrate that using Eclipse,
+no, I think, I have that here, yeah.
+
+200
+00:18:24,075 --> 00:18:33,015
+So, okay, I said that already.
+So, we create in the Week three package,
+
+201
+00:18:33,015 --> 00:18:40,055
+this time not a worksheet but a Scala
+object, call it, Hello.
+
+202
+00:18:43,011 --> 00:18:49,088
+And then, we have to add the main function
+which takes this.
+
+203
+00:18:50,016 --> 00:19:02,444
+And it would print something.
+We can run this program as a program using
+
+204
+00:19:02,444 --> 00:19:07,680
+the green arrow here.
+So, we will run it as a Scala application,
+
+205
+00:19:07,680 --> 00:19:14,295
+and we see on the console, Hello World.
+So, that's how you would run full programs
+
+206
+00:19:14,295 --> 00:19:18,956
+in Scala from Eclipse.
+If you want to run it from the command
+
+207
+00:19:18,956 --> 00:19:25,357
+line, you will also have a Scala compiler
+called Scala C in the main distributions
+
+208
+00:19:25,357 --> 00:19:32,455
+of Scala's [unknown].
+Now, let's just drop it.
+
+209
+00:19:32,455 --> 00:19:36,479
+So, [inaudible].
+Okay, then we go back to, okay.
+
+210
+00:19:36,479 --> 00:19:41,069
+If you, no, that, no, we won't do that,
+that's, okay.
+
+211
+00:19:41,069 --> 00:19:48,503
+So, that's how we would run things in
+Eclipse, and then we stop, okay?
+
+212
+00:19:48,503 --> 00:20:01,270
+Good.
+Mm-hm.
+
+213
+00:20:01,270 --> 00:20:20,200
+Okay.
+And okay.
+
+214
+00:20:20,200 --> 00:20:24,606
+Yeah.
+Yeah.
+
+215
+00:20:24,606 --> 00:20:29,639
+Now, we have to do it this way or
+something, not the ideal because not, so,
+
+216
+00:20:29,639 --> 00:20:34,199
+let's do an exercise.
+The task is to add a new method to our
+
+217
+00:20:34,199 --> 00:20:39,513
+insert class hierarchy.
+The method should take the union of a set
+
+218
+00:20:39,513 --> 00:20:44,774
+and some other set.
+So, you should extend the class insert to
+
+219
+00:20:44,774 --> 00:20:50,248
+be the following abstract class and
+implement that.
+
+220
+00:20:50,248 --> 00:21:01,244
+So, how we would we go about that?
+Let's first start with the abstract class.
+
+221
+00:21:01,244 --> 00:21:09,675
+So, here's the signature of union.
+And now, we get two errors because we have
+
+222
+00:21:09,675 --> 00:21:15,399
+to implement it in the two sub classes.
+So, let's start with empty.
+
+223
+00:21:15,399 --> 00:21:20,917
+What would the union of an empty set and
+some other set be?
+
+224
+00:21:20,917 --> 00:21:29,424
+Well, that's very simple, empty set union
+some other set is always the other set.
+
+225
+00:21:29,424 --> 00:21:42,773
+For non-empty, what would we do for
+non-empty?
+
+226
+00:21:42,773 --> 00:21:57,882
+Well, hm, that's a good question now.
+For non-empty, how would we define union
+
+227
+00:21:57,882 --> 00:22:04,038
+in that case?
+But one idea is to use what's often called
+
+228
+00:22:04,038 --> 00:22:09,050
+divide and conquer.
+So, a non-empty set is built from an
+
+229
+00:22:09,050 --> 00:22:13,097
+element and a left subset and a right
+subset.
+
+230
+00:22:13,097 --> 00:22:17,097
+So, let's maybe union all of these
+together.
+
+231
+00:22:17,097 --> 00:22:22,081
+So, it would say, okay, it would be the
+left set union.
+
+232
+00:22:25,081 --> 00:22:37,074
+The right set, union the, I will set
+union, include the element.
+
+233
+00:22:38,055 --> 00:22:56,091
+So, the good definition let's see.
+[laugh] So, we go left, it's definitely
+
+234
+00:22:56,091 --> 00:23:04,981
+smaller, that's okay.
+Yeah, we will just, then left union right
+
+235
+00:23:04,981 --> 00:23:22,020
+is, is still smaller.
+You need other, that's smaller.
+
+236
+00:23:23,007 --> 00:23:30,035
+And include, yeah, okay, that should work.
+Okay, let's, let's, let's do this again.
+
+237
+00:23:31,020 --> 00:23:36,117
+Okay.
+So, for non-empty sets, how would we
+
+238
+00:23:36,117 --> 00:23:43,033
+define union in this case?
+Well, the idea is that we split the set
+
+239
+00:23:43,033 --> 00:23:48,053
+into its constituents.
+So, we have the left inset, the right
+
+240
+00:23:48,053 --> 00:23:52,098
+inset, and the element.
+Let's form the union instead from
+
+241
+00:23:52,098 --> 00:23:56,094
+something that is smaller.
+So, one of the subsets.
+
+242
+00:23:56,094 --> 00:24:03,087
+Let's start with left and two union right.
+So, that would give us the set without the
+
+243
+00:24:03,087 --> 00:24:08,057
+initial element.
+Then, let's finally give the union of the
+
+244
+00:24:08,057 --> 00:24:15,641
+other set.
+And as a last action, action, let's
+
+245
+00:24:15,641 --> 00:24:22,090
+include the element back into the set.
+So, the new union has all the parts of the
+
+246
+00:24:22,090 --> 00:24:28,034
+previous ones that contain the left set,
+it contains the right set, it contains the
+
+247
+00:24:28,034 --> 00:24:33,052
+element, and it contains the other set.
+So, it's very easy to convince ourselves
+
+248
+00:24:33,052 --> 00:24:38,729
+that indeed the two the, the, the results
+set here would have all the elements of
+
+249
+00:24:38,729 --> 00:24:41,483
+the union and would have no other
+elements.
+
+250
+00:24:41,483 --> 00:24:46,692
+But there's another concern and that is
+well, how do we know that this recursion
+
+251
+00:24:46,692 --> 00:24:51,409
+actually terminates, because after all,
+union calls union and we've seen already,
+
+252
+00:24:51,409 --> 00:24:55,083
+cases where calling yourself again would
+not terminate.
+
+253
+00:24:55,083 --> 00:25:00,095
+So, the argument you, we could make here
+is to say, well, every call to union is
+
+254
+00:25:00,095 --> 00:25:05,041
+actually on something that is smaller than
+the set we started with.
+
+255
+00:25:05,041 --> 00:25:10,123
+The first call to union was on the left
+subtree here, and obviously, that set is
+
+256
+00:25:10,123 --> 00:25:15,407
+smaller than the whole non-empty set.
+The second call to union was on the union
+
+257
+00:25:15,407 --> 00:25:21,354
+in left and right, and then again contains
+one element less than the full set that we
+
+258
+00:25:21,354 --> 00:25:25,427
+have here.
+Because every union, every quarter union
+
+259
+00:25:25,427 --> 00:25:30,483
+is on a set that is smaller, it follows
+that, at some point, we have to reach
+
+260
+00:25:30,483 --> 00:25:34,036
+zero.
+And if the set is zero, then we fall back
+
+261
+00:25:34,036 --> 00:25:39,810
+to the case of empty sets where the union
+is immediate, we just return the other
+
+262
+00:25:39,810 --> 00:25:43,023
+set.
+So, that's how we convince ourselves that
+
+263
+00:25:43,023 --> 00:25:48,013
+the union that we, operations that we do
+here are in fact terminating.
+
+264
+00:25:48,013 --> 00:25:53,067
+And once those are terminating, we can
+safely add element back with an include
+
+265
+00:25:53,067 --> 00:25:58,621
+operation as before, okay.
+What object oriented language is do in
+
+266
+00:25:58,621 --> 00:26:02,719
+this case?
+Scala included, is to use th dynamic
+
+267
+00:26:02,719 --> 00:26:07,813
+method dispatch model.
+That means, that the code that's invoked
+
+268
+00:26:07,813 --> 00:26:14,429
+by a method call depends on the runtime
+type of the object, that contains the
+
+269
+00:26:14,429 --> 00:26:18,553
+method.
+I believe that's best exemplified with,
+
+270
+00:26:18,553 --> 00:26:22,218
+okay, I believe that's best shown in an
+example.
+
+271
+00:26:22,218 --> 00:26:25,994
+So, let's say, you have the code empty
+contains one.
+
+272
+00:26:25,994 --> 00:26:32,252
+What do you do?
+Well, you look up the contains method in
+
+273
+00:26:32,252 --> 00:26:39,760
+empty.
+Remember that was, remember that was an
+
+274
+00:26:39,760 --> 00:26:53,093
+object empty and we had a def contains y =
+False, that was its definition.
+
+275
+00:26:53,093 --> 00:27:01,061
+So, looking up that method and performing
+the necessary substitutions, we get False.
+
+276
+00:27:02,038 --> 00:27:08,090
+On the other hand, if we have, so here, is
+another evaluation using non-empty.
+
+277
+00:27:08,090 --> 00:27:14,090
+We would have a tree called new.
+So, so, here is another evaluation using
+
+278
+00:27:14,090 --> 00:27:18,086
+non-empty.
+We would have to set non-empty seven,
+
+279
+00:27:18,086 --> 00:27:23,019
+empty, empty, and we ask whether it
+contains seven.
+
+280
+00:27:23,019 --> 00:27:29,606
+So, if you look back at the definition of
+contain and non-empty, that's what we see
+
+281
+00:27:29,606 --> 00:27:33,057
+here.
+And if we apply our substitution rules,
+
+282
+00:27:33,057 --> 00:27:39,087
+then it means this call of the method will
+be replaced by the right hand side of the
+
+283
+00:27:39,087 --> 00:27:45,079
+contains method, which you see here.
+And at the same time, the substitutions of
+
+284
+00:27:45,079 --> 00:27:50,087
+the parameters of the class, and the
+method, and the self-reference.
+
+285
+00:27:50,087 --> 00:27:57,050
+So, the three elements that you see here.
+If we perform the substitution, we arrive
+
+286
+00:27:57,050 --> 00:28:02,166
+at this expression here.
+So, instead of x and ln we have we, we
+
+287
+00:28:02,166 --> 00:28:08,619
+have we see seven in each case, and
+instead of the, this, we see new non,
+
+288
+00:28:08,619 --> 00:28:14,064
+non-empty seven, empty, empty.
+If you perform the simplification, we get
+
+289
+00:28:14,064 --> 00:28:20,070
+that seven is neither less nor greater
+than seven, so we fall into the else case,
+
+290
+00:28:20,070 --> 00:28:25,090
+and we get true.
+So, for the end of this session, here's
+
+291
+00:28:25,090 --> 00:28:29,253
+something to ponder.
+You've seen that dynamic dispatch of
+
+292
+00:28:29,253 --> 00:28:34,682
+methods in object oriented languages is
+actually quite similar to calls of high
+
+293
+00:28:34,682 --> 00:28:37,992
+order functions in pure functional
+languages.
+
+294
+00:28:37,992 --> 00:28:43,997
+The similarity is that in both cases, the
+code that gets executed on a functional
+
+295
+00:28:43,997 --> 00:28:50,016
+method call is not known statically, it's
+not apparent from the name or the type of
+
+296
+00:28:50,016 --> 00:28:55,422
+the thing you called, but it is determined
+by the runtime value that is passed.
+
+297
+00:28:55,422 --> 00:29:00,617
+So, it's a fair question whether we can
+implement one concept in terms of the
+
+298
+00:29:00,617 --> 00:29:03,730
+other.
+Can we maybe implement objects in terms of
+
+299
+00:29:03,730 --> 00:29:08,560
+high order functions or can we implement
+higher order functions in terms of
+
+300
+00:29:08,560 --> 00:29:11,180
+objects?
+Or can we maybe go both ways?
+
+301
+00:29:11,180 --> 00:29:16,765
+It's a question that is fairly open and
+that has a range of possible answers.
+
+302
+00:29:16,765 --> 00:29:23,029
+So, I just let you with that think a
+little bit, bit about it and maybe discuss
+
+303
+00:29:23,029 --> 00:29:24,036
+with others.

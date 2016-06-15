@@ -1,0 +1,1148 @@
+1
+00:00:00,000 --> 00:00:04,321
+In the last session, you've seen a class
+hierarchy of overall three classes.
+
+2
+00:00:04,321 --> 00:00:09,619
+The real program of course will contain
+not three but dozens or hundreds or
+
+3
+00:00:09,619 --> 00:00:13,731
+thousands of classes.
+So there's a question how to organize
+
+4
+00:00:13,731 --> 00:00:16,450
+them.
+In this session, we'll learn about
+
+5
+00:00:16,450 --> 00:00:22,096
+packages that can contain classes, as well
+as how to make classes accessible with
+
+6
+00:00:22,096 --> 00:00:25,581
+imports.
+We'll find out about this standard Scala
+
+7
+00:00:25,581 --> 00:00:31,227
+library that contains a lot predefined
+classes already and how these classes are
+
+8
+00:00:31,227 --> 00:00:37,354
+organized in an hierarchy.
+So generally in Scala as well as in Java,
+
+9
+00:00:37,354 --> 00:00:40,967
+classes and objects are organized in
+packages.
+
+10
+00:00:41,202 --> 00:00:47,407
+You can place your class or object inside
+a package simply by adding a package
+
+11
+00:00:47,407 --> 00:00:54,337
+clause like package progfun.example at the
+beginning of your source file And that
+
+12
+00:00:54,337 --> 00:01:00,330
+would put then every class or object you
+define later on in that package that you
+
+13
+00:01:00,330 --> 00:01:04,495
+have defined here.
+And once you've done that, then you can
+
+14
+00:01:04,495 --> 00:01:10,050
+refer to the original object or class, by
+its so called, fully qualified main.
+
+15
+00:01:10,050 --> 00:01:15,604
+So, the fully qualified name is the name
+of the package and then a dot and then the
+
+16
+00:01:15,604 --> 00:01:19,419
+name of the object of the class.
+So, for Hello, it would be
+
+17
+00:01:19,419 --> 00:01:23,769
+progfun.examples.Hello.
+And, that fully qualified name you can use
+
+18
+00:01:23,769 --> 00:01:28,922
+to refer to Hello from your program or
+also on the command line when you say,
+
+19
+00:01:28,922 --> 00:01:34,210
+want to run the Hello program you will
+write scala then progfun.examples.Hello.
+
+20
+00:01:34,210 --> 00:01:37,219
+So let's demonstrate that using the
+worksheet.
+
+21
+00:01:37,219 --> 00:01:42,781
+What I've done here is I've taken the
+class rational from the last session which
+
+22
+00:01:42,781 --> 00:01:47,947
+was in worksheet, and I've put this as a
+standalone class in package week three
+
+23
+00:01:47,950 --> 00:01:52,619
+over here.
+So now what I want to do is refer to
+
+24
+00:01:52,619 --> 00:01:57,487
+rationals from another worksheet, call it
+scratch.
+
+25
+00:01:57,487 --> 00:02:05,931
+So what we could do is write new
+week3.Rational(1, two) and then the
+
+26
+00:02:05,931 --> 00:02:15,071
+worksheet would answer that it's defined a
+instance of type week3.Rational and the
+
+27
+00:02:15,071 --> 00:02:19,749
+value is one-half.
+So if it becomes too tedious to write
+
+28
+00:02:19,749 --> 00:02:25,909
+week3.Rational every time you want to
+refer to a rational, you could also import
+
+29
+00:02:25,909 --> 00:02:29,407
+the rational type from the week three
+package.
+
+30
+00:02:29,407 --> 00:02:32,829
+The way you do that is with an import
+clause.
+
+31
+00:02:32,829 --> 00:02:38,228
+You write import week3.Rational.
+Once you've done that, you can refer to
+
+32
+00:02:38,228 --> 00:02:43,400
+rational without the prefix, because you
+have imported it previously.
+
+33
+00:02:44,460 --> 00:02:49,662
+Imports come in several forms.
+This is the most simple one where you
+
+34
+00:02:49,662 --> 00:02:55,018
+import a single named thing.
+There's also another form of import where
+
+35
+00:02:55,018 --> 00:03:01,216
+you import everything in a given package
+so the form import week3. would import
+
+36
+00:03:01,216 --> 00:03:07,108
+everything that is defined in package week
+three It's more general, it's more
+
+37
+00:03:07,108 --> 00:03:13,611
+convenient but sometimes it's less legible
+because sometimes you really want to have
+
+38
+00:03:13,611 --> 00:03:17,820
+a more precise control over where your
+names come from.
+
+39
+00:03:18,880 --> 00:03:24,356
+It's also a third form of import which
+you'll see here in the second line where
+
+40
+00:03:24,356 --> 00:03:27,847
+you can import several names from the same
+package.
+
+41
+00:03:27,847 --> 00:03:35,309
+So the form import week3, Hell would
+import both Rational and Hello from the
+
+42
+00:03:35,309 --> 00:03:39,443
+week three package.
+The first two forms here are called named
+
+43
+00:03:39,443 --> 00:03:43,155
+imports and the last form is called a
+wildcard import.
+
+44
+00:03:43,155 --> 00:03:48,553
+And another thing to say is that we've
+seen we can import from packages, but you
+
+45
+00:03:48,553 --> 00:03:53,748
+could in fact import from any object,
+Any expression that gives you an object
+
+46
+00:03:53,748 --> 00:03:57,730
+and you would simply import all the
+members of that object.
+
+47
+00:03:57,730 --> 00:04:02,866
+Some entities are imported automatically
+in any Scala program.
+
+48
+00:04:02,866 --> 00:04:08,940
+These are, all members of packaged Scala.
+All members of package java.lang and all
+
+49
+00:04:08,940 --> 00:04:13,653
+members of the singleton object
+scala.Predef. So if you wondered
+
+50
+00:04:13,653 --> 00:04:19,241
+previously for instance how, where did the
+require or the insert function come from,
+
+51
+00:04:19,241 --> 00:04:25,166
+Well the answer was they were defined in
+the object scala.Predef, that's an object
+
+52
+00:04:25,166 --> 00:04:30,081
+inside the scaler package and the
+automatic import of all members of the
+
+53
+00:04:30,081 --> 00:04:34,727
+Predef object made that you could use
+these names without a further
+
+54
+00:04:34,727 --> 00:04:38,274
+qualification.
+The same holds for the types Int and
+
+55
+00:04:38,274 --> 00:04:44,118
+Boolean that you've used before so these
+are actually defined in the Scala package
+
+56
+00:04:44,118 --> 00:04:49,469
+and their fully qualified names are
+scala.Int and scala.Boolean whereas the
+
+57
+00:04:49,469 --> 00:04:54,890
+name object that we've been using, that
+actually comes from the Java universe
+
+58
+00:04:54,890 --> 00:04:58,340
+which is in which the Scala universe is
+embedded.
+
+59
+00:04:58,340 --> 00:05:04,535
+Object is spelled out java.lang.Object.
+The root object of all Java objects and we
+
+60
+00:05:04,535 --> 00:05:10,432
+have imported that automatically because
+besides Scala also, all objects in Java
+
+61
+00:05:10,432 --> 00:05:16,901
+land are automatically imported.
+By now you probably would like to find out
+
+62
+00:05:16,901 --> 00:05:21,382
+more about what classes are there and the
+Scala library.
+
+63
+00:05:21,382 --> 00:05:25,704
+What can you do with them?
+What methods do they export?
+
+64
+00:05:25,704 --> 00:05:32,747
+You can do all that using a set of webpage
+that have been generated by a tool called
+
+65
+00:05:32,747 --> 00:05:39,709
+Scaladoc and you can get that by googling
+for Scaladoc or by going to this page here
+
+66
+00:05:39,709 --> 00:05:47,134
+which gives you the root package of the
+scala library and here you can see on the
+
+67
+00:05:47,134 --> 00:05:54,448
+left hand side a set of classes, You can,
+by displaying all packages you get the set
+
+68
+00:05:54,448 --> 00:06:00,610
+of packages in the Scalar library. If you
+go through to the packages Scalar then,
+
+69
+00:06:00,610 --> 00:06:05,751
+and I look at a class, let's say Predef
+object that we've seen here.
+
+70
+00:06:05,751 --> 00:06:10,378
+And you see here an explanation of what's
+in the Predef object,
+
+71
+00:06:10,378 --> 00:06:16,034
+If we then want to find a method let's say
+assert in there, then you see here is the
+
+72
+00:06:16,034 --> 00:06:21,249
+definition of the assert methods that are
+offered by the Predef object.
+
+73
+00:06:21,249 --> 00:06:24,848
+You see here each assert's comes in two
+versions.
+
+74
+00:06:24,848 --> 00:06:30,871
+One with an error message, one without so
+that's why I told you the error messages
+
+75
+00:06:30,871 --> 00:06:35,945
+was optional and like that, you can
+explore, what's out there in the Scala
+
+76
+00:06:36,901 --> 00:06:41,493
+libraries.
+Now, if you have browsed a little bit this
+
+77
+00:06:41,493 --> 00:06:47,723
+Scala doc, then you probably would have
+come across set of pages that describe
+
+78
+00:06:47,723 --> 00:06:51,056
+traits, and you might ask well what is a
+trait?
+
+79
+00:06:51,056 --> 00:06:56,345
+Well in Java, as well as in Scala, a class
+can only have one super class.
+
+80
+00:06:56,345 --> 00:07:00,620
+You say for this scheme it's a single
+inheritance language.
+
+81
+00:07:00,620 --> 00:07:08,652
+Single inheritance.
+And that's actually very constraining
+
+82
+00:07:08,652 --> 00:07:14,435
+because quite often a, a type will have
+naturally several super types or it would,
+
+83
+00:07:14,435 --> 00:07:20,779
+you would want to inherit behavior from
+several super entities that all contribute
+
+84
+00:07:20,779 --> 00:07:26,148
+to the final code of the class.
+To do that, you can use the concept of
+
+85
+00:07:26,148 --> 00:07:30,972
+Traits A Trait is essentially declared
+like an abstract class.
+
+86
+00:07:31,205 --> 00:07:36,030
+You just use trait instead of the keyword
+abstract class here.
+
+87
+00:07:36,030 --> 00:07:41,448
+So here for instance we would have a trait
+of planar objects, where the objects would
+
+88
+00:07:41,448 --> 00:07:45,911
+have a height and width unspecified so
+those depths don't come within
+
+89
+00:07:45,911 --> 00:07:49,353
+implementation.
+And then you would have a surface that
+
+90
+00:07:49,353 --> 00:07:52,923
+would be height times width as a default
+implementation.
+
+91
+00:07:52,923 --> 00:07:58,151
+So that would be a concrete method and
+those two would be method which would lack
+
+92
+00:07:58,151 --> 00:08:01,020
+an implementation and so are called
+abstract.
+
+93
+00:08:03,000 --> 00:08:08,414
+So, the idea of traits is then that,
+claases, objects and other traits can
+
+94
+00:08:08,414 --> 00:08:14,431
+inherit from utmost one class, but they
+can inherit from arbitrarily many traits.
+
+95
+00:08:14,431 --> 00:08:20,447
+The way you do that, you see here, so here
+would be a, you would have class square,
+
+96
+00:08:20,447 --> 00:08:26,614
+that extends a shape superclass and then
+it adds also two traits one is called
+
+97
+00:08:26,614 --> 00:08:31,910
+Planar and one is called Movable.
+You combine the super class and all the
+
+98
+00:08:31,910 --> 00:08:34,727
+traits you want to inherit with, with
+here.
+
+99
+00:08:34,727 --> 00:08:39,893
+So with this a combination that adds
+another trait to some set of classes or
+
+100
+00:08:39,893 --> 00:08:44,805
+traits that you inherit already.
+In that sense, even though the syntax is
+
+101
+00:08:44,805 --> 00:08:47,915
+different, try traits resemble interfaces
+in Java.
+
+102
+00:08:47,915 --> 00:08:53,376
+Because in Java as well you can inherit
+from one class, but multiple interfaces.
+
+103
+00:08:53,376 --> 00:08:58,907
+However, traits actually much more
+powerful than interfaces in Java because
+
+104
+00:08:58,907 --> 00:09:04,299
+traits can contain fields and concrete
+methods whereas interfaces can contain
+
+105
+00:09:04,299 --> 00:09:08,915
+only abstract methods.
+You seen on the last slide, that the trade
+
+106
+00:09:08,915 --> 00:09:14,958
+planner has, had one method surface which
+already gave a default implementation of
+
+107
+00:09:14,958 --> 00:09:19,895
+the surface property here.
+That implementation can be overridden in
+
+108
+00:09:19,895 --> 00:09:26,012
+subclasses as always, but if subclasses do
+not give an implementation, then this one
+
+109
+00:09:26,012 --> 00:09:30,382
+here would be chosen.
+So there's only one thing you can do with
+
+110
+00:09:30,382 --> 00:09:34,951
+classes, but not with traits.
+And that is that classes can have value
+
+111
+00:09:34,951 --> 00:09:39,251
+parameters like the numerator and
+denominator of class rational,
+
+112
+00:09:39,251 --> 00:09:42,880
+Whereas traits cannot.
+So traits never have parameters.
+
+113
+00:09:44,140 --> 00:09:49,181
+So now let's have a look at the outline of
+Scala's class hierarchy.
+
+114
+00:09:49,181 --> 00:09:55,653
+So here you see the fundamental Scala
+classes and the relationship between them.
+
+115
+00:09:55,653 --> 00:10:01,899
+The arrow here means that the class at the
+root of the arrow is a sub class of the
+
+116
+00:10:01,899 --> 00:10:07,468
+class to which the arrow points.
+So you see that the classes are organized
+
+117
+00:10:07,468 --> 00:10:11,531
+in a hierarchy.
+At the top of the hierarchy, you have a
+
+118
+00:10:11,531 --> 00:10:16,423
+class called scala.Any.
+That's a super class of every other class
+
+119
+00:10:16,423 --> 00:10:22,981
+and Then, you have essentially two set
+trees of classes.
+
+120
+00:10:22,981 --> 00:10:30,997
+They are rooted in AnyVal and AnyRef So
+AnyVal is the base class of all so-called
+
+121
+00:10:30,997 --> 00:10:37,765
+value classes and those are essentially
+the primitive types that you see from,
+
+122
+00:10:37,765 --> 00:10:44,388
+from Java so you have Int and Long, and
+Float, and Double, and Boolean, and those
+
+123
+00:10:44,388 --> 00:10:49,958
+types would all be subtypes of
+Scala.AnyVal All the other classes are
+
+124
+00:10:49,958 --> 00:10:56,820
+subtypes of Scala.AnyRef AnyRef itself is
+just an alias, a different name for Java
+
+125
+00:10:56,820 --> 00:11:00,141
+Lang Object, the root class of all Java
+classes.
+
+126
+00:11:00,141 --> 00:11:06,265
+And here you see classes like the string
+class of Java but you also see Scalar
+
+127
+00:11:06,265 --> 00:11:10,028
+classes such as iterabole] and sequence
+and list.
+
+128
+00:11:10,028 --> 00:11:15,341
+We will get to know them later on.
+All those classes happen to implement
+
+129
+00:11:15,341 --> 00:11:20,137
+another trait called Scalar.ScalarObject
+object in addition to the any ref base
+
+130
+00:11:20,137 --> 00:11:23,705
+class.
+And then on the bottom of the slide, you
+
+131
+00:11:23,705 --> 00:11:28,315
+see two types that are subtypes of many
+other types.
+
+132
+00:11:28,550 --> 00:11:35,191
+They are called scalar.Nothing and
+scalar.Now and we'll get to them in the
+
+133
+00:11:35,191 --> 00:11:39,610
+following slides.
+I should say there's one other twist here
+
+134
+00:11:39,610 --> 00:11:45,202
+in this diagram, we see the relationships
+between the numeric types, they are
+
+135
+00:11:45,202 --> 00:11:50,794
+actually written with dotted arrows, not
+hard arrows, and that means that the
+
+136
+00:11:50,794 --> 00:11:56,828
+numeric types, they're not strictly in a
+subtype relationship with each other, but
+
+137
+00:11:56,828 --> 00:12:02,641
+in a conversion relationship so you can
+automatically convert and type such as
+
+138
+00:12:02,641 --> 00:12:06,100
+Long to Float, but it's not really a
+subtype.
+
+139
+00:12:06,100 --> 00:12:10,538
+Why is it not a subtype?
+Well subtype really means that the
+
+140
+00:12:10,538 --> 00:12:15,413
+conversion is the identity.
+So that you don't need to rearrange the
+
+141
+00:12:15,413 --> 00:12:18,833
+bits in order to go from one type to the
+other.
+
+142
+00:12:18,833 --> 00:12:24,581
+Whereas here, definitely if you to go a
+Long from a Float, you do need to change
+
+143
+00:12:24,581 --> 00:12:30,693
+you representation of that type and what's
+more in this case here the conversion is
+
+144
+00:12:30,693 --> 00:12:34,549
+not loss free.
+You might actually lose some precision
+
+145
+00:12:34,549 --> 00:12:42,092
+going to a Long to a Float.
+Okay now again at the top type in the
+
+146
+00:12:42,092 --> 00:12:47,717
+hierarchy, we have three of them.
+Any, AnyRef and AnyVal. Any is the base
+
+147
+00:12:47,717 --> 00:12:53,413
+type of all type's and it's also the type
+that defines certain universal methods.
+
+148
+00:12:53,413 --> 00:12:58,547
+We've already used equality, =,, = and its
+opposite not equals.
+
+149
+00:12:58,547 --> 00:13:04,102
+Those are actually methods that are
+conceptually defined in this type any, and
+
+150
+00:13:04,102 --> 00:13:10,268
+those methods actually mapped to the Java
+equivalence which would be written equals.
+
+151
+00:13:10,268 --> 00:13:16,232
+That's the good method of Java.
+So =,, = is essentially just a forwarder
+
+152
+00:13:16,232 --> 00:13:21,750
+that cause the Java equals methods unless
+it's overwritten by a user code.
+
+153
+00:13:21,750 --> 00:13:27,994
+And also, in class, any of you would find
+the method two string that you've already
+
+154
+00:13:27,994 --> 00:13:31,421
+seen that converts an object to a two
+string.
+
+155
+00:13:31,421 --> 00:13:37,818
+And finally, you'll have a universal hash
+code method that produces a hash code from
+
+156
+00:13:37,818 --> 00:13:41,156
+an object.
+The two subtypes of type Any are the
+
+157
+00:13:41,156 --> 00:13:46,579
+AnyRef which is the base type of also
+called the reference types and that's an
+
+158
+00:13:46,579 --> 00:13:52,205
+alias of Java Lang Objects and any vowel
+which is the base type of all value types
+
+159
+00:13:52,205 --> 00:13:57,561
+which for the time being are just the
+primitive types that Scala inherits from
+
+160
+00:13:57,561 --> 00:14:01,194
+Java.
+So what about those, those two types at
+
+161
+00:14:01,194 --> 00:14:08,025
+the bottom, Nothing and Null.
+Nothing is at the very bottom of all Scala
+
+162
+00:14:08,025 --> 00:14:10,974
+types.
+It's a subtype of every other type.
+
+163
+00:14:10,974 --> 00:14:14,068
+And there's no value that has type
+Nothing.
+
+164
+00:14:14,068 --> 00:14:17,017
+So you might ask, well, why is that
+useful.
+
+165
+00:14:17,017 --> 00:14:22,917
+How is the type that has no value useful?
+Well, there are actually two uses and the
+
+166
+00:14:22,917 --> 00:14:28,096
+two uses, it turns out they're connected.
+The first is to signal abnormal
+
+167
+00:14:28,096 --> 00:14:31,592
+termination.
+Sometimes a function would not return but
+
+168
+00:14:31,592 --> 00:14:36,605
+for instance would throw an exception or
+abort the program and in that case you
+
+169
+00:14:36,605 --> 00:14:41,619
+might ask well what would the return type
+of that function be? And the answer in
+
+170
+00:14:41,619 --> 00:14:45,880
+fact is the best possible the most precise
+possible type is Nothing.
+
+171
+00:14:45,880 --> 00:14:49,390
+It doesn't return anything.
+It will terminate abnormally.
+
+172
+00:14:49,390 --> 00:14:55,722
+And the second usage that you, we are
+going to see shortly is as an element type
+
+173
+00:14:55,722 --> 00:15:00,300
+of empty collections.
+So if you have, let's say, a set that
+
+174
+00:15:00,300 --> 00:15:04,650
+contains no elements,
+You could say it's a set of nothing.
+
+175
+00:15:04,650 --> 00:15:10,280
+Something like that.
+We will see that in a, in a second later
+
+176
+00:15:10,280 --> 00:15:18,931
+on So speaking of abnormal termination,
+the usual way that is brought about in
+
+177
+00:15:18,931 --> 00:15:26,009
+both Java and Scala is using an exception
+and in fact here the syntax for both Scala
+
+178
+00:15:26,009 --> 00:15:32,845
+and Java is exactly the same here we throw
+expression where you right throw and then
+
+179
+00:15:32,845 --> 00:15:39,922
+comes some exception value and that throw
+expression would then abort the evaluation
+
+180
+00:15:39,922 --> 00:15:46,800
+of the program with the given exception.
+Let's do that in an example.
+
+181
+00:15:47,720 --> 00:15:57,320
+Let's say we have a function F def error
+and it takes a message of type string.
+
+182
+00:15:57,320 --> 00:16:03,717
+And it should give us a throw new error as
+an exception with the given message.
+
+183
+00:16:03,717 --> 00:16:08,010
+So calling error would immediately abort
+the program.
+
+184
+00:16:08,010 --> 00:16:14,289
+So what we see here is that the computer
+type for error was it's a method that
+
+185
+00:16:14,289 --> 00:16:18,820
+takes a string as an argument and it will
+return nothing.
+
+186
+00:16:18,820 --> 00:16:25,020
+So the, scalatype checker was able to
+figure out that this expression will not
+
+187
+00:16:25,020 --> 00:16:30,425
+terminate normally and therefore it's
+[inaudible] type it's nothing.
+
+188
+00:16:30,425 --> 00:16:36,174
+Indeed if we call error now, some
+exception value than what you would get is
+
+189
+00:16:36,174 --> 00:16:41,648
+not normally termination, but you would
+get an exception trace that says, well,
+
+190
+00:16:41,648 --> 00:16:47,122
+and the exception Java Lang error was
+thrown and that was the message that came
+
+191
+00:16:47,122 --> 00:16:51,013
+with it.
+The other button type we have in the
+
+192
+00:16:51,013 --> 00:16:58,604
+diagram is Scala.Null Turns out that Null
+is a subtype of all the classes that are,
+
+193
+00:16:58,604 --> 00:17:04,750
+themselves, reference types.
+And it's also the type of the Null value.
+
+194
+00:17:04,750 --> 00:17:12,559
+Null is written in Scala as in Java.
+It is a value of every reference type here
+
+195
+00:17:12,559 --> 00:17:19,490
+so, when somebody expects let's say a
+string you could also pass it now.
+
+196
+00:17:19,490 --> 00:17:25,146
+So, the type of the Null value then is the
+Null type which is written in the same way
+
+197
+00:17:25,146 --> 00:17:30,936
+just with the capital N and that type is a
+subtype of every class that inherits from
+
+198
+00:17:30,936 --> 00:17:34,131
+object.
+On the other hand it's incompatible with
+
+199
+00:17:34,131 --> 00:17:39,987
+subtypes of any value, so let's try that
+out here, so we could write first val x =
+
+200
+00:17:40,187 --> 00:17:45,451
+null.
+And here we, worksheet would answer that
+
+201
+00:17:45,451 --> 00:17:53,678
+the value of x is null and the type of
+excess null with a Null. We can also then
+
+202
+00:17:53,678 --> 00:17:59,709
+assign x to another.
+Value of, let's say type String And to see
+
+203
+00:17:59,709 --> 00:18:06,670
+that also works so the type...
+The value of value x, with the type null,
+
+204
+00:18:06,670 --> 00:18:14,572
+That one actually conforms two Strings so
+you can initialize the value y with the
+
+205
+00:18:14,572 --> 00:18:19,088
+value x.
+On the other hand what you cannot do is
+
+206
+00:18:19,088 --> 00:18:24,356
+define a value of type Int z and
+initialize that one to Null.
+
+207
+00:18:24,356 --> 00:18:29,060
+Then you will get an error which says that
+the.
+
+208
+00:18:29,060 --> 00:18:32,417
+There is a type mismatch the compiler
+found now.
+
+209
+00:18:32,627 --> 00:18:36,475
+The null value of the null type.
+And it required an Int.
+
+210
+00:18:36,475 --> 00:18:41,861
+And then there comes a long string that
+certain implicit conversions are not
+
+211
+00:18:41,861 --> 00:18:50,931
+applicable, which you can ignore.
+So you've seen that null is a sub type
+
+212
+00:18:50,931 --> 00:18:55,209
+only of the reference types, not of the
+value types.
+
+213
+00:18:55,209 --> 00:19:00,409
+Lets do an exercise.
+Let's say I have the following expression.
+
+214
+00:19:00,409 --> 00:19:05,693
+If true one else false.
+What should the type of that expression
+
+215
+00:19:05,693 --> 00:19:08,042
+be, in your opinion?
+Possible.
+
+216
+00:19:08,042 --> 00:19:15,340
+So answers would be Int or maybe Boolean,
+or maybe AnyVal or object or Any.
+
+217
+00:19:19,100 --> 00:19:24,944
+Well, to solve this question the easiest
+thing would be to just enter this
+
+218
+00:19:24,944 --> 00:19:29,524
+expression in to the web-sheet and see
+what it says right?
+
+219
+00:19:29,524 --> 00:19:33,583
+So if true, one else false.
+What do we get?
+
+220
+00:19:33,583 --> 00:19:41,930
+We get AnyVal Why do we get AnyVal? Well
+Let's look at the two branches of the'if'.
+
+221
+00:19:41,930 --> 00:19:45,511
+The first one is one has definitely
+type'int'.
+
+222
+00:19:45,511 --> 00:19:51,221
+The second is false and that has
+definitely type Boolean But then, those
+
+223
+00:19:51,221 --> 00:19:55,715
+two types don't match at this level So
+what do we do?
+
+224
+00:19:55,715 --> 00:20:01,671
+Let us look back at the arrow key here.
+So we see that we have Int here and we
+
+225
+00:20:01,671 --> 00:20:07,190
+have Boolean here, but both of these
+values are also values of the supertype.
+
+226
+00:20:07,190 --> 00:20:12,346
+So that will be either AnyVal or Any.
+And in this case AnyVal is better.
+
+227
+00:20:12,346 --> 00:20:18,155
+It conveys more information than Any.
+So the type check actually picked the type
+
+228
+00:20:18,155 --> 00:20:24,110
+that matched both of these values, AnyVal
+in that case, and that was as specific as
+
+229
+00:20:24,110 --> 00:20:27,668
+possible.
+So that's why the type checker answered
+
+230
+00:20:27,668 --> 00:20:28,540
+with AnyVal.

@@ -1,0 +1,1159 @@
+1
+00:00:00,000 --> 00:00:05,638
+The first three weeks courses have focused
+on functions, classes, data items, and a
+
+2
+00:00:05,638 --> 00:00:10,452
+model how they are evaluated.
+In this week, we are going to concentrate
+
+3
+00:00:10,452 --> 00:00:14,165
+more on types.
+That is the way the compiler sees these
+
+4
+00:00:14,165 --> 00:00:18,498
+classes and functions.
+In particular, we're going to learn about
+
+5
+00:00:18,498 --> 00:00:21,730
+fundamental ways to abstract and compose
+types.
+
+6
+00:00:21,730 --> 00:00:25,431
+The principal concept here is type
+parameterization.
+
+7
+00:00:25,431 --> 00:00:31,267
+Type parameterization means that classes
+as well as methods can now have types as
+
+8
+00:00:31,267 --> 00:00:34,826
+parameters.
+The running example for this week is a
+
+9
+00:00:34,826 --> 00:00:39,524
+data structure which is fundamental for
+many functional languages.
+
+10
+00:00:39,524 --> 00:00:44,080
+That's the immutable list that's built
+from individual consoles.
+
+11
+00:00:44,820 --> 00:00:51,667
+Over the last sessions we have seen quite
+a few different forms of types.
+
+12
+00:00:51,667 --> 00:00:59,360
+From simple types such as int or double,
+to class types such as rational and inset.
+
+13
+00:00:59,360 --> 00:01:06,806
+What we're going to see this week is more
+flexible ways to express and parameterize
+
+14
+00:01:06,806 --> 00:01:09,820
+types.
+This is called polymorphism.
+
+15
+00:01:09,820 --> 00:01:16,076
+So as a motivating example lets looks at
+the data structure that's been fundamental
+
+16
+00:01:16,076 --> 00:01:21,811
+in many functional languages from the
+beginnings of list, its called the cons
+
+17
+00:01:21,811 --> 00:01:25,089
+list.
+So cons list is an immutable link list
+
+18
+00:01:25,089 --> 00:01:31,345
+constructed from two building blocks. The
+empty list which we call mill and the cell
+
+19
+00:01:31,345 --> 00:01:37,527
+that contains first element of the list
+and a pointer reference to the rest of the
+
+20
+00:01:37,527 --> 00:01:41,412
+list, that is called cons.
+Let's look at some examples.
+
+21
+00:01:41,412 --> 00:01:44,952
+The list one, two, three could be drawn as
+follows.
+
+22
+00:01:44,952 --> 00:01:49,069
+You would have a first Cons cell that
+contains the one.
+
+23
+00:01:49,069 --> 00:01:53,547
+And a reference to the next Cons cell that
+contains the two.
+
+24
+00:01:53,547 --> 00:01:57,665
+And a reference to a Cons cell that
+contains the three.
+
+25
+00:01:57,665 --> 00:02:02,793
+And finally, this right field is nil.
+Here's a somewhat more complicated
+
+26
+00:02:02,793 --> 00:02:05,899
+example.
+A list containing two nested lists.
+
+27
+00:02:05,899 --> 00:02:11,606
+So that could be visualized as follows.
+We would have here, let's start with the
+
+28
+00:02:11,606 --> 00:02:15,600
+list that contains true.
+And false,
+
+29
+00:02:19,720 --> 00:02:23,173
+That would be the first element of the
+outer list.
+
+30
+00:02:23,380 --> 00:02:28,368
+Then there would be another list which is
+three and nil.
+
+31
+00:02:28,368 --> 00:02:37,040
+That will be the second element and then
+we would connect those two lists like
+
+32
+00:02:37,040 --> 00:02:42,080
+that.
+And,
+
+33
+00:02:42,500 --> 00:02:48,747
+We would finally, get a little here.
+So that would be, the list, list of true,
+
+34
+00:02:48,747 --> 00:02:54,320
+false, and the list of three here.
+So you see the general principle.
+
+35
+00:02:54,320 --> 00:02:59,770
+The question now is, how do we write that
+as a class heirarchy in Scala?
+
+36
+00:02:59,770 --> 00:03:05,604
+Okay, so here's an outline of a class
+heirarchy that would represent list of
+
+37
+00:03:05,604 --> 00:03:10,440
+integers in this fashion.
+We would start with a base trait, call it
+
+38
+00:03:10,440 --> 00:03:16,273
+IntList and two subclasses, Cons and Nil
+Cons subclass takes a head which is an
+
+39
+00:03:16,273 --> 00:03:22,338
+integer, the first element of the list,
+and a tail which is the remainder of the
+
+40
+00:03:22,338 --> 00:03:26,560
+list of Type intList and extends IntList
+The Nil class,
+
+41
+00:03:26,560 --> 00:03:30,469
+Representing the empty list, simply
+extends inclist.
+
+42
+00:03:30,469 --> 00:03:36,217
+And, we will have to fill in the dots
+here, to show what methods are in this
+
+43
+00:03:36,217 --> 00:03:39,897
+class hierarchy and how we would implement
+them.
+
+44
+00:03:39,897 --> 00:03:45,952
+Now, there is one piece of new syntax
+here, I have written directly val head int
+
+45
+00:03:45,952 --> 00:03:50,704
+and val tail inclist.
+What that does is, it defines at the same
+
+46
+00:03:50,704 --> 00:03:56,760
+time a parameter of the class and a field
+value definition in the class itself.
+
+47
+00:03:58,180 --> 00:04:04,827
+So the parameters that you see here are in
+fact equivalent to two fields, head and
+
+48
+00:04:04,827 --> 00:04:10,906
+tail, that I initialized by parameters
+that have some other name that's not
+
+49
+00:04:10,906 --> 00:04:16,337
+otherwise used in the program.
+So you can always express the val
+
+50
+00:04:16,337 --> 00:04:22,822
+parameters in, in this way but of course
+val parameters are much more concise so
+
+51
+00:04:22,822 --> 00:04:30,089
+they're preferred as a syntax form.
+But there's actually one other problem
+
+52
+00:04:30,089 --> 00:04:35,661
+with our type hierarchy, and that's that
+it's way too narrow to define on the list
+
+53
+00:04:35,661 --> 00:04:39,602
+with int elements.
+If we do it that way we'ld need another
+
+54
+00:04:39,602 --> 00:04:44,494
+class hierarchy for double lists, and one
+for list of booleans and so on.
+
+55
+00:04:44,494 --> 00:04:48,774
+One for each possible element type so lets
+clear an unscalable.
+
+56
+00:04:48,774 --> 00:04:54,210
+What we need to do is generalize the
+definition and we can do that using a type
+
+57
+00:04:54,210 --> 00:04:57,666
+parameter.
+So as an outline, what we're going to do
+
+58
+00:04:57,666 --> 00:05:03,518
+is, we're going to define now a base trait
+list, which takes a type parameter t.
+
+59
+00:05:03,518 --> 00:05:07,270
+So type parameters are written, in square
+brackets.
+
+60
+00:05:07,270 --> 00:05:13,062
+And that base trait list of T would have
+two subclasses, cons and middle.
+
+61
+00:05:13,062 --> 00:05:18,936
+Both of them are again parametrized.
+Also we call their type parameters T.
+
+62
+00:05:18,936 --> 00:05:25,453
+And in the case of cons we would now have
+a head element that is of type T, no
+
+63
+00:05:25,453 --> 00:05:31,407
+longer imp, but the parameter T.
+And a tail element that is of type list of
+
+64
+00:05:31,407 --> 00:05:34,705
+T.
+And cons of T itself extends list of T.
+
+65
+00:05:34,705 --> 00:05:40,740
+The middle class is analogous, so middle
+of T would simply extend list of T.
+
+66
+00:05:40,740 --> 00:05:47,045
+What we're going to do now is flesh out
+this hierarchy, adding the necessary
+
+67
+00:05:47,045 --> 00:05:53,101
+methods and the implementations.
+And we're going to do that using Eclipse
+
+68
+00:05:53,101 --> 00:05:57,083
+again.
+So what I'm going to do is create a Scala
+
+69
+00:05:57,083 --> 00:06:04,182
+trait, call it list.
+And the first thing I will do is add, the
+
+70
+00:06:04,182 --> 00:06:10,280
+type parameter, to, list, t.
+We could have any name, but, if this is
+
+71
+00:06:10,280 --> 00:06:15,140
+just a single type parameter at play, t is
+quite common.
+
+72
+00:06:15,140 --> 00:06:19,178
+So what methods should, we put into that
+trait?
+
+73
+00:06:19,178 --> 00:06:22,886
+Well, there seem to be three fundamental
+ones.
+
+74
+00:06:22,886 --> 00:06:28,903
+The first method is, we need to
+distinguish between whether the list is a
+
+75
+00:06:28,903 --> 00:06:34,260
+Cons cell the empty list.
+So let's call this method is empty.
+
+76
+00:06:34,260 --> 00:06:38,384
+Of type Boolean.
+So that tells us what kind of list we
+
+77
+00:06:38,384 --> 00:06:41,821
+have.
+Second method would be if we have a non
+
+78
+00:06:41,821 --> 00:06:48,007
+empty list, then we would be interested
+what is the first element of that list, so
+
+79
+00:06:48,007 --> 00:06:52,972
+that would be head as a method name, and
+what should it's type be?
+
+80
+00:06:52,972 --> 00:06:57,631
+Well, it would be element type of the
+list, so that would be T.
+
+81
+00:06:57,631 --> 00:07:03,435
+And finally, the last method would be
+tail, which gives us the remaining list
+
+82
+00:07:03,435 --> 00:07:10,597
+and its type would be list of T.
+Good, now that we have fleshed out the
+
+83
+00:07:10,597 --> 00:07:17,708
+base trait, let's go the implementations.
+First implementation would be the class
+
+84
+00:07:17,708 --> 00:07:24,020
+cons, which takes the type parameter t and
+head and tail as you've seen.
+
+85
+00:07:25,840 --> 00:07:35,024
+And it's an extension of list of T and
+what do we need to implement, well let's
+
+86
+00:07:35,024 --> 00:07:41,087
+start is MT.
+If a console is empty is always false
+
+87
+00:07:41,087 --> 00:07:46,750
+because consoles are never empty.
+What about the other two?
+
+88
+00:07:46,750 --> 00:07:51,367
+Definitions head and tail.
+Well actually, we have already implemented
+
+89
+00:07:51,367 --> 00:07:55,101
+them using the parameter names here.
+So the vowel had T.
+
+90
+00:07:55,101 --> 00:08:00,329
+T is actually a legal implementation for
+the method head t in the base class.
+
+91
+00:08:00,329 --> 00:08:04,131
+And the same holds for the tail value that
+we have here.
+
+92
+00:08:04,131 --> 00:08:09,699
+Oh, I just forgot, we have to put the tail
+value here in front because otherwise, it
+
+93
+00:08:09,699 --> 00:08:13,230
+wouldn't count as a field, and it wouldn't
+implement.
+
+94
+00:08:13,230 --> 00:08:17,392
+So what that shows is that in, Scala val
+definitions.
+
+95
+00:08:17,392 --> 00:08:22,539
+So field definitions in classes are really
+special cases of methods.
+
+96
+00:08:22,539 --> 00:08:28,670
+And they can override methods, and they
+can implement abstract methods and traits.
+
+97
+00:08:28,670 --> 00:08:34,195
+The difference between eval and the def
+concerns only the initialization.
+
+98
+00:08:34,195 --> 00:08:38,358
+Eval is evaluated when the object is first
+initialized.
+
+99
+00:08:38,358 --> 00:08:42,900
+Where, whereas a def is evaluated each
+time it is referenced.
+
+100
+00:08:42,900 --> 00:08:49,660
+So now we have cons.
+Let's look at the final one, Nil.
+
+101
+00:08:51,460 --> 00:08:59,286
+Nil of T also extends list of T and we
+have to implement the three methods.
+
+102
+00:08:59,286 --> 00:09:05,980
+What should this empty be?
+Well for Nil that would always be true.
+
+103
+00:09:05,980 --> 00:09:12,340
+What should head be?
+Well the problem with head is that we
+
+104
+00:09:12,340 --> 00:09:20,183
+cannot take the head of an empty list.
+So we should do is draw an exception, is
+
+105
+00:09:20,183 --> 00:09:28,328
+actually a handy exception in java code.
+No such element exception which we could
+
+106
+00:09:28,328 --> 00:09:36,472
+throw here and we can give it a message
+which says well you just hit nil.head.
+
+107
+00:09:36,472 --> 00:09:41,500
+So new no such element exception and
+finally tail.
+
+108
+00:09:42,880 --> 00:09:48,344
+Would be the same thing.
+We cannot also, cannot take the remainder
+
+109
+00:09:48,344 --> 00:09:53,005
+of an empty list.
+So, it would also throw a no such element
+
+110
+00:09:53,005 --> 00:09:56,862
+exception.
+What is the type of head and tails?
+
+111
+00:09:56,862 --> 00:10:03,612
+Well, you've learned that throw exception
+has type nothing and that then is also the
+
+112
+00:10:03,612 --> 00:10:09,880
+inferred type of head and tails so to be
+explicit, we could try that like this.
+
+113
+00:10:14,200 --> 00:10:19,903
+And then, we also see why that works,
+because head is, now is type nothing.
+
+114
+00:10:19,903 --> 00:10:26,002
+Nothing is a subtype of any other type,
+including T, so it's perfectly okay to
+
+115
+00:10:26,002 --> 00:10:32,260
+have a head definition here that returns
+nothing and that can implement a head,
+
+116
+00:10:32,497 --> 00:10:38,913
+abstract method in the trait list that
+returns a T, simply because a nothing is a
+
+117
+00:10:38,913 --> 00:10:42,320
+T, a nothing is a subtype of any other
+type.
+
+118
+00:10:42,320 --> 00:10:45,042
+Good.
+So, that was our implementation of lists,
+
+119
+00:10:45,042 --> 00:10:49,944
+which relied on the fact that we could
+parameter as classes with type parameters.
+
+120
+00:10:49,944 --> 00:10:54,603
+Type parameters are there not only for
+classes, but we can apply them also to
+
+121
+00:10:54,603 --> 00:10:57,508
+functions.
+So, functions can have type parameters.
+
+122
+00:10:57,508 --> 00:11:01,985
+For instance, here's a function that
+creates a list consisting of a single
+
+123
+00:11:01,985 --> 00:11:05,666
+element.
+So we would write def singleton and it
+
+124
+00:11:05,666 --> 00:11:12,142
+takes a element of the type of the list.
+And again that could be any type, so we
+
+125
+00:11:12,142 --> 00:11:16,322
+parametrize here singleton with a type
+parameter T.
+
+126
+00:11:16,322 --> 00:11:23,424
+And the body of the singleton is that
+simply creates a new Cons cell. it passes
+
+127
+00:11:23,424 --> 00:11:29,102
+on the type parameter T to say well, it
+needs to be a, a Cons cell of type T.
+
+128
+00:11:29,102 --> 00:11:35,480
+Its first element is elem and its tail is
+an empty list and it's an empty list of
+
+129
+00:11:35,480 --> 00:11:39,543
+element type T.
+The same T as the Cons cell. And if we do
+
+130
+00:11:39,543 --> 00:11:43,843
+that, we can then write singleton, and we
+can pass the type along.
+
+131
+00:11:43,843 --> 00:11:48,816
+So we want a singleton of type int now and
+the actual value should be one.
+
+132
+00:11:48,816 --> 00:11:52,310
+And that would give us, of course, the
+singleton list.
+
+133
+00:11:52,310 --> 00:11:59,432
+One and nil.
+Or the other one would be, that Singerton
+
+134
+00:11:59,432 --> 00:12:08,727
+lists ture and Nil. So we can create lists
+like that by passing in first the type
+
+135
+00:12:08,727 --> 00:12:15,577
+parameter and then the value parameter.
+In fact, the type parameters are often
+
+136
+00:12:15,577 --> 00:12:21,118
+redundant, because the Scala compiler can
+usually deduce the correct type parameter
+
+137
+00:12:21,118 --> 00:12:24,390
+from the value arguments of a function
+call here.
+
+138
+00:12:24,390 --> 00:12:29,932
+So, for instance, for the singleton,
+examples you could also write simply
+
+139
+00:12:29,932 --> 00:12:34,351
+singleton of one.
+And, the compiler would infer that this is
+
+140
+00:12:34,351 --> 00:12:40,417
+a singleton of type Int. Simply because,
+it knows that the constant one is of type
+
+141
+00:12:40,417 --> 00:12:43,862
+Int so Int is the best fitting parameter
+type.
+
+142
+00:12:43,862 --> 00:12:49,405
+And, the same way, it could infer that
+singleton of True has type parameter
+
+143
+00:12:49,405 --> 00:12:53,000
+boolean because, True is a value of type
+Boolean.
+
+144
+00:12:53,000 --> 00:12:57,959
+So that gives us a quite significant
+simplification of notation.
+
+145
+00:12:57,959 --> 00:13:01,288
+Where, then, the types really get out of
+the way.
+
+146
+00:13:01,288 --> 00:13:07,452
+They're not in your face anymore but they
+do in the background what needs to happen.
+
+147
+00:13:07,452 --> 00:13:12,978
+So when I drew data structures like this,
+Then in fact the actual type Int and
+
+148
+00:13:12,978 --> 00:13:16,378
+boolean doesn't form part of the data
+structure,
+
+149
+00:13:16,378 --> 00:13:21,288
+It's not stored anywhere.
+And that's a principle that affects all of
+
+150
+00:13:21,288 --> 00:13:25,009
+evaluation.
+So it turns out that type parameters do
+
+151
+00:13:25,009 --> 00:13:30,702
+not affect evaluation in Scala at all.
+So, to use our substitution model, we can
+
+152
+00:13:30,702 --> 00:13:36,321
+simply assume that all type parameters and
+type arguments are removed before
+
+153
+00:13:36,321 --> 00:13:41,578
+evaluating the program.
+Otherwise said, pipes are only important
+
+154
+00:13:41,578 --> 00:13:47,128
+for the compiler to verify that the
+program satisfies certain correctness
+
+155
+00:13:47,128 --> 00:13:51,440
+properties, but they're not relevant for
+the actual execution.
+
+156
+00:13:51,440 --> 00:13:56,979
+That's a property which is called type
+erasure so types erased at run-time.
+
+157
+00:13:56,979 --> 00:14:01,327
+And it's a property that some languages
+have and others don't.
+
+158
+00:14:01,327 --> 00:14:07,007
+So, if we look at the camp of languages
+that use type erasure, then we'll see Java
+
+159
+00:14:07,007 --> 00:14:10,934
+and also Scala.
+And functional languages such as Haskell,
+
+160
+00:14:10,934 --> 00:14:15,211
+ML or OCaml.
+But other languages actually keep the type
+
+161
+00:14:15,211 --> 00:14:20,050
+parameters around at run time.
+So for those languages, type parameters.
+
+162
+00:14:20,050 --> 00:14:27,323
+Would affect run time behavior, so those
+languages include c++ and languages in
+
+163
+00:14:27,323 --> 00:14:33,652
+the.NET family, such as C# or F#.
+So what we've seen here is a form of
+
+164
+00:14:33,652 --> 00:14:37,699
+polymorphism.
+Polymorphism is a Greek word and its
+
+165
+00:14:37,699 --> 00:14:43,644
+original meaning was having many forms.
+So applied to a function, it means that
+
+166
+00:14:43,644 --> 00:14:48,597
+the function can be applied to arguments
+of many different types.
+
+167
+00:14:48,597 --> 00:14:54,618
+Applied to a class or a type, it means
+that the type can have instances of many
+
+168
+00:14:54,618 --> 00:14:58,428
+different types.
+In fact, what we have seen are two
+
+169
+00:14:58,428 --> 00:15:03,230
+principle forms of polymorphism, namely
+sub typing and generics.
+
+170
+00:15:03,230 --> 00:15:09,197
+So sub-typing means that instances of a
+sub-class can be base, passed to a base
+
+171
+00:15:09,197 --> 00:15:12,370
+class.
+So, for instance, in the case of list.
+
+172
+00:15:12,370 --> 00:15:18,163
+I would have two subtypes.
+One was the class new, and the other was
+
+173
+00:15:18,163 --> 00:15:22,210
+the class cons.
+And wherever I would have a parameter that
+
+174
+00:15:22,210 --> 00:15:25,639
+accepts a list that could pass either a
+nil or a cons.
+
+175
+00:15:25,639 --> 00:15:29,750
+That which would be.
+Just as just as good as, as a channelist.
+
+176
+00:15:29,750 --> 00:15:35,006
+So that means that it is a form of
+polymorphism that it could have one of
+
+177
+00:15:35,006 --> 00:15:39,126
+those two forms.
+The other form of polymorphism we've seen
+
+178
+00:15:39,126 --> 00:15:44,879
+was generics where we can create many
+instances of a function or a class by type
+
+179
+00:15:44,879 --> 00:15:48,998
+parameterization.
+So using generics we could create a list
+
+180
+00:15:48,998 --> 00:15:53,260
+of int's or a list of doubles or a list of
+list of booleans.
+
+181
+00:15:53,260 --> 00:15:58,330
+The two forms of polymorphism complement
+each other well and Scala has both of
+
+182
+00:15:58,330 --> 00:16:01,412
+them.
+Typically you would say that subtyping was
+
+183
+00:16:01,412 --> 00:16:06,868
+traditionally a form that object-oriented
+languages had first whereas generics was a
+
+184
+00:16:06,868 --> 00:16:11,735
+form that functional languages had first.
+So let's do an exercise.
+
+185
+00:16:11,735 --> 00:16:18,239
+Given our definition of lists, write a
+function nth that takes an integer n and
+
+186
+00:16:18,239 --> 00:16:22,273
+the list and selects the nth element of
+the list.
+
+187
+00:16:22,273 --> 00:16:27,377
+So we assume that elements in the list are
+numbered from zero.
+
+188
+00:16:27,377 --> 00:16:34,210
+So the first element in the list has index
+zero, the second has index one, and so on.
+
+189
+00:16:34,210 --> 00:16:40,041
+The other specification is that if an
+index is outside the range from zero up to
+
+190
+00:16:40,041 --> 00:16:45,800
+the length of the list minus one, so it's
+outside range, then you should throw an
+
+191
+00:16:45,800 --> 00:16:53,876
+index out of bounds exception.
+So let's see how we would solve the
+
+192
+00:16:53,876 --> 00:16:57,465
+exercise.
+I have here our implementation of lists.
+
+193
+00:16:57,465 --> 00:17:01,640
+What I want to do is create a worksheet in
+which I could.
+
+194
+00:17:01,980 --> 00:17:05,603
+Implement this method.
+Call it Nth.
+
+195
+00:17:05,603 --> 00:17:13,702
+So I want to import in the worksheet what
+we have defined in the list class.
+
+196
+00:17:13,702 --> 00:17:18,222
+And I want to define a method.
+.
+
+197
+00:17:18,222 --> 00:17:22,854
+Call it nth that takes an index of type
+int.
+
+198
+00:17:22,854 --> 00:17:29,381
+And a list of type, list of.
+Well, we want to be flexible in the
+
+199
+00:17:29,381 --> 00:17:35,171
+element type.
+So that should be a type parameter of our
+
+200
+00:17:35,171 --> 00:17:40,120
+nth method.
+Have to return an element of type t.
+
+201
+00:17:41,620 --> 00:17:49,123
+So how do we implement that method?
+Well one good way to do it would be to ask
+
+202
+00:17:49,123 --> 00:17:55,015
+whether the.
+Index n equals zero and if it is then we
+
+203
+00:17:55,015 --> 00:18:01,566
+would have the answer immediately we could
+just return xs.head first element of x.
+
+204
+00:18:01,566 --> 00:18:05,959
+On the other hand if xn is not zero then
+what do we do.
+
+205
+00:18:05,959 --> 00:18:12,510
+Well the idea then is would be to say well
+to take say the third element end of a
+
+206
+00:18:12,510 --> 00:18:16,374
+list.
+That would be the same as taking the
+
+207
+00:18:16,374 --> 00:18:20,494
+second element of the remainder of the
+list.
+
+208
+00:18:20,494 --> 00:18:24,707
+So we would do an nth of n minus one as
+the index.
+
+209
+00:18:24,707 --> 00:18:34,752
+And x as [inaudible] as the list argument.
+Okay, so now we have to find M.
+
+210
+00:18:34,752 --> 00:18:57,380
+Let's test it.
+Let's do a list ,, .
+
+211
+00:18:58,380 --> 00:19:08,971
+So we have to find the list one two three
+And lets do n of two in the list.
+
+212
+00:19:08,971 --> 00:19:17,052
+What could we expect Well, It's three
+because we have arranged the elements in a
+
+213
+00:19:17,052 --> 00:19:21,781
+list, starting from zero.
+So, the one element will be at index zero,
+
+214
+00:19:21,781 --> 00:19:27,092
+two at index one, three at index two.
+So far so good, but, there was another
+
+215
+00:19:27,092 --> 00:19:33,204
+part of it, and that says well, what do we
+do if the index is not in the range of the
+
+216
+00:19:33,204 --> 00:19:36,260
+list.
+So, that would be something like that.
+
+217
+00:19:36,740 --> 00:19:40,510
+.
+And here we see a.
+
+218
+00:19:40,510 --> 00:19:44,501
+Java you till no such element exception
+nil.tail.
+
+219
+00:19:44,501 --> 00:19:49,308
+That's an exception alright, but it's not
+the one we wanted.
+
+220
+00:19:49,308 --> 00:19:54,766
+The exercise said we should return an
+index out of bound exception.
+
+221
+00:19:54,766 --> 00:19:59,899
+So what do we do here?
+Well, we have to change our definition of
+
+222
+00:19:59,899 --> 00:20:04,054
+Nth to guard against index out of bound
+exceptions.
+
+223
+00:20:04,054 --> 00:20:10,408
+So what we need to do is change the
+definition of Nth to take account of this
+
+224
+00:20:10,408 --> 00:20:16,525
+behavior with exceptions.
+So the idea here is to say well, if our
+
+225
+00:20:16,525 --> 00:20:24,392
+list is empty then we can essentially, not
+select any element no matter what the
+
+226
+00:20:24,392 --> 00:20:29,014
+index.
+So we have to catch this case beforehand.
+
+227
+00:20:29,014 --> 00:20:37,176
+So what I would do here is I would say, if
+X is empty then we throw a new index out
+
+228
+00:20:37,176 --> 00:20:41,180
+of bounds.
+The exception.
+
+229
+00:20:50,200 --> 00:20:54,007
+And now we see the, worksheet behaves as
+we want.
+
+230
+00:20:54,245 --> 00:21:00,750
+Nth minus one of list will throw an index
+out of bound exception, and I would hope
+
+231
+00:21:00,750 --> 00:21:04,716
+that nth and four of list would do the
+same thing.
+
+232
+00:21:04,716 --> 00:21:08,604
+Yes, it does.
+Index out of bound exception in both
