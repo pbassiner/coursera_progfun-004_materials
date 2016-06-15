@@ -1,0 +1,633 @@
+1
+00:00:00,000 --> 00:00:06,086
+In this session we'll take a quick detour
+from the general topic of working with
+
+2
+00:00:06,086 --> 00:00:11,796
+lists by introducing a new class of data
+structures, namely pairs and tuples.
+
+3
+00:00:11,796 --> 00:00:17,957
+You'll see how pairs and tuples can help
+in program composition and decomposition,
+
+4
+00:00:17,957 --> 00:00:22,090
+and you'll see that by using a somewhat
+larger example.
+
+5
+00:00:22,090 --> 00:00:27,638
+We're going to demonstrate the material in
+this session with a somewhat larger
+
+6
+00:00:27,638 --> 00:00:31,435
+example.
+The task is to define a function to sort
+
+7
+00:00:31,435 --> 00:00:34,940
+lists that's more efficient than insertion
+sort.
+
+8
+00:00:34,940 --> 00:00:39,498
+One good algorithm that's particular
+suitable for a functional list
+
+9
+00:00:39,498 --> 00:00:44,190
+implementation is merge sort.
+The idea behind merge sort is as follows:
+
+10
+00:00:44,190 --> 00:00:49,285
+if a list consists of zero or one
+elements, it's obviously already sorted so
+
+11
+00:00:49,285 --> 00:00:53,420
+there's nothing to do.
+Otherwise, we separate the lists into two
+
+12
+00:00:53,420 --> 00:00:58,288
+sub lists each containing around half of
+the elements of the original list.
+
+13
+00:00:58,288 --> 00:01:03,739
+An easy way to do that would be to simply
+take the first n elements of the list and
+
+14
+00:01:03,739 --> 00:01:08,412
+then the second n element of the lists if
+the lengths of the list is 2n.
+
+15
+00:01:08,412 --> 00:01:13,539
+Once we have the two sub lists we sort
+them each in turn and then we merge the
+
+16
+00:01:13,539 --> 00:01:16,590
+two sorted sub lists into a single sorted
+list.
+
+17
+00:01:16,590 --> 00:01:20,440
+To see the algorithm in code, look at this
+function here.
+
+18
+00:01:20,440 --> 00:01:23,749
+So we would have a function msort for
+merge sort.
+
+19
+00:01:23,749 --> 00:01:29,490
+It takes a list of Ints for the moment we
+restrict ourselves to lists of a single
+
+20
+00:01:29,490 --> 00:01:34,826
+type, and it returns a list of Ints The
+first thing is the splitting, so we take
+
+21
+00:01:34,826 --> 00:01:38,657
+the length of the list divided by two,
+that's our n.
+
+22
+00:01:38,657 --> 00:01:44,839
+If n is zero than, than the original
+length was zero or one, because division
+
+23
+00:01:44,839 --> 00:01:49,282
+truncates towards zero.
+In both of these cases, the list is
+
+24
+00:01:49,282 --> 00:01:53,620
+already sorted so we can simply return it.
+If n is not zero,
+
+25
+00:01:53,620 --> 00:01:59,134
+Then what we do is we split the list at
+point N so we'll get to split that
+
+26
+00:01:59,134 --> 00:02:03,730
+function in a moment.
+It returns essentially the first half of
+
+27
+00:02:03,730 --> 00:02:09,811
+the list and the second half of the list.
+Then we sort both of these halfs with the
+
+28
+00:02:09,811 --> 00:02:14,548
+recursive call to msort and finally we
+merge the two sorted lists.
+
+29
+00:02:14,548 --> 00:02:20,629
+The definition of merge is here, is a
+function that takes two lists of Ints and
+
+30
+00:02:20,629 --> 00:02:23,740
+we have left out its implementation so
+far.
+
+31
+00:02:24,160 --> 00:02:29,410
+So if we look at an implementation of
+merge, then here's a possible one.
+
+32
+00:02:29,410 --> 00:02:35,269
+We're going to improve that later.
+So merge takes two lists of Ints and it
+
+33
+00:02:35,269 --> 00:02:40,692
+would proceed by a pattern match.
+First, on the left list, so if the left
+
+34
+00:02:40,692 --> 00:02:44,915
+list is nil.
+Then the merge must consist of all the
+
+35
+00:02:44,915 --> 00:02:48,258
+elements of the right list so we return
+ys.
+
+36
+00:02:48,258 --> 00:02:54,867
+If the left list is not Nil so let's say
+consists of head element x followed by a
+
+37
+00:02:54,867 --> 00:02:58,676
+tail xs1,
+Then we do a pattern match on the right
+
+38
+00:02:58,676 --> 00:03:03,419
+hand list the ys.
+If that is nil then we can simply return
+
+39
+00:03:03,419 --> 00:03:06,840
+xs.
+If that is not nil then we have two head
+
+40
+00:03:06,840 --> 00:03:11,350
+elements x and y and two tail lists x is
+one and y is one.
+
+41
+00:03:11,350 --> 00:03:16,028
+And what we do is we compare the head
+elements with each other.
+
+42
+00:03:16,028 --> 00:03:22,191
+So if x is smaller than y, then obviously
+x must be the first element of our sorted
+
+43
+00:03:22,191 --> 00:03:28,226
+lists, so we take x followed by a merge of
+all the remaining elements are from the
+
+44
+00:03:28,226 --> 00:03:33,040
+excess list, that's excess one and all the
+elements of the ys list.
+
+45
+00:03:33,040 --> 00:03:39,079
+If, on the other hand, x is not less than
+y, then we can take y as the first element
+
+46
+00:03:39,079 --> 00:03:45,193
+of the sorted list, and we follow that by
+a merge of all the x elements followed by
+
+47
+00:03:45,193 --> 00:03:49,096
+all the other y elements that the ones
+that follow y.
+
+48
+00:03:49,096 --> 00:03:55,149
+So, that would be y is one here.
+So we've seen that the M sort algorithm
+
+49
+00:03:55,149 --> 00:04:00,530
+made use of the split-end function.
+Let's take a closer look at this one.
+
+50
+00:04:00,530 --> 00:04:06,903
+So the split it function on lists returns
+two sub lists, namely the elements of a
+
+51
+00:04:06,903 --> 00:04:12,961
+given list up to the given index and the
+elements that start from that index.
+
+52
+00:04:12,961 --> 00:04:16,974
+And those two lists are in fact returned
+in a pair.
+
+53
+00:04:16,974 --> 00:04:23,111
+Now lets take a little time to look at
+pairs and their generalization tupples.
+
+54
+00:04:23,111 --> 00:04:27,295
+A pair in Scala.
+Is written just x and y, where x and y are
+
+55
+00:04:27,295 --> 00:04:31,684
+the elements of the pair.
+So here's an example, you could form a
+
+56
+00:04:31,684 --> 00:04:34,680
+pair from the string answer and the
+number.
+
+57
+00:04:34,680 --> 00:04:38,621
+22.
+Call it pair, and the worksheet would
+
+58
+00:04:38,621 --> 00:04:44,161
+respond that we have just formed a pair of
+type string comma int in parentheses.
+
+59
+00:04:44,161 --> 00:04:49,146
+So, that's the type of this pair.
+And the value of that pair is obviously
+
+60
+00:04:49,146 --> 00:04:53,919
+the string answer, and the value 42.
+So that was a way to form pairs.
+
+61
+00:04:53,919 --> 00:04:59,571
+We can also decompose pairs using pattern
+matching, so that you see down here.
+
+62
+00:04:59,571 --> 00:05:05,077
+We can type pair and we can match it
+against the pattern that contains two
+
+63
+00:05:05,077 --> 00:05:10,583
+variables, label and value in a pair.
+And the worksheet would answer that we
+
+64
+00:05:10,583 --> 00:05:15,648
+have just defined a label which is a
+string and its value is answer.
+
+65
+00:05:15,648 --> 00:05:20,420
+And we have defined a value which is an
+int and it's value is 42.
+
+66
+00:05:20,420 --> 00:05:26,611
+This, of course, works analogously also
+for tuples with more than two elements.
+
+67
+00:05:26,611 --> 00:05:30,008
+So, you can have triples, quadruples, and
+so on.
+
+68
+00:05:30,008 --> 00:05:36,275
+So far, all the types we've encountered in
+Scala were really abbreviations for some
+
+69
+00:05:36,275 --> 00:05:40,654
+instance of a class type.
+And tuples are no exception.
+
+70
+00:05:40,654 --> 00:05:46,921
+In fact, the tuple type of t1 to tn in
+parens is just an abbreviation of the
+
+71
+00:05:46,921 --> 00:05:51,149
+parameterized type,
+Scala.tuple n of t1 to tn, with, as type
+
+72
+00:05:51,149 --> 00:05:55,913
+parameters.
+If we look at tuple expressions then E1 to
+
+73
+00:05:55,913 --> 00:06:02,885
+EN and parens is equivalent to the
+function application skeletal tuple N of
+
+74
+00:06:02,885 --> 00:06:07,039
+E1 to EN.
+And finally, a tuple pattern, p1 to pn, is
+
+75
+00:06:07,039 --> 00:06:12,356
+equivalent to the constructor pattern.
+Again, scala.tuple n p1 to pn.
+
+76
+00:06:12,356 --> 00:06:17,162
+To make that work, we have to have a look
+at the tuple class.
+
+77
+00:06:17,162 --> 00:06:23,644
+So all the tuple classes are modeled after
+the following pattern that you see here
+
+78
+00:06:23,644 --> 00:06:28,604
+for tuple two.
+It's a case class it takes t1 and t2 as
+
+79
+00:06:28,604 --> 00:06:32,790
+parameters.
+And then tuple two would have two fields
+
+80
+00:06:32,790 --> 00:06:38,137
+which are named underscore one and
+underscore two of types t1 and t2
+
+81
+00:06:38,137 --> 00:06:40,638
+respectively.
+That's almost all.
+
+82
+00:06:40,638 --> 00:06:46,374
+The only other thing we need to do is work
+on the ways tuples are represented.
+
+83
+00:06:46,595 --> 00:06:52,700
+We do not want to print them with tuple
+two so we override the two string function
+
+84
+00:06:52,700 --> 00:06:58,878
+to give us back the usual tuple syntax, so
+open parentheses followed by the field
+
+85
+00:06:58,878 --> 00:07:02,850
+separated by commas followed by a closing
+parentheses.
+
+86
+00:07:02,850 --> 00:07:08,374
+So what this definition of the case class
+shows is that the fields of a tuple can in
+
+87
+00:07:08,374 --> 00:07:13,385
+fact be accessed with names underscore
+one, underscore two, and so om up to the
+
+88
+00:07:13,385 --> 00:07:18,834
+number of elements in the pattern.
+That means that instead of the pattern
+
+89
+00:07:18,834 --> 00:07:23,186
+matching that we've seen.
+Say, now label value equals pair.
+
+90
+00:07:23,186 --> 00:07:26,614
+One could also have written label equals
+pair.<u>11.</u>
+
+91
+00:07:26,618 --> 00:07:30,799
+So the first element of the pair and value
+equals pair.<u>2.2.</u>
+
+92
+00:07:30,803 --> 00:07:37,750
+But the pattern matching form is generally
+preferred, because it's both shorter and
+
+93
+00:07:37,750 --> 00:07:43,094
+clearer.
+So, let's do an exercise.
+
+94
+00:07:43,094 --> 00:07:48,176
+The merge function we've seen so far uses
+a nested pattern match and that was rather
+
+95
+00:07:48,176 --> 00:07:53,198
+long and it was also not so nice because
+it didn't reflect the inherent symmetry of
+
+96
+00:07:53,198 --> 00:07:56,785
+the merge algorithm.
+We had, first had to do at pattern match
+
+97
+00:07:56,785 --> 00:08:01,628
+on the left-hand side and then a nested
+pattern match on the right-hand side but,
+
+98
+00:08:01,628 --> 00:08:06,470
+for merge, it doesn't really matter what
+is left-hand and what is right-hand side.
+
+99
+00:08:06,470 --> 00:08:09,224
+So.
+Let's rewrite merge using a pattern
+
+100
+00:08:09,224 --> 00:08:13,442
+matching over pairs.
+So what I want to do here is, I want to
+
+101
+00:08:13,442 --> 00:08:19,163
+have the same signature as merge, but I
+want to start off with saying, well, let's
+
+102
+00:08:19,163 --> 00:08:22,595
+form a pair of xa, ys, and then match on
+the pair.
+
+103
+00:08:22,595 --> 00:08:24,880
+So,
+How would I do that?
+
+104
+00:08:24,880 --> 00:08:29,973
+To develop an answer for this quiz let's
+use the worksheet again.
+
+105
+00:08:29,973 --> 00:08:36,341
+I've already opened a worksheet for merge
+sort and I've put the outline of the merge
+
+106
+00:08:36,341 --> 00:08:39,637
+sort function as we've seen it so far in
+it.
+
+107
+00:08:39,637 --> 00:08:44,730
+The definition of merge here is still
+missing, so let's work on that.
+
+108
+00:08:44,730 --> 00:08:49,600
+So the suggestion was, let's do a pattern
+match on the pair xs ys.
+
+109
+00:08:51,020 --> 00:08:56,966
+What kind of patterns would apply?
+Well, the first pattern that's interesting
+
+110
+00:08:56,966 --> 00:09:00,799
+is if either one of the argument lists is
+nil.
+
+111
+00:09:00,799 --> 00:09:06,645
+So the first one would be nil nys.
+In that case, if the first list x-s is
+
+112
+00:09:06,645 --> 00:09:13,101
+nil, and then the second list y-s, is just
+arbitrary, then we always return y-s,
+
+113
+00:09:13,101 --> 00:09:18,634
+because there's nothing to merge.
+Analogously, if the first list is
+
+114
+00:09:18,634 --> 00:09:23,496
+arbitrary and the second list is nil, we
+always return x-s.
+
+115
+00:09:23,496 --> 00:09:30,120
+So that leaves us with the third case,
+where we say that both lists are non-nil.
+
+116
+00:09:33,840 --> 00:09:39,007
+Let's write it like that.
+So X followed by XX1 and Y followed by
+
+117
+00:09:39,007 --> 00:09:42,237
+YS1.
+And then in that case what do we do.
+
+118
+00:09:42,237 --> 00:09:48,454
+Well, we now need to compare X and Y.
+If it's less than then we know that X is
+
+119
+00:09:48,454 --> 00:09:54,348
+the first element of our result and we
+follow that with merge XX1 and YS.
+
+120
+00:09:54,348 --> 00:09:58,708
+And if that's not the case and Y is the
+first element.
+
+121
+00:09:58,708 --> 00:10:02,180
+We then follow it with merge of XX and
+YS1.
+
+122
+00:10:07,640 --> 00:10:15,622
+And what we have here is, it complains
+that we need to give a result type, which
+
+123
+00:10:15,622 --> 00:10:20,977
+is correct.
+So now it should compile without problems,
+
+124
+00:10:20,977 --> 00:10:28,959
+and we can now apply merge sort to some
+test data, so let's define nums equals
+
+125
+00:10:28,959 --> 00:10:35,931
+list of two minus four, five, seven, one.
+Just to get some data here and we do msort
+
+126
+00:10:35,931 --> 00:10:43,820
+of nums.
+And it did sort them, the way it was
+
+127
+00:10:43,820 --> 00:10:45,240
+supposed to.

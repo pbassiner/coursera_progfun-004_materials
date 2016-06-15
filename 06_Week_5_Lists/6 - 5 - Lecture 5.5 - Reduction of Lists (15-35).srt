@@ -1,0 +1,859 @@
+1
+00:00:00,000 --> 00:00:04,863
+In this session, we'll continue our study
+of high-order list functions.
+
+2
+00:00:04,863 --> 00:00:10,283
+We'll introduce a new class of such
+functions which are called fold or reduce
+
+3
+00:00:10,283 --> 00:00:13,479
+combinators.
+There's several variance of these
+
+4
+00:00:13,479 --> 00:00:19,176
+combinators, but what they have in common
+is that they insert and give an operator
+
+5
+00:00:19,176 --> 00:00:24,457
+between adjacent elements of a list.
+Another common operation on lists is to
+
+6
+00:00:24,457 --> 00:00:28,140
+combine the element of a list using a
+given operator.
+
+7
+00:00:28,140 --> 00:00:34,224
+For instance, to take the sum of a list,
+you would put a plus between adjacent
+
+8
+00:00:34,224 --> 00:00:40,694
+elements of the list or to take a product,
+you would use, multiplication operation
+
+9
+00:00:40,694 --> 00:00:46,163
+between, adjacent elements.
+To cater for empty lists, so if n equals
+
+10
+00:00:46,163 --> 00:00:52,189
+zero, we can, we, we deal with that by
+actually taking zero plus in the sum and,
+
+11
+00:00:52,189 --> 00:00:56,808
+one times in the product.
+So each time we take the unit value of the
+
+12
+00:00:56,808 --> 00:01:00,069
+operation as a first operation here on the
+left.
+
+13
+00:01:00,069 --> 00:01:05,232
+So that way the, our definitions of sum
+and product can also deal with empty
+
+14
+00:01:05,232 --> 00:01:10,089
+lists. And that, of course, can be
+implemented with the usual recursive
+
+15
+00:01:10,089 --> 00:01:13,409
+schema,
+So could define sum takes a list of Int,
+
+16
+00:01:13,409 --> 00:01:19,197
+and gives you a an Int. If the list is
+Nil, then we return the unit element zero,
+
+17
+00:01:19,201 --> 00:01:26,205
+Otherwise, we return y plus sum ys.
+Again, you might ask how can I generalize
+
+18
+00:01:26,205 --> 00:01:31,822
+that pattern, and in fact it can be
+abstracted using the generic method
+
+19
+00:01:31,822 --> 00:01:38,468
+reduceLeft. So reduceLeft inserts a given
+binary operator between adjacent elements
+
+20
+00:01:38,468 --> 00:01:42,344
+of a list.
+So, if you have a list of from x1 to xn
+
+21
+00:01:42,344 --> 00:01:48,594
+and we say reduceLeft up and we would put
+an operator between each successive
+
+22
+00:01:48,594 --> 00:01:53,420
+elements of the list.
+If we draw that as a tree, it would look
+
+23
+00:01:53,420 --> 00:01:57,060
+like this one here,
+So we have a list of x1,
+
+24
+00:02:02,680 --> 00:02:11,558
+X2 and so on until we have the last
+operation that's the last element of the
+
+25
+00:02:11,558 --> 00:02:15,267
+list.
+Once we have reduceLeft, we can express
+
+26
+00:02:15,267 --> 00:02:20,789
+sum and product with it.
+So sum just would be take the list that
+
+27
+00:02:20,789 --> 00:02:27,218
+just starts with the zero and then
+following the list xs and reduceLeft with
+
+28
+00:02:27,218 --> 00:02:32,080
+a plus operation.
+So it would look like as thing here, would
+
+29
+00:02:32,080 --> 00:02:44,460
+be zero, X1 plus, plus x2 and so on,
+With a plus xn.
+
+30
+00:02:44,780 --> 00:02:50,863
+And product would be the same thing except
+that at the lower left corner of this tree
+
+31
+00:02:50,863 --> 00:02:55,580
+here you would have a one, and as an
+operation you would have a times.
+
+32
+00:02:59,000 --> 00:03:03,060
+By the way,
+Instead of writing, functions like this
+
+33
+00:03:03,060 --> 00:03:08,429
+one here, two parameters xy then x times
+y, Scala actually lets you write that also
+
+34
+00:03:08,429 --> 00:03:13,406
+in a shorter way using underscores.
+So you could just write, underscore times
+
+35
+00:03:13,406 --> 00:03:18,186
+underscore for this very same function.
+The idea is that every underscore
+
+36
+00:03:18,186 --> 00:03:23,424
+represents a function parameter, so if you
+have several ones, then each one would
+
+37
+00:03:23,424 --> 00:03:26,764
+represent a new parameter going from left
+to right.
+
+38
+00:03:26,764 --> 00:03:31,610
+And the parameters then are implicitly
+defined at the next out of pair of
+
+39
+00:03:31,610 --> 00:03:34,898
+parentheses.
+So that's why here you would read this
+
+40
+00:03:34,898 --> 00:03:40,410
+expression as first saying, well, this
+defines two parameters, x times y.
+
+41
+00:03:40,410 --> 00:03:46,110
+And here are my parentheses, so that's
+where I insert the parameters x and y that
+
+42
+00:03:46,110 --> 00:03:51,952
+I have just synthesized and that gives us
+precisely the function that you see here.
+
+43
+00:03:51,952 --> 00:03:56,597
+So sum and product can, in fact, be
+expressed even shorter, like this.
+
+44
+00:03:56,597 --> 00:04:01,805
+Sum would be zero followed by xs,
+reduceLeft with a binary operation plus.
+
+45
+00:04:01,805 --> 00:04:06,240
+And product would reduceLeft with a,
+binary operation times.
+
+46
+00:04:06,820 --> 00:04:12,034
+So, by its very nature, reduceLeft can
+only be applied to non-empty lists.
+
+47
+00:04:12,034 --> 00:04:18,247
+There's a more general function which is
+called foldLeft, which can also applied to
+
+48
+00:04:18,247 --> 00:04:21,890
+empty lists.
+The idea is that forwardLeft takes an
+
+49
+00:04:21,890 --> 00:04:27,818
+operation and a so called accumulator or
+zero element zet as an additional
+
+50
+00:04:27,818 --> 00:04:32,890
+parameter and that zero element would be
+returned if the list is empty.
+
+51
+00:04:32,890 --> 00:04:37,773
+So the idea here would be that you would
+use foldLeft like this.
+
+52
+00:04:37,773 --> 00:04:44,030
+Here would be a list, then you would call
+foldLeft with the zero element and then
+
+53
+00:04:44,030 --> 00:04:49,829
+you would apply the operation as an
+additional argument. And that would then
+
+54
+00:04:49,829 --> 00:04:54,942
+expand to the following tree here,
+And let's say we have the zero element and
+
+55
+00:04:54,942 --> 00:05:00,970
+x1, and that would be combined with the
+operation, and then the other operation
+
+56
+00:05:00,970 --> 00:05:10,570
+would take x2 and so on until finally the
+last topmost operation, would combined the
+
+57
+00:05:10,570 --> 00:05:16,180
+result of all the previous elements with
+the last element as right upper.
+
+58
+00:05:16,820 --> 00:05:22,538
+So, sum and product can also be defined as
+follows, using foldLeft instead of
+
+59
+00:05:22,538 --> 00:05:28,257
+reduceLeft. For sum, we say fold with a
+plus and zero element is zero, and for
+
+60
+00:05:28,257 --> 00:05:33,338
+product, we fold with a times and the unit
+element is a one.
+
+61
+00:05:33,340 --> 00:05:39,458
+So here you see some possible
+implementations of foldLeft and reduceLeft
+
+62
+00:05:39,458 --> 00:05:43,761
+as methods in class list.
+So reduceLeft, let's look at the type
+
+63
+00:05:43,761 --> 00:05:46,782
+first.
+It would take an operation that takes two
+
+64
+00:05:46,782 --> 00:05:51,556
+operands of the list element type and
+returns a result of the type and the
+
+65
+00:05:51,556 --> 00:05:55,241
+result of reduceLeft is again, the list
+element type.
+
+66
+00:05:55,241 --> 00:05:59,899
+The list must be non-empty,
+So in the case of Nil, we throw an error,
+
+67
+00:05:59,899 --> 00:06:04,071
+Nil reduceLeft.
+And if the list is non-empty, so it comes
+
+68
+00:06:04,071 --> 00:06:09,564
+just of a head x and the tail xs,
+Then, what we do is we forward to the
+
+69
+00:06:10,120 --> 00:06:14,918
+foldLeft method with a zero element x.
+So that's the element that will be
+
+70
+00:06:14,918 --> 00:06:20,550
+returned when xs is empty and the
+operation we have pass to reduceLeft.
+
+71
+00:06:20,550 --> 00:06:25,888
+Now that leaves us with foldLeft.
+So type of foldLeft is a bit more
+
+72
+00:06:25,888 --> 00:06:29,215
+complicated.
+Let's ignore it for the moment.
+
+73
+00:06:29,215 --> 00:06:33,161
+We'll get back to it.
+But let's look at the body.
+
+74
+00:06:33,161 --> 00:06:38,578
+So if the list is empty, then foldLeft
+would return its zero element.
+
+75
+00:06:38,578 --> 00:06:42,059
+Zeta.
+If the list is non-empty, then what we do
+
+76
+00:06:42,059 --> 00:06:48,292
+is, we have another call to foldLeft with
+zero element that's now the operation
+
+77
+00:06:48,292 --> 00:06:52,962
+applied to the former zero and the first
+element of the list.
+
+78
+00:06:52,962 --> 00:06:57,785
+So lets draw this.
+So, in the first iteration, foldLeft would
+
+79
+00:06:57,785 --> 00:07:03,297
+be applied recursively, with the
+accumulator of the first element of the
+
+80
+00:07:03,297 --> 00:07:06,666
+list, which I call here x1, and the
+operation.
+
+81
+00:07:06,666 --> 00:07:13,288
+Now, the second call would then apply the
+operation to the zero that we pass into
+
+82
+00:07:13,288 --> 00:07:20,172
+the second call, this, this subtree here,
+and the second element of the list and so
+
+83
+00:07:20,172 --> 00:07:27,225
+on. our accumulator grows with each
+recursive call to foldLeft, until finally
+
+84
+00:07:27,225 --> 00:07:30,463
+we are,
+Have an accumulator that looks like that.
+
+85
+00:07:30,463 --> 00:07:35,556
+And there are no further elements in the
+list, so the list is empty and in that
+
+86
+00:07:35,556 --> 00:07:40,713
+case we would return the accumulator.
+So it's a classic loop with an accumulator
+
+87
+00:07:40,713 --> 00:07:46,991
+that implements foldLeft.
+So let's look at the type of foldLeft now.
+
+88
+00:07:46,991 --> 00:07:51,501
+So, we know that the list elements are all
+of type T,
+
+89
+00:07:51,501 --> 00:07:59,140
+So I can write T: for each one of those.
+The zero can be of a different type, u.
+
+90
+00:08:00,480 --> 00:08:06,680
+Then to make things work out, because that
+subtree here is the next zero, we must
+
+91
+00:08:07,240 --> 00:08:11,213
+also have that the subtree has type u and
+so on.
+
+92
+00:08:11,213 --> 00:08:16,428
+All the subtrees have type u, up to the
+result of the foldLeft.
+
+93
+00:08:16,428 --> 00:08:21,726
+So that type annotated tree matches the
+types that you see here.
+
+94
+00:08:21,726 --> 00:08:25,037
+Type u is arbitrary,
+Zero has the type u.
+
+95
+00:08:25,037 --> 00:08:31,329
+The operation, then, must have the type
+that takes a u and a T to a u and the
+
+96
+00:08:31,329 --> 00:08:35,220
+result of the final foldLeft operation is
+a u.
+
+97
+00:08:35,220 --> 00:08:41,292
+Now we've seen that foldLeft and
+reduceLeft produce trees that lean to the
+
+98
+00:08:41,292 --> 00:08:44,682
+left.
+So it would make sense to have a dual pair
+
+99
+00:08:44,682 --> 00:08:48,799
+of operations that unfold to trees that
+lean to the right.
+
+100
+00:08:48,799 --> 00:08:51,994
+These are called foldRight and
+reduceRight.
+
+101
+00:08:51,994 --> 00:08:58,099
+Let's look at reduceRight first.
+So reduceRight puts an operator between
+
+102
+00:08:58,099 --> 00:09:03,565
+adjacent elements, but now the parentheses
+go to the right, not to the left.
+
+103
+00:09:03,565 --> 00:09:08,393
+So, visually represented as trees it would
+like, would look like this.
+
+104
+00:09:08,393 --> 00:09:15,237
+So we would have the first operation takes
+x1, and the whole result of producing a
+
+105
+00:09:15,758 --> 00:09:25,138
+foldRight of the rest of the list and at
+the end, I would xn minus one and xn here.
+
+106
+00:09:25,138 --> 00:09:31,411
+So we get a tree that leans to the right.
+Foldright is, analogous to foldLeft.
+
+107
+00:09:31,411 --> 00:09:35,105
+It takes, again, a zero element or an
+accumulator here,
+
+108
+00:09:35,105 --> 00:09:39,636
+So we would, what we would see here, it
+would be something similar.
+
+109
+00:09:39,636 --> 00:09:43,400
+It would be an operation that takes the
+first element.
+
+110
+00:09:43,400 --> 00:09:48,827
+Then the second element of the list if it
+exists, and so on, until it finally it
+
+111
+00:09:48,827 --> 00:09:53,704
+takes the final element of the list and
+combines it with the zero here.
+
+112
+00:09:53,704 --> 00:09:59,268
+So, if the list is empty, reduceRight
+would be undefined, just as reduceLeft is
+
+113
+00:09:59,268 --> 00:10:03,322
+not defined for empty lists.
+So if you look at the possible
+
+114
+00:10:03,322 --> 00:10:08,955
+implementations of reduceRight and
+foldRight and class lists, then here they
+
+115
+00:10:08,955 --> 00:10:11,951
+are.
+So for reduceRight, it takes again a
+
+116
+00:10:11,951 --> 00:10:16,878
+binary operation from T, T to T.
+Would say for empty list, it's again
+
+117
+00:10:16,878 --> 00:10:20,555
+undefined.
+If the list consist of a single element,
+
+118
+00:10:20,555 --> 00:10:24,379
+then that's the element that's going to be
+returned.
+
+119
+00:10:24,379 --> 00:10:30,263
+And otherwise, it's going to be the result
+of the operation applied to the first
+
+120
+00:10:30,263 --> 00:10:36,220
+element of the list and a recursive call
+of reduceRight to the rest of the list.
+
+121
+00:10:36,220 --> 00:10:43,804
+For foldRight, we have a small typo here,
+so it takes a type parameter which is a u
+
+122
+00:10:43,804 --> 00:10:50,812
+and a zero element of type u and then an
+operation and it's, implementation will
+
+123
+00:10:50,812 --> 00:10:56,144
+simply be for an empty list, we return
+zero element, as for foldLeft.
+
+124
+00:10:56,144 --> 00:11:02,001
+For a non-empty list, we return the
+operation that takes the headed element of
+
+125
+00:11:02,001 --> 00:11:08,084
+the list and the result of applying
+foldRight recursively to the tail of the
+
+126
+00:11:08,084 --> 00:11:11,438
+list.
+So to expand it out, if we had a non-empty
+
+127
+00:11:11,438 --> 00:11:17,642
+list, what we would get is, we would have
+the first element of the list x1 applied
+
+128
+00:11:17,642 --> 00:11:23,440
+with operation of recursively applying
+foldRight to the tail of the list.
+
+129
+00:11:23,440 --> 00:11:29,840
+So, let's say there's a second element x2,
+Again recursive call until finally we
+
+130
+00:11:29,840 --> 00:11:34,961
+would have the last element,
+Then we would hit an empty list and the
+
+131
+00:11:34,961 --> 00:11:41,361
+result of foldRight is set so you see the
+same right leaning tree that I've shown
+
+132
+00:11:41,361 --> 00:11:46,331
+you on the previous slide.
+Quickly look at types so the xn's again
+
+133
+00:11:46,331 --> 00:11:50,799
+all have type T's as before.
+The zeta is type u.
+
+134
+00:11:50,799 --> 00:11:57,367
+And then, it follows that the operations
+must also return the same type u, because
+
+135
+00:11:57,367 --> 00:12:03,368
+like the zeta, they are all used as a
+right-hand operand offer successive
+
+136
+00:12:03,368 --> 00:12:06,692
+operation.
+And then u is also the type that is
+
+137
+00:12:06,692 --> 00:12:16,432
+returned from foldRight.
+So foldLeft and foldRight produce
+
+138
+00:12:16,432 --> 00:12:19,629
+different trees,
+Left leaning trees and right leaning
+
+139
+00:12:19,629 --> 00:12:22,524
+trees,
+But maybe they produce the same result.
+
+140
+00:12:22,524 --> 00:12:25,841
+In fact, if our operator is associative
+and commutative,
+
+141
+00:12:25,841 --> 00:12:30,485
+One can show that foldLeft and foldRight
+are equivalent functionally,
+
+142
+00:12:30,485 --> 00:12:33,741
+Even though there might be a difference in
+efficiency.
+
+143
+00:12:33,741 --> 00:12:37,300
+But sometimes, only one of the two
+operators is appropriate.
+
+144
+00:12:38,660 --> 00:12:44,816
+So we see this in an exercise.
+Here is another formulation of the concat
+
+145
+00:12:44,816 --> 00:12:51,315
+function that you've seen before.
+So let's look at this in a little bit more
+
+146
+00:12:51,315 --> 00:12:55,334
+detail.
+So, what we mean here is that we have, do
+
+147
+00:12:55,334 --> 00:13:02,089
+a foldRight over a list xs with zero
+element ys and the operation is a cons.
+
+148
+00:13:02,089 --> 00:13:08,160
+So let's draw that out graphically.
+So, we would have x1 operation cons,
+
+149
+00:13:08,160 --> 00:13:14,801
+X2, operation cons, and so on,
+Until to, the end of the list operation
+
+150
+00:13:14,801 --> 00:13:18,700
+cons,
+And then we would have the list ys.
+
+151
+00:13:19,560 --> 00:13:23,375
+Okay.
+So, how can we represent the list ys?
+
+152
+00:13:23,375 --> 00:13:28,215
+How can we write that out?
+So let's delete that here.
+
+153
+00:13:28,215 --> 00:13:34,544
+Well, the way we write a list is, we write
+it as a tree of cons cells,
+
+154
+00:13:34,544 --> 00:13:45,580
+So it would be y1 cons, y2 and so on,
+until yn and Nil.
+
+155
+00:13:47,940 --> 00:13:52,718
+So what do we see here?
+Well, it's just a single list that
+
+156
+00:13:52,718 --> 00:13:57,330
+consists of element x1 to xn and then y1
+to yn.
+
+157
+00:13:57,330 --> 00:14:04,546
+So that, that shows us that, the operation
+cons here, with the ys as zero element,
+
+158
+00:14:04,546 --> 00:14:09,914
+provides exactly the list that we need for
+the concatenation.
+
+159
+00:14:09,914 --> 00:14:15,508
+Now, that was okay for foldRight.
+Can you replace foldRight by foldLeft
+
+160
+00:14:15,508 --> 00:14:18,912
+here?
+In fact, you can but you should tell us
+
+161
+00:14:18,912 --> 00:14:22,246
+what is goes wrong.
+The types might not work out,
+
+162
+00:14:22,246 --> 00:14:25,233
+The resulting function might not
+terminate,
+
+163
+00:14:25,233 --> 00:14:30,929
+Or the result might not be what you want.
+For instance, it could be the reversed of
+
+164
+00:14:30,929 --> 00:14:34,680
+the result that, that you what to have get
+back from concat.
+
+165
+00:14:40,665 --> 00:14:46,855
+.
+Okay. so, to answer this question, let's
+
+166
+00:14:46,855 --> 00:15:01,337
+simply type the definition of concat to
+our worksheet and we place foldRight by
+
+167
+00:15:01,818 --> 00:15:11,290
+foldLeft and we get the error message,
+value:: is not a member of the type
+
+168
+00:15:11,290 --> 00:15:14,953
+parameter T.
+So, what happened here was well, we do a
+
+169
+00:15:15,312 --> 00:15:19,838
+foldLleft over a list xs,
+So we apply the operation to each element
+
+170
+00:15:19,838 --> 00:15:25,871
+of that list xs and that's a T and in fact
+the operation cons is not applicable to
+
+171
+00:15:25,871 --> 00:15:29,391
+arbitrary elements, it's only applicable
+to lists.
+
+172
+00:15:29,391 --> 00:15:35,209
+So that's why what the right answer is we
+would get a type error in this case.

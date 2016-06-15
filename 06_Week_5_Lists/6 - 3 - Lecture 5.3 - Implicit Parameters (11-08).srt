@@ -1,0 +1,634 @@
+1
+00:00:00,000 --> 00:00:04,532
+This session will be concerned with
+parameterization techniques.
+
+2
+00:00:04,532 --> 00:00:09,986
+The question is how can we make a
+definition, such as mergesort more general
+
+3
+00:00:09,986 --> 00:00:14,094
+so that they can be used not for a
+singular argument type.
+
+4
+00:00:14,094 --> 00:00:19,052
+We'll see in this session how
+parameterization by either functions or
+
+5
+00:00:19,052 --> 00:00:24,222
+objects helps in this respect.
+One shortcoming of the merge-sort function
+
+6
+00:00:24,222 --> 00:00:29,110
+we've seen last session was that it can
+only be applied to list of X.
+
+7
+00:00:29,110 --> 00:00:34,804
+But it makes sense to, apply the same
+function or similar function also to lists
+
+8
+00:00:34,804 --> 00:00:39,930
+of other element types such as strings or
+doubles or booleans and so on.
+
+9
+00:00:40,146 --> 00:00:44,901
+How could we achieve that?
+Well, the most straightforward way to do
+
+10
+00:00:44,901 --> 00:00:48,070
+that would be let's parameterize merge
+sort.
+
+11
+00:00:48,070 --> 00:00:51,529
+So instead of int I have a type parameter
+T now.
+
+12
+00:00:51,529 --> 00:00:56,355
+But that wouldn't work because the
+comparison function wouldn't be
+
+13
+00:00:56,355 --> 00:00:59,381
+well-defined.
+So let's have a look at that.
+
+14
+00:00:59,381 --> 00:01:05,073
+Here I have the merge sort that we have
+defined at the end of the last session.
+
+15
+00:01:05,073 --> 00:01:09,540
+Let's just replace the int by a T, and
+make T a type parameter.
+
+16
+00:01:10,120 --> 00:01:15,592
+And the same thing here for the merge,
+which takes the type parameter of the
+
+17
+00:01:15,592 --> 00:01:18,760
+enclosing function msort, and what do we
+see?
+
+18
+00:01:18,760 --> 00:01:24,376
+Well, we see one error here, which says
+that value less is not a member of type
+
+19
+00:01:24,376 --> 00:01:28,408
+parameter T.
+Of course, now that our at least elements
+
+20
+00:01:28,408 --> 00:01:33,880
+can have an arbitrary type. We can no
+longer be sure that there is, in fact, a
+
+21
+00:01:33,880 --> 00:01:37,624
+less than function defined on elements of
+this type.
+
+22
+00:01:37,624 --> 00:01:42,983
+So what can we do?
+Well, the next refinement of our idea
+
+23
+00:01:42,983 --> 00:01:48,513
+would be to parameterize merge with the
+necessary comparison function.
+
+24
+00:01:48,513 --> 00:01:56,140
+So let's see how that would work.
+We would have a polymorphic function msort
+
+25
+00:01:56,140 --> 00:02:00,947
+with a type parameter t.
+And in addition to the list that we pass
+
+26
+00:02:00,947 --> 00:02:07,012
+to msor we also pass a less than function
+with an lt here that takes two ts and
+
+27
+00:02:07,012 --> 00:02:13,224
+returns a Boolean and the contract for LT
+would be that it should return the result
+
+28
+00:02:13,224 --> 00:02:16,848
+of comparing its two elements with the
+less than.
+
+29
+00:02:16,848 --> 00:02:21,286
+Once we have that then we have to apply LT
+in two instances.
+
+30
+00:02:21,286 --> 00:02:26,020
+Let's see how we would do that in the work
+sheet, so I have here.
+
+31
+00:02:26,020 --> 00:02:31,960
+I pass an LT, which takes two T's, and
+returns a Boolean.
+
+32
+00:02:34,440 --> 00:02:41,009
+And then I can write here, instead of x
+less than y, I can write here LT of x and
+
+33
+00:02:41,009 --> 00:02:47,228
+y, in the merge function.
+That's good, but, I have another problem
+
+34
+00:02:47,228 --> 00:02:51,128
+here.
+For the sort here, of course, I have to
+
+35
+00:02:51,128 --> 00:02:57,204
+pass the correct LT function into the two
+recursive calls of msort.
+
+36
+00:02:57,204 --> 00:03:04,187
+And finally, for the numbers here, I have
+to pass the right version of LT into
+
+37
+00:03:04,187 --> 00:03:08,359
+numbers.
+So, one way to do that would be to say,
+
+38
+00:03:08,359 --> 00:03:15,251
+well, let's take an int X and a Y, which
+is also of int, type int, and return X
+
+39
+00:03:15,251 --> 00:03:21,511
+less than Y.
+And that would compile.
+
+40
+00:03:21,511 --> 00:03:25,492
+And if we run it, we get the same result
+as before.
+
+41
+00:03:25,492 --> 00:03:31,305
+What we can do now is we can also add a
+data of another type.
+
+42
+00:03:31,305 --> 00:03:36,720
+Let's call, let's say fruits.
+That would be a list of let's say, apple.
+
+43
+00:03:38,800 --> 00:03:47,820
+Pineapple,
+Orange, and banana.
+
+44
+00:03:50,500 --> 00:03:54,154
+And we can now apply msort to the fruits
+list.
+
+45
+00:03:54,154 --> 00:03:58,602
+All we have to do is pass the right
+comparison function.
+
+46
+00:03:58,602 --> 00:04:06,836
+So this one here would take two strings.
+And it will return the result of the Java
+
+47
+00:04:06,836 --> 00:04:13,820
+call x compared to y, and that, that must
+be less than zero.
+
+48
+00:04:13,820 --> 00:04:19,127
+So compare to is a method on Java string
+which returns minus one if the first
+
+49
+00:04:19,127 --> 00:04:24,366
+string is less than the second string, a
+zero if they're equal, and one if the
+
+50
+00:04:24,366 --> 00:04:29,469
+first one is greater than second one.
+So since we want minus one, we have to
+
+51
+00:04:29,469 --> 00:04:34,157
+test here less than zero.
+Let's run the worksheet, and we see that
+
+52
+00:04:34,157 --> 00:04:39,237
+indeed, our list of fruit has been sorted
+in lexical, graphical order.
+
+53
+00:04:39,237 --> 00:04:45,138
+In fact, we can simplify the, calls here
+further, because the types of the two
+
+54
+00:04:45,138 --> 00:04:50,367
+function values are not necessary.
+We can leave them out and the Scala
+
+55
+00:04:50,367 --> 00:04:55,073
+compiler will infer them.
+So we could also write something like
+
+56
+00:04:55,073 --> 00:04:59,890
+that, and, That would give us the same
+list obviously.
+
+57
+00:04:59,890 --> 00:05:05,900
+And we could also leave the types out in
+the second function values of the strings.
+
+58
+00:05:05,900 --> 00:05:11,420
+The reason why that works is that this
+kind of compile is figure out, it's able
+
+59
+00:05:11,420 --> 00:05:17,221
+to figure out that X and Y need to have
+type int by simply analyzing the call of M
+
+60
+00:05:17,221 --> 00:05:20,226
+sort of nums, because nums is a list of
+int.
+
+61
+00:05:20,226 --> 00:05:25,677
+It will therefore know that the type
+parameter of M sort must be int and that
+
+62
+00:05:25,677 --> 00:05:30,220
+will determine in turn the types of the
+function parameters here.
+
+63
+00:05:30,413 --> 00:05:35,636
+That discussion shows that it's usually
+advantages if you have several parameter
+
+64
+00:05:35,636 --> 00:05:40,343
+lists and one of them is a function value,
+to put the function value last.
+
+65
+00:05:40,343 --> 00:05:45,696
+Cuz then you have a better chance that the
+type's already inferred by the time the
+
+66
+00:05:45,696 --> 00:05:50,661
+compiler will type check the function
+value and that means you don't have to
+
+67
+00:05:50,661 --> 00:05:54,414
+write them explicitly.
+So, so far, we have parameterized the
+
+68
+00:05:54,414 --> 00:05:59,665
+merge sort function with our own less than
+operation, which is perfectly possible,
+
+69
+00:05:59,665 --> 00:06:03,491
+but on the other hand, we could also use a
+predefined class.
+
+70
+00:06:03,491 --> 00:06:08,678
+There is already a class in the standard
+library that represents orderings with
+
+71
+00:06:08,678 --> 00:06:13,735
+less than function, but also all the
+other, all ordering functions like greater
+
+72
+00:06:13,735 --> 00:06:18,598
+than, less than or equal, and so on.
+That class is called scala.math.ordering
+
+73
+00:06:18,598 --> 00:06:21,515
+of T.
+So the type parameter T tells us what's
+
+74
+00:06:21,515 --> 00:06:25,730
+the type of the elements that are compared
+in the ordering class.
+
+75
+00:06:25,730 --> 00:06:31,148
+Instead of parameterizing with the less
+than function directly, we could also
+
+76
+00:06:31,148 --> 00:06:36,567
+parameterize msort with ordering instead.
+So, wouldn't be much that we have to
+
+77
+00:06:36,567 --> 00:06:40,261
+change.
+So in the worksheet, we'll have a look at
+
+78
+00:06:40,261 --> 00:06:43,345
+it.
+So instead of less than, we would have a
+
+79
+00:06:43,345 --> 00:06:49,732
+paramenter ord of type ordering of t.
+We should import that first.
+
+80
+00:06:49,732 --> 00:06:57,122
+Import math dot ordering.
+And then instead of the less than call
+
+81
+00:06:57,122 --> 00:07:01,726
+here we would call the less than method of
+our ordering type.
+
+82
+00:07:01,726 --> 00:07:06,480
+And instead of passing less than along, we
+can pass order along.
+
+83
+00:07:07,480 --> 00:07:14,540
+And in our, actual calls, we can now use,
+the predefined orderings, but the first
+
+84
+00:07:14,540 --> 00:07:20,087
+one would be ordering.int.
+That's the ordering on integers that is
+
+85
+00:07:20,087 --> 00:07:26,475
+defined as a value in the ordering object,
+and for the other one, it would be
+
+86
+00:07:26,475 --> 00:07:32,120
+ordering.string.
+And the results are the same as before.
+
+87
+00:07:32,120 --> 00:07:36,330
+Unsurprisingly.
+So, there's one remaining problem in.
+
+88
+00:07:36,330 --> 00:07:41,154
+Passing a round piece LT or all values are
+rather cumbersome.
+
+89
+00:07:41,391 --> 00:07:48,114
+Would be much nicer if we could somehow
+synthesize the right comparison operation
+
+90
+00:07:48,114 --> 00:07:53,730
+directly just given the type T.
+And we can make it at least appear that
+
+91
+00:07:53,730 --> 00:07:59,187
+way by avoiding passing or implicit,
+explicitly making it an implicit
+
+92
+00:07:59,187 --> 00:08:03,141
+parameter.
+So the only thing here is that we write
+
+93
+00:08:03,141 --> 00:08:08,361
+implicit ord cut orderings.
+So all I do now is I write implicit in
+
+94
+00:08:08,361 --> 00:08:11,050
+front of the.
+What parameter.
+
+95
+00:08:11,050 --> 00:08:17,622
+Nothing changes so far, but what it means
+is that I can now leave out the actual,
+
+96
+00:08:17,868 --> 00:08:23,537
+parameter in a, in a call, and the
+compiler will synthesize one for me.
+
+97
+00:08:23,537 --> 00:08:28,960
+So I can leave out the ort here, and I can
+leave out the ort there.
+
+98
+00:08:28,960 --> 00:08:35,368
+And I can even leave out arch in the
+ordering.int or the ordering of string and
+
+99
+00:08:35,368 --> 00:08:39,293
+everything would still compile and run as
+before.
+
+100
+00:08:39,293 --> 00:08:45,862
+So I can get rid, get rid of the ordering
+of string as well and its still the same
+
+101
+00:08:45,862 --> 00:08:49,627
+thing.
+So now my program is just as concise and
+
+102
+00:08:49,627 --> 00:08:54,754
+nice as in the case of list of int's but
+it is fully parametric.
+
+103
+00:08:54,754 --> 00:08:58,760
+How did that happen?
+How, how could we achieve that?
+
+104
+00:08:59,600 --> 00:09:04,969
+Well, what actually happens is that when
+you write an implicit parameter, and you
+
+105
+00:09:04,969 --> 00:09:10,137
+don't write an actual argument that
+matches that parameter, the compiler will
+
+106
+00:09:10,137 --> 00:09:14,500
+figure out the right implicit to pass,
+based on the demanded type.
+
+107
+00:09:15,240 --> 00:09:21,248
+So what are the precise rules for that?
+So let's say a function takes an implicit
+
+108
+00:09:21,248 --> 00:09:25,477
+parameter of type T.
+The compiler will then search for an
+
+109
+00:09:25,477 --> 00:09:29,854
+implicit definition.
+So that's a parameter or a vowel or an
+
+110
+00:09:29,854 --> 00:09:35,269
+object that's marked implicit.
+And that has a type that's compatible with
+
+111
+00:09:35,269 --> 00:09:38,459
+T.
+And finally, it's visible at the point of
+
+112
+00:09:38,459 --> 00:09:42,761
+the function call.
+Or it's defined in the companion object
+
+113
+00:09:42,761 --> 00:09:45,210
+associated with T.
+So in our case.
+
+114
+00:09:45,210 --> 00:09:51,595
+Here we have the first word that we left
+out here that was visible at the point of
+
+115
+00:09:51,595 --> 00:09:58,135
+the function call, because the word here
+is visible where as the orderings that we
+
+116
+00:09:58,135 --> 00:10:04,444
+left out here, they were defined in the
+companion object of the ordering class and
+
+117
+00:10:04,444 --> 00:10:08,060
+therefore also qualified as implicit
+arguments.
+
+118
+00:10:09,840 --> 00:10:14,860
+So once the compiler has done that search,
+if it comes back with a single more
+
+119
+00:10:14,860 --> 00:10:19,752
+specific definition, that definition will
+t-, be taken as the actual agrument.
+
+120
+00:10:19,752 --> 00:10:24,708
+So the arg-, that will be the synthesized
+argument for the implicit parameter.
+
+121
+00:10:24,708 --> 00:10:29,600
+And otherwise, if the compiler finds
+nothing or if it finds several possible
+
+122
+00:10:29,600 --> 00:10:36,277
+candidate definitions, then it's an error.
+So let's test your understanding with a
+
+123
+00:10:36,277 --> 00:10:40,125
+simple quiz.
+Consider the line in the definition of
+
+124
+00:10:40,125 --> 00:10:43,520
+msort where you have the two recursive
+calls.
+
+125
+00:10:44,880 --> 00:10:49,700
+So that would be this line here.
+Which.
+
+126
+00:10:50,120 --> 00:10:57,380
+Definition of ordering is implicitly
+inserted by the compiler here and here.?
+
+127
+00:10:59,380 --> 00:11:08,020
+Is it ordering.int, or ordering.string, or
+the Ord parameter of the N sort function?

@@ -1,0 +1,804 @@
+1
+00:00:00,000 --> 00:00:03,210
+This session introduces more utility
+methods on lists.
+
+2
+00:00:03,210 --> 00:00:07,908
+You'll find out what these methods do and
+where they're useful, and you'll also
+
+3
+00:00:07,908 --> 00:00:12,784
+learn how they're implemented in terms of
+the fundamental operations on lists and
+
+4
+00:00:12,784 --> 00:00:16,411
+[inaudible] matching.
+So in this session, you're going to find
+
+5
+00:00:16,411 --> 00:00:19,919
+out about more methods that are useful for
+list processing.
+
+6
+00:00:19,919 --> 00:00:24,736
+First one is the length method, so that
+gives you the number of elements that are
+
+7
+00:00:24,736 --> 00:00:27,887
+in the lists.
+You know already about head and tail, so
+
+8
+00:00:27,887 --> 00:00:32,644
+if you have a list that I'm now writing as
+essentially a contiguous sequence of
+
+9
+00:00:32,644 --> 00:00:40,583
+elements.
+Then head would be the first one here and
+
+10
+00:00:40,583 --> 00:00:49,822
+there would be rest.
+The duals of head and tail are called init
+
+11
+00:00:49,822 --> 00:00:53,698
+and last.
+So Last would, give you the last element
+
+12
+00:00:53,698 --> 00:00:57,417
+in a list.
+And Init would give you all elements
+
+13
+00:00:57,417 --> 00:01:02,883
+except for the last.
+Then there's also take and drop.
+
+14
+00:01:02,883 --> 00:01:09,870
+So take takes an arbitrary prefix of
+elements in the list, whereas drop would,
+
+15
+00:01:09,870 --> 00:01:15,558
+they could give you back all the elements
+in the list except for some prefix so it
+
+16
+00:01:15,558 --> 00:01:21,454
+would drop a number of elements from the
+beginning and then give you back the, the
+
+17
+00:01:21,454 --> 00:01:25,616
+remainder of the list.
+And finally, we can also select into a
+
+18
+00:01:25,616 --> 00:01:31,373
+list, that's written xs of n, where n is
+an index, and that's expanded, as usual,
+
+19
+00:01:31,373 --> 00:01:36,992
+to a call of the applied method of lists.
+So alternatively, we could also write xs
+
+20
+00:01:36,992 --> 00:01:41,778
+apply n, that the same thing,
+And that would give you the element of xs
+
+21
+00:01:41,986 --> 00:01:46,878
+at index n,
+Where as usual, in this is R numbered from
+
+22
+00:01:46,878 --> 00:01:50,365
+zero.
+Here are some more utility methods for
+
+23
+00:01:50,365 --> 00:01:53,821
+lists.
+You might be interested in new ways to
+
+24
+00:01:53,821 --> 00:01:58,046
+create lists.
+The first method here is concatenation,
+
+25
+00:01:58,046 --> 00:02:04,036
+it's written xs plus, plus ys and that
+gives you the list that consists of all
+
+26
+00:02:04,036 --> 00:02:07,570
+elements of xs followed by all elements of
+ys.
+
+27
+00:02:07,570 --> 00:02:12,514
+And that's reverse which, as the name
+says, will you give a list that contains
+
+28
+00:02:12,514 --> 00:02:16,848
+the elements of xs in reversed order and
+finally that's updated.
+
+29
+00:02:16,848 --> 00:02:22,402
+So updated is, in a sense the functional
+equivalent of mutable updates in an array
+
+30
+00:02:22,402 --> 00:02:27,888
+when you change an element in an array.
+Of course you know that you can't do that
+
+31
+00:02:27,888 --> 00:02:33,171
+in a list because lists are immutable.
+But what you can do, is you can return a
+
+32
+00:02:33,171 --> 00:02:38,725
+list that contains all the elements of the
+list xs here, except at a given index n
+
+33
+00:02:38,725 --> 00:02:41,570
+where the new list would contain the x.
+So.
+
+34
+00:02:41,570 --> 00:02:47,341
+It's a new list that corresponds to the
+old list the x's in all elements except
+
+35
+00:02:47,341 --> 00:02:50,020
+one.
+Besides creating, there are also two
+
+36
+00:02:50,020 --> 00:02:54,886
+functions for finding elements.
+There is indexOf, which is very much like
+
+37
+00:02:55,286 --> 00:03:00,353
+indexOf, on let's say a Java string.
+So it, finds, tries to find an element x
+
+38
+00:03:00,353 --> 00:03:06,553
+in a list xs and would give you back its
+index if, of the first occurrence of x if
+
+39
+00:03:06,553 --> 00:03:10,886
+it's found in the list and minus one if x
+does not appear in the list.
+
+40
+00:03:10,886 --> 00:03:14,553
+And then there is contains.
+So, xs x contains x,
+
+41
+00:03:14,553 --> 00:03:19,486
+Is asks whether the element x appears in
+the list of xs at all.
+
+42
+00:03:19,486 --> 00:03:24,038
+So it's the same as xs indexOf x quite are
+equal to zero.
+
+43
+00:03:24,040 --> 00:03:27,888
+Now, let's look a little bit more at the
+implementation issues.
+
+44
+00:03:27,888 --> 00:03:33,349
+We know that the we've had is simple field
+selection, so it's a very small constant
+
+45
+00:03:33,349 --> 00:03:36,598
+time.
+Can last be implemented just as
+
+46
+00:03:36,598 --> 00:03:40,563
+efficiently?
+Tail, again, is just a simple selection of
+
+47
+00:03:40,563 --> 00:03:43,916
+the, of the second field of a list,
+constant time.
+
+48
+00:03:43,916 --> 00:03:47,060
+Can it be implemented at the same
+efficiency?
+
+49
+00:03:47,060 --> 00:03:50,262
+Well, let's see first how we would
+implement last.
+
+50
+00:03:50,262 --> 00:03:55,622
+As I said, last is a method in class list,
+but to study its implementation we, we
+
+51
+00:03:55,622 --> 00:04:00,262
+might as well define it as an external
+function outside the list class.
+
+52
+00:04:00,262 --> 00:04:04,641
+If we do that, then last would have the
+signature that you see here.
+
+53
+00:04:04,641 --> 00:04:09,282
+So it takes a list of t for an arbitrary
+type t, and gives you back a t,
+
+54
+00:04:09,282 --> 00:04:11,570
+The element type of the list.
+And t,
+
+55
+00:04:11,570 --> 00:04:16,760
+Usual implementation of last would be to
+say well let's see what the list is.
+
+56
+00:04:16,760 --> 00:04:22,085
+Last of an empty list should give you an
+error just like head of an empty list
+
+57
+00:04:22,085 --> 00:04:26,129
+gives you an error.
+Last of a list that contains a single
+
+58
+00:04:26,129 --> 00:04:31,657
+element would give you just that element.
+And finally, last of a list that consists
+
+59
+00:04:31,657 --> 00:04:36,780
+of a head followed by some tail would give
+you the last element of the tail.
+
+60
+00:04:38,200 --> 00:04:43,109
+So we see, by looking at this
+implementation, that last takes a number
+
+61
+00:04:43,109 --> 00:04:46,666
+of steps that's proportional to the length
+of xs.
+
+62
+00:04:46,666 --> 00:04:51,220
+We need to take one recursion for each
+element in the list here.
+
+63
+00:04:52,600 --> 00:04:55,622
+Let's do the same as an exercise within
+it.
+
+64
+00:04:55,622 --> 00:05:01,035
+So, I've given you another outline of an
+external function, init, analogous to
+
+65
+00:05:01,035 --> 00:05:03,988
+last.
+It takes a list of t for arbitrary t
+
+66
+00:05:03,988 --> 00:05:07,503
+returns a list of t.
+Its not defined of list of empty.
+
+67
+00:05:07,503 --> 00:05:12,494
+So all you need to do is fill in the
+triple question marks for the two
+
+68
+00:05:12,494 --> 00:05:18,188
+patterns. What happens if the list consist
+of one element and what happens in the
+
+69
+00:05:18,188 --> 00:05:23,109
+case where list is a general first element
+y followed by a list ys?
+
+70
+00:05:23,109 --> 00:05:28,674
+So lets see how we would solve this.
+The initial part of a list that consists
+
+71
+00:05:28,674 --> 00:05:31,931
+of a single element would be the empty
+list.
+
+72
+00:05:31,931 --> 00:05:39,258
+So, we would return list of empty. The
+initial part of a list that consists of a
+
+73
+00:05:39,258 --> 00:05:43,500
+head y and some tail ys.
+What would that be?
+
+74
+00:05:43,500 --> 00:05:54,267
+Well, it would certainly contain the head
+and then we would have a recursive call to
+
+75
+00:05:54,515 --> 00:05:58,147
+init ys.
+So, one thing that I've just not yet said
+
+76
+00:05:58,147 --> 00:06:05,081
+explicitly here but which is important, is
+that the patterns are actually matched in
+
+77
+00:06:05,081 --> 00:06:09,126
+sequence.
+So, what this pattern would match is any
+
+78
+00:06:09,126 --> 00:06:14,162
+list of a single element.
+What this pattern then would match is any
+
+79
+00:06:14,162 --> 00:06:19,398
+list of, length two or more,
+Because we have already covered lists of
+
+80
+00:06:19,398 --> 00:06:23,856
+zero and one elements.
+So that means that the recursive call to
+
+81
+00:06:23,856 --> 00:06:29,305
+init on that list cannot fail,
+Because we know that the, the size of ys
+
+82
+00:06:29,305 --> 00:06:33,268
+is, is at least one.
+So let's look at another fundamental
+
+83
+00:06:33,268 --> 00:06:37,938
+operation on lists concatenation.
+How is concatenation implemented?
+
+84
+00:06:37,938 --> 00:06:43,258
+Well, you'll remember that if we write xs
+and then the triple colon for
+
+85
+00:06:43,258 --> 00:06:48,295
+concatenation ys,
+That really is the same as the call of the
+
+86
+00:06:48,295 --> 00:06:53,581
+method triple colon with receiver ys and
+xs as the argument.
+
+87
+00:06:53,581 --> 00:06:58,444
+So it's a prepend of xs on top of the
+right hand side ys.
+
+88
+00:06:58,444 --> 00:07:05,439
+Very much like the prepend function that
+you've implemented last week, but now, you
+
+89
+00:07:05,439 --> 00:07:09,620
+prepend a whole list not just the single
+element.
+
+90
+00:07:09,620 --> 00:07:15,495
+To find out how the implementation of that
+can be done, it's actually just as good to
+
+91
+00:07:15,495 --> 00:07:20,404
+write a stand-alone function.
+I've given you the signature of concat
+
+92
+00:07:20,404 --> 00:07:22,961
+here.
+So, that will be a function that
+
+93
+00:07:22,961 --> 00:07:28,008
+concatenates and ys like you see here.
+How could that be implemented?
+
+94
+00:07:28,008 --> 00:07:33,331
+Well, so far, everything we did was by a
+pattern match on the list and question,
+
+95
+00:07:33,331 --> 00:07:36,994
+But now there are two lists we deal with,
+xs and ys.
+
+96
+00:07:36,994 --> 00:07:43,756
+So what list should we pattern match on?
+Well, the other observation is that, once
+
+97
+00:07:43,756 --> 00:07:48,545
+we were done with pattern matching
+typically reconstructed lists from left to
+
+98
+00:07:48,545 --> 00:07:51,369
+right.
+We were asking the question, what is the
+
+99
+00:07:51,369 --> 00:07:54,992
+first element of the result list and what
+is the remainder.
+
+100
+00:07:54,992 --> 00:07:59,659
+Now, does the first element of the result
+list, does it depend on xs or on ys.
+
+101
+00:07:59,659 --> 00:08:04,080
+Well, clearly it depends on xs.
+So it makes sense to pair and match in xs.
+
+102
+00:08:04,080 --> 00:08:07,848
+So, let's do that.
+We have the standard match on xs.
+
+103
+00:08:07,848 --> 00:08:14,104
+The empty and the case where the list is
+nonempty with a head z and a tail zs.
+
+104
+00:08:14,104 --> 00:08:19,832
+Ys is already taken as a name here.
+So for the empty list, what should concat
+
+105
+00:08:19,832 --> 00:08:22,948
+return?
+Well, obviously, the empty list
+
+106
+00:08:22,948 --> 00:08:26,411
+concatenated with sum list ys is the list
+ys,
+
+107
+00:08:26,411 --> 00:08:31,798
+So that would be our result.
+If the list is not empty, so it contains a
+
+108
+00:08:31,798 --> 00:08:37,030
+head z and tail zs. You could, next
+question is, well what is the first
+
+109
+00:08:37,030 --> 00:08:42,109
+element of the result list?
+While it's the first element of xs, and
+
+110
+00:08:42,109 --> 00:08:47,526
+that would be z and the remainder.
+While the remainder would simply be the
+
+111
+00:08:47,526 --> 00:08:53,168
+result of concatenating the rest of the
+left list, which we call letters now here,
+
+112
+00:08:53,168 --> 00:08:57,126
+and the right list, ys.
+So, that gives us the complete
+
+113
+00:08:57,126 --> 00:09:01,210
+implementation of concat.
+Now, what is its complexity?
+
+114
+00:09:01,210 --> 00:09:09,196
+Well, we see that we will need a call of
+concat for each element of the left list.
+
+115
+00:09:09,196 --> 00:09:16,514
+So complexity would be correspond to the
+length of the list excess.
+
+116
+00:09:16,514 --> 00:09:21,694
+Sometimes we use mathematics notations
+with the double bars to indicate the size
+
+117
+00:09:21,694 --> 00:09:24,956
+of something.
+So now that we have seen concat, let's
+
+118
+00:09:24,956 --> 00:09:27,770
+look at reverse.
+How can that be implemented?
+
+119
+00:09:27,770 --> 00:09:30,492
+Let's try by writing a stand-alone
+function.
+
+120
+00:09:30,492 --> 00:09:34,229
+So we would have a function reverse,
+It take xs,
+
+121
+00:09:34,229 --> 00:09:39,105
+A list of arbitrary element type t.
+Gives us back a list that's a reversal of
+
+122
+00:09:39,105 --> 00:09:42,461
+xs.
+Let's start with the usual pattern match
+
+123
+00:09:42,461 --> 00:09:46,577
+on the shape of xs.
+So if that list is empty, then, the
+
+124
+00:09:46,577 --> 00:09:49,933
+reversal of an empty list would give the
+list itself.
+
+125
+00:09:49,933 --> 00:09:55,564
+If that list is nonempty, let's say
+consisting of a head element y and a tail
+
+126
+00:09:55,564 --> 00:09:59,932
+ys. What do we do?
+Well, one thing we know is that the list
+
+127
+00:09:59,932 --> 00:10:05,372
+will end with the element y.
+The first element becomes the last element
+
+128
+00:10:05,372 --> 00:10:11,912
+and before that, or before that, we just
+have a recursive call of reverse, ys and
+
+129
+00:10:11,912 --> 00:10:17,381
+then comes the head element, y, in the
+second list concatenated.
+
+130
+00:10:17,381 --> 00:10:21,174
+So that would be the definition of
+reverse.
+
+131
+00:10:21,174 --> 00:10:27,260
+So the next question is, given that
+definition, what is its complexity?
+
+132
+00:10:27,260 --> 00:10:31,440
+Well, let's have a look.
+We know that concatenation is linear,
+
+133
+00:10:32,067 --> 00:10:37,989
+Text time proportional to the size of the
+list on the left hand of the concatenation
+
+134
+00:10:37,989 --> 00:10:41,612
+operator.
+So that list is a list that grows from one
+
+135
+00:10:41,612 --> 00:10:47,534
+to the length of excess, that's for the
+first element that we concantenated would
+
+136
+00:10:47,534 --> 00:10:52,202
+be the length of xs minus one.
+So that's linear in the size of excess.
+
+137
+00:10:52,202 --> 00:10:58,124
+And furthermore, we do one step for each
+element in the reverse list because we go
+
+138
+00:10:58,124 --> 00:11:04,434
+through each element of ys, and put it at
+the end of the reverse this. So that gives
+
+139
+00:11:04,434 --> 00:11:08,591
+us a factor of n,
+For the concat times n for the reversal
+
+140
+00:11:08,591 --> 00:11:14,046
+where n is the size of success.
+So we get quadratic complexity of reverse
+
+141
+00:11:14,046 --> 00:11:18,567
+which is a bit disappointing because we
+all know that if you have, let's say an
+
+142
+00:11:18,567 --> 00:11:22,372
+array or a link list, a mutable link list
+of pointers,
+
+143
+00:11:22,372 --> 00:11:25,673
+Then we all know how to reverse in linear
+time.
+
+144
+00:11:25,889 --> 00:11:32,061
+We'll see later on how we might do better
+and get down the complexity of reverse,
+
+145
+00:11:32,061 --> 00:11:35,220
+But for the moment, we'll leave it like
+that.
+
+146
+00:11:35,220 --> 00:11:40,565
+So, here's an exercise.
+The question is, how could you write a
+
+147
+00:11:40,565 --> 00:11:44,338
+method that removes the n'th element of a
+list xs?
+
+148
+00:11:44,338 --> 00:11:49,749
+If n is out of bounds in the list, then we
+would just return the list xs.
+
+149
+00:11:49,749 --> 00:11:55,231
+So, as an example, if we call, removeAt at
+index one and the list of a, b, c, d, then
+
+150
+00:11:55,231 --> 00:11:58,363
+we would expect the get back the list a,
+c, d.
+
+151
+00:11:58,363 --> 00:12:04,156
+The element at index one would be removed.
+So, let's grab a worksheet to see how we
+
+152
+00:12:04,156 --> 00:12:10,027
+could answer that question.
+Let's write a method signature.
+
+153
+00:12:10,027 --> 00:12:13,860
+It takes an Int as an index and a list of
+Int,
+
+154
+00:12:14,400 --> 00:12:21,485
+And we want to have the list that consists
+of all elements except the ones at the
+
+155
+00:12:21,485 --> 00:12:24,250
+index n.
+So how would we do that?
+
+156
+00:12:24,250 --> 00:12:29,089
+Well, remember you have taken drop already
+as operations.
+
+157
+00:12:29,089 --> 00:12:36,174
+So, the easiest way to do that would be to
+say well, it's xs, take the first elements
+
+158
+00:12:36,174 --> 00:12:48,500
+n,
+Followed by xs drop n plus one.
+
+159
+00:12:48,500 --> 00:12:52,292
+So it means we take the first elements of
+the x,
+
+160
+00:12:52,292 --> 00:12:58,376
+We skip one and then we take the rest of
+the x elements xs, which would be
+
+161
+00:12:58,376 --> 00:00:00,000
+expressed by the expression xs drop n then
+plus one.

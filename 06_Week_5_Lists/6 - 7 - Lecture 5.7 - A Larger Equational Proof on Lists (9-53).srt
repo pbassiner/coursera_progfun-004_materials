@@ -1,0 +1,579 @@
+1
+00:00:00,000 --> 00:00:04,008
+In this session we'll come back to what we
+did in the last one.
+
+2
+00:00:04,008 --> 00:00:08,844
+Namely, proving equational properties of
+programs using structural induction.
+
+3
+00:00:08,844 --> 00:00:13,490
+We will practice the newly learned
+techniques in a somewhat larger proof.
+
+4
+00:00:13,490 --> 00:00:18,434
+For a more difficult example let's
+consider the reverse function.
+
+5
+00:00:18,434 --> 00:00:24,823
+We pick its inefficient definition here
+because it's more amenable to equational
+
+6
+00:00:24,823 --> 00:00:28,474
+proofs.
+So as defining process we would have nil
+
+7
+00:00:28,474 --> 00:00:34,939
+reverses nil and x followed by XS reverse
+is the reversal of the list xs followed by
+
+8
+00:00:34,939 --> 00:00:41,176
+the element X. These two equations are as
+we know equivalent to the more efficient
+
+9
+00:00:41,176 --> 00:00:46,044
+version of fork left and closer to what we
+want to prove.
+
+10
+00:00:46,044 --> 00:00:52,785
+So we pick them which of course does not
+prevent us from using at one time the more
+
+11
+00:00:52,785 --> 00:00:58,388
+efficient definition of reverse.
+So what we would like to do is prove the
+
+12
+00:00:58,388 --> 00:01:04,988
+proposition that XS reverse of reverse is
+XS. So to prove this it's an obvious
+
+13
+00:01:04,988 --> 00:01:10,898
+induction on the list excess, the base
+case is really easy. Nil reverse, reverse
+
+14
+00:01:10,898 --> 00:01:17,038
+is the same thing as nil reverse by the
+first law of reverse which says that nil
+
+15
+00:01:17,038 --> 00:01:22,813
+dot reverse is nil and then we again
+invoke the first law To show that, that
+
+16
+00:01:22,813 --> 00:01:27,811
+expression now is the same as nil, which
+establishes the proposition.
+
+17
+00:01:27,811 --> 00:01:33,912
+Let's look at the induction step so here
+we would have X followed by XS, and then a
+
+18
+00:01:33,912 --> 00:01:36,852
+double reverse.
+What can we do with that?
+
+19
+00:01:36,852 --> 00:01:42,291
+Well, we can apply the second clause of
+reverse, which would mean that this
+
+20
+00:01:42,291 --> 00:01:47,951
+expression here would, can be rewritten to
+the right-hand side, excess.reverse
+
+21
+00:01:47,951 --> 00:01:52,140
+followed by X.
+And then we have our reverse on both sides
+
+22
+00:01:52,140 --> 00:01:54,272
+here.
+What else can we do?
+
+23
+00:01:54,272 --> 00:01:57,423
+Well,
+That doesn't seem to be anything obvious.
+
+24
+00:01:57,423 --> 00:02:02,651
+So let's turn to the right hand side.
+The right hand side would read simply X
+
+25
+00:02:02,651 --> 00:02:05,431
+followed by XS.
+So what can we do that?
+
+26
+00:02:05,431 --> 00:02:11,863
+Well, one thing we could do is apply the
+induction hypothesis which says that the
+
+27
+00:02:11,863 --> 00:02:15,769
+list xs is the same as the list xs
+reverse, reverse.
+
+28
+00:02:15,769 --> 00:02:21,895
+So then we are left with x followed by xs
+reverse, reverse and again, there's not
+
+29
+00:02:21,895 --> 00:02:27,561
+much we can do anymore to this side here.
+So both sides, unfortunately, have
+
+30
+00:02:27,561 --> 00:02:32,998
+simplified to different expressions.
+This expression here and I've that
+
+31
+00:02:32,998 --> 00:02:37,210
+expression there.
+So we still need to show that the two
+
+32
+00:02:37,210 --> 00:02:43,449
+sides are the same and proving it directly
+by induction doesn't work as we have seen.
+
+33
+00:02:43,449 --> 00:02:47,766
+What we can try instead is, we can
+generalize this equation.
+
+34
+00:02:47,766 --> 00:02:55,737
+So the idea is that, instead of just
+saying excess to dot reverse here and
+
+35
+00:02:55,737 --> 00:02:59,390
+here.
+We replace that with.
+
+36
+00:02:59,390 --> 00:03:04,739
+An arbitrary list ys.
+So our new lemma that we want to prove is
+
+37
+00:03:04,739 --> 00:03:11,447
+for, that for any list ys, ys followed by
+x reverse is the same as x followed by
+
+38
+00:03:11,447 --> 00:03:18,875
+ys.reverse. And to prove that equation, we
+can use a second induction argument, this
+
+39
+00:03:18,875 --> 00:03:25,027
+time on the list bias so let's try that.
+So, let's look at the base case first.
+
+40
+00:03:25,027 --> 00:03:31,576
+So here, YS equals nil and the equation we
+want to show is that nil followed by
+
+41
+00:03:31,576 --> 00:03:35,803
+x.reverse is the same as x followed by
+nil.reverse.
+
+42
+00:03:35,803 --> 00:03:40,943
+That's the instansation of the lemma that
+we want to show here.
+
+43
+00:03:40,943 --> 00:03:45,005
+So, what could we do with the left hand
+side here?
+
+44
+00:03:45,005 --> 00:03:48,460
+Well,
+By the first close of plus, plus, nil is a
+
+45
+00:03:48,460 --> 00:03:54,023
+left unit, so this thing simply simplifies
+to list of x.reverse. reverse.
+
+46
+00:03:54,023 --> 00:03:58,177
+Then the next step would be to expand what
+list of X is.
+
+47
+00:03:58,177 --> 00:04:02,850
+So list of X, as we know by its
+definition, is X followed by nil.
+
+48
+00:04:02,850 --> 00:04:08,411
+In the next step then, we would involve
+the second clause of reverse to arrive at
+
+49
+00:04:08,411 --> 00:04:12,531
+this expression here.
+When actually there's one intermediate
+
+50
+00:04:12,531 --> 00:04:17,269
+step that we have to do here.
+So by the second clause of reverse, what
+
+51
+00:04:17,269 --> 00:04:20,840
+would we get?
+We would get the list that follows the
+
+52
+00:04:20,840 --> 00:04:31,181
+head element first so there would be
+nil.reverse Followed by, this suffix and
+
+53
+00:04:31,181 --> 00:04:36,592
+now we can simply find nil.reverse by the
+first clause of reverse is just nil.
+
+54
+00:04:36,592 --> 00:04:39,966
+Where as list of x expands to x followed
+by nil.
+
+55
+00:04:39,966 --> 00:04:43,340
+So, that's how we arrive, at this
+expression here.
+
+56
+00:04:43,340 --> 00:04:49,405
+Now what we can do here is we can again
+invoke the first clause of plus, plus to
+
+57
+00:04:49,405 --> 00:04:54,228
+say nil is a left unit and we're just left
+with x followed by nil.
+
+58
+00:04:54,228 --> 00:04:59,416
+There's one more step to do.
+Again by the first clause of reverse we
+
+59
+00:04:59,416 --> 00:05:04,239
+know that nil.reverse is nil.
+Or we've just now used this equation
+
+60
+00:05:04,239 --> 00:05:09,793
+backwards from going from nil to
+nil.reverse And that's the right hand side
+
+61
+00:05:09,793 --> 00:05:15,166
+if you want to show here.
+So we get equality here and the base case
+
+62
+00:05:15,166 --> 00:05:18,921
+is established.
+Let's look at the inductive step.
+
+63
+00:05:18,921 --> 00:05:25,103
+What we need to do here is show that y
+followed by ys, that's our list, followed
+
+64
+00:05:25,103 --> 00:05:30,814
+by x reverse is the same as x followed by
+then y followed by ys reversed.
+
+65
+00:05:30,814 --> 00:05:37,152
+So let's see how we would go about that
+let's work on the left hand side here.
+
+66
+00:05:37,152 --> 00:05:43,603
+First thing we can do is we can pull out
+the y from its binding with the list YS,
+
+67
+00:05:43,603 --> 00:05:49,722
+using the second list of comcat.
+So we have the Y as a head element here,
+
+68
+00:05:49,722 --> 00:05:53,230
+and then the list YS, followed by list of
+X.
+
+69
+00:05:53,230 --> 00:05:58,951
+The next thing we can do is we can invoke
+the law of reverse, which says well
+
+70
+00:05:58,951 --> 00:06:04,896
+reverse of a list that starts with Y is
+the same as reversal of the rest of the
+
+71
+00:06:04,896 --> 00:06:09,896
+list here.
+And the y becomes the last element of the
+
+72
+00:06:09,896 --> 00:06:13,294
+new list.
+The next thing we can do is apply the
+
+73
+00:06:13,294 --> 00:06:19,295
+induction hypothesis because we see here
+that the expression ys followed by list x
+
+74
+00:06:19,295 --> 00:06:25,296
+reverse, that's the left hand side of the
+equation with just the list ys and we can
+
+75
+00:06:25,296 --> 00:06:28,333
+assume that, that, that, that equation
+holds.
+
+76
+00:06:28,333 --> 00:06:33,827
+So we can rewrite it to the right hand
+side of the equation which will be x
+
+77
+00:06:33,827 --> 00:06:42,035
+followed by yes.reverse. Now we can apply
+the first clause of plus, plus to pull out
+
+78
+00:06:42,035 --> 00:06:46,838
+the accelerant.
+And we can apply the second clause of
+
+79
+00:06:46,838 --> 00:06:53,828
+reverse to establish that Y followed by ys
+reverse, is the same as ys reverse
+
+80
+00:06:53,828 --> 00:06:58,660
+followed by a list of y.
+And again we have equality here.
+
+81
+00:07:01,120 --> 00:07:07,052
+So the auxiliary equation is established
+and because the auxiliary equation was the
+
+82
+00:07:07,052 --> 00:07:12,279
+last thing was needed to prove the main
+proposition, that accessory versus
+
+83
+00:07:12,279 --> 00:07:16,390
+success, we adapt.
+So the proof methodology you have seen
+
+84
+00:07:16,390 --> 00:07:22,884
+here, worked in essentially three steps We
+could apply a defining equation, either of
+
+85
+00:07:22,884 --> 00:07:27,586
+reverse or contact and we could apply it
+in two different ways.
+
+86
+00:07:27,586 --> 00:07:30,871
+So.
+What you've seen here, for instance, going
+
+87
+00:07:30,871 --> 00:07:35,603
+from here to here that was, we invoked the
+equation left to right.
+
+88
+00:07:35,812 --> 00:07:41,031
+The, that was the second clause of plus,
+plus, which says plus, plus on a list,
+
+89
+00:07:41,240 --> 00:07:46,250
+with a head element y is the same thing
+as, a list that starts with y.
+
+90
+00:07:46,250 --> 00:07:50,564
+So we can pull out the y.
+And that step is called typically, an
+
+91
+00:07:50,564 --> 00:07:54,594
+unfold step.
+The other, equation of resending step was
+
+92
+00:07:54,798 --> 00:07:59,759
+what you've seen here in the last step
+where we have applied an equation
+
+93
+00:07:59,759 --> 00:08:02,546
+backwards.
+The equation for reverse right.
+
+94
+00:08:02,546 --> 00:08:06,760
+Y followed by ys reverse is ys reverse
+followed by this stuff.
+
+95
+00:08:07,576 --> 00:08:10,023
+Y.
+And that is called a forward step.
+
+96
+00:08:10,023 --> 00:08:15,120
+So what's important here is that these
+equations are real equations in the
+
+97
+00:08:15,120 --> 00:08:19,130
+mathematical sense.
+They can be applied both way-, both ways.
+
+98
+00:08:19,130 --> 00:08:24,655
+They're commutative.
+And the last step that we typically do in
+
+99
+00:08:24,655 --> 00:08:29,746
+an, a proof like that is apply the
+induction hypothesis.
+
+100
+00:08:29,746 --> 00:08:37,060
+So the proof method that we've seen is
+sometimes called the fold-unfold method.
+
+101
+00:08:41,600 --> 00:08:45,460
+For equational proofs of functional
+programs.
+
+102
+00:08:45,460 --> 00:08:50,292
+So, we finish the session with an
+exercise, which is a bit more involved
+
+103
+00:08:50,292 --> 00:08:55,534
+than the previous ones, and, it's open
+ended, so I won't give you a solution
+
+104
+00:08:55,534 --> 00:08:59,413
+immediately.
+So what I want you to do is, prove another
+
+105
+00:08:59,413 --> 00:09:03,430
+law that's useful, that relates map, and
+concatenation.
+
+106
+00:09:03,430 --> 00:09:08,490
+So the law says that, essentially the, a,
+a, map distributes over concat.
+
+107
+00:09:08,490 --> 00:09:14,284
+For any lists XS, YS and function F, XS
+followed by YS and then map the function
+
+108
+00:09:14,284 --> 00:09:19,638
+is the same thing as mapping the function
+over XS, mapping it over YS, and
+
+109
+00:09:19,638 --> 00:09:24,405
+concatenating the results.
+What you need for the proofs is the
+
+110
+00:09:24,405 --> 00:09:30,199
+classes of plus, plus, that you've seen,
+as well as two classes for maps that you
+
+111
+00:09:30,199 --> 00:09:33,719
+see here.
+So, again, they derive directly from the
+
+112
+00:09:33,719 --> 00:09:37,784
+definition of map.
+First clause says to map a function over
+
+113
+00:09:37,784 --> 00:09:40,730
+the empty list, you would get the empty
+list.
+
+114
+00:09:40,730 --> 00:09:45,683
+The second clause says that to map a
+function over a list consisting of x
+
+115
+00:09:45,683 --> 00:09:49,231
+followed by xs.
+What you get is f applied to the head
+
+116
+00:09:49,231 --> 00:09:53,449
+element x followed by the result of
+mapping f over the rest of.

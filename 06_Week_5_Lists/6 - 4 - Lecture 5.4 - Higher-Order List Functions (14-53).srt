@@ -1,0 +1,908 @@
+1
+00:00:00,000 --> 00:00:04,124
+So far,
+All operations on lists were first order.
+
+2
+00:00:04,124 --> 00:00:09,427
+That means, the functions took lists of
+primitive types as arguments and returned
+
+3
+00:00:09,427 --> 00:00:12,963
+them as results.
+In this session, we're going to change
+
+4
+00:00:12,963 --> 00:00:16,106
+that.
+We're going to introduce higher order list
+
+5
+00:00:16,106 --> 00:00:20,493
+functions that work on lists and take
+another function as argument.
+
+6
+00:00:20,493 --> 00:00:25,469
+We will see that with just a handful of
+these higher order functions, we can
+
+7
+00:00:25,469 --> 00:00:28,350
+describe a great variety of different
+tasks.
+
+8
+00:00:28,350 --> 00:00:33,482
+The examples in the previous sessions have
+shown that functions of lists often have
+
+9
+00:00:33,482 --> 00:00:37,453
+very similar structure.
+In fact, we can identify several recurring
+
+10
+00:00:37,453 --> 00:00:41,730
+patterns, such as transforming each
+element in a list in a certain way,
+
+11
+00:00:41,730 --> 00:00:47,517
+Or retrieving from a list all elements
+that satisfy a given criterion, or maybe
+
+12
+00:00:47,517 --> 00:00:50,683
+combining the elements of a list using an
+operator.
+
+13
+00:00:50,683 --> 00:00:55,773
+And since we are in a functional language
+which allows programmers to write generic
+
+14
+00:00:55,773 --> 00:01:00,864
+functions using high auto-functions, we
+can apply the same techniques to functions
+
+15
+00:01:00,864 --> 00:01:04,154
+over the lists.
+So in this session, we are going to be
+
+16
+00:01:04,154 --> 00:01:07,320
+interested in higher order functions over
+the lists.
+
+17
+00:01:07,320 --> 00:01:12,493
+Our first common operation is to transform
+each element of a list, and then return
+
+18
+00:01:12,493 --> 00:01:16,468
+the list of results.
+So for instant to multiply each element of
+
+19
+00:01:16,468 --> 00:01:21,704
+a list by the same factor, you could write
+a function scale list which takes a list
+
+20
+00:01:21,704 --> 00:01:26,688
+of doubles as input and a factor and
+returns a list of double and what it does
+
+21
+00:01:26,688 --> 00:01:31,672
+is, well if the input list is nil, it just
+returns it unchanged, and otherwise it
+
+22
+00:01:31,672 --> 00:01:36,656
+multiplies the first element of the list
+by the factor, and it does a recursive
+
+23
+00:01:36,656 --> 00:01:40,190
+call of scale list with the rest of the
+list and factor.
+
+24
+00:01:40,190 --> 00:01:45,778
+So, obviously, that function would
+multiply each element of the list by the
+
+25
+00:01:45,778 --> 00:01:50,128
+same factor.
+That scheme can be generalized to a method
+
+26
+00:01:50,128 --> 00:01:56,760
+map on the list class which can apply in
+arbitrary operation to all elements of a
+
+27
+00:01:56,760 --> 00:02:00,400
+list.
+So here's a simple way to define map on
+
+28
+00:02:00,400 --> 00:02:05,738
+the abstract class list of t.
+We would say def map and map takes a
+
+29
+00:02:05,738 --> 00:02:10,430
+function from t to some.
+Other type, u, which could be the same as
+
+30
+00:02:10,430 --> 00:02:14,830
+type t, or it could be different.
+So, u is a type parameter of MAP.
+
+31
+00:02:14,830 --> 00:02:19,918
+And then it returns a list of u.
+And then the body of MAP is just the body
+
+32
+00:02:19,918 --> 00:02:25,144
+of scale lists, but now generalized.
+So, in the case of nil, we return the list
+
+33
+00:02:25,144 --> 00:02:28,651
+unchanged.
+If the list is non-nil, then we apply the
+
+34
+00:02:28,651 --> 00:02:31,938
+function,
+F to the first element X,
+
+35
+00:02:31,938 --> 00:02:37,490
+And we follow that with a recursive call
+of xs.mapf.
+
+36
+00:02:37,490 --> 00:02:43,152
+In fact the actual implementation of map N
+class list and this kind of standard
+
+37
+00:02:43,152 --> 00:02:46,975
+library is a bit more complicated for
+several reasons.
+
+38
+00:02:46,975 --> 00:02:50,727
+First, the actual definition is in fact
+terra cursive.
+
+39
+00:02:50,727 --> 00:02:56,248
+Where as this definition isn't you see
+after the call to map you still have a
+
+40
+00:02:56,248 --> 00:03:00,212
+call to cons.
+The second the actual implementation to
+
+41
+00:03:00,212 --> 00:03:03,398
+maps for arbituary collections not just
+lists.
+
+42
+00:03:03,398 --> 00:03:08,070
+But for understanding map list definition
+here we'll do very well.
+
+43
+00:03:08,070 --> 00:03:13,101
+So using map, we can now write scale list
+much more concisely, so much more
+
+44
+00:03:13,101 --> 00:03:18,132
+concisely that, that it's hardly worth
+writing a different function for it.
+
+45
+00:03:18,132 --> 00:03:23,504
+We would just say, scale list of XS and a
+factor S, map XS map, with the function
+
+46
+00:03:23,504 --> 00:03:26,700
+that takes an X and multiplies X by the
+factor.
+
+47
+00:03:26,700 --> 00:03:31,117
+So here's an exercise for you.
+Let's take a function square list that
+
+48
+00:03:31,117 --> 00:03:34,638
+squares each element of a list, then
+returns the result.
+
+49
+00:03:34,638 --> 00:03:39,824
+There are two possible ways to do that,
+either with pattern matching or using map.
+
+50
+00:03:39,824 --> 00:03:45,458
+I invite you to try both possible ways by
+filling in the three triple question marks
+
+51
+00:03:45,458 --> 00:03:50,900
+in the definition of square lists here and
+the definition of square lists down there.
+
+52
+00:03:50,900 --> 00:03:54,805
+So let's see how we would do that.
+In the paren.
+
+53
+00:03:54,805 --> 00:04:02,034
+Matching definition to take the squares of
+an empty list we would surely return the
+
+54
+00:04:02,034 --> 00:04:06,936
+empty list again.
+To take the squares of a list with a head
+
+55
+00:04:06,936 --> 00:04:12,753
+y and a tail ys, what do we do?
+Well, we start by taking the square of y
+
+56
+00:04:12,753 --> 00:04:17,240
+and we follow that by a recursive call of
+square list.
+
+57
+00:04:17,240 --> 00:04:22,877
+Of Y-S.
+So far so good.
+
+58
+00:04:22,877 --> 00:04:27,488
+I think by now we all know how to do these
+things cold.
+
+59
+00:04:27,488 --> 00:04:31,931
+But, let's see whether we can do it
+shorter using map.
+
+60
+00:04:31,931 --> 00:04:35,955
+Well, to use square list with map, what
+can we do?
+
+61
+00:04:35,955 --> 00:04:41,740
+Well, we map it by the function that takes
+an X, and returns X times X.
+
+62
+00:04:42,580 --> 00:04:47,762
+And that's it.
+So obviously the definition with map is
+
+63
+00:04:47,762 --> 00:04:53,092
+much shorter and I would, argue also
+clearer than the one that uses
+
+64
+00:04:53,092 --> 00:04:59,038
+paramatching and recursion.
+So here's another common operation on
+
+65
+00:04:59,038 --> 00:05:03,300
+lists, selecting all elements that satisfy
+a given condition.
+
+66
+00:05:03,300 --> 00:05:08,900
+For instance, you might want to select all
+elements from a list that are positives.
+
+67
+00:05:08,900 --> 00:05:13,866
+Here you have a function pause alps.
+It takes a list of int, gives you back a
+
+68
+00:05:13,866 --> 00:05:17,199
+list of int.
+And the para matching definition would
+
+69
+00:05:17,199 --> 00:05:21,251
+read as you see here.
+So for the empty list we can just return
+
+70
+00:05:21,251 --> 00:05:24,192
+it.
+If its non-empty and the first element is
+
+71
+00:05:24,192 --> 00:05:29,289
+in fact greater than zero it's positive,
+then we include it in the result list.
+
+72
+00:05:29,289 --> 00:05:32,100
+So we return the first element followed
+by.
+
+73
+00:05:32,100 --> 00:05:36,781
+Pause LM's of the rest of the list.
+And, otherwise, we just do pause LM's of
+
+74
+00:05:36,781 --> 00:05:40,703
+the rest of the list.
+So, the first element gets dropped, and we
+
+75
+00:05:40,703 --> 00:05:44,120
+just filter the remainder of the list with
+pause LM's.
+
+76
+00:05:45,200 --> 00:05:50,870
+Again, this pattern can be generalized to
+the method filter in the list class.
+
+77
+00:05:50,870 --> 00:05:56,762
+So here you see the definition of filter.
+It takes now a predicate that takes an
+
+78
+00:05:56,762 --> 00:06:02,433
+element of the list element type t, that
+gives you back a boolean, and it will
+
+79
+00:06:02,433 --> 00:06:06,235
+return a list of t's.
+The definition is an obvious
+
+80
+00:06:06,235 --> 00:06:10,589
+generalization of posElems that we've seen
+before.
+
+81
+00:06:10,589 --> 00:06:16,344
+So we match on the current list.
+If it's nil then we return to middle list.
+
+82
+00:06:16,344 --> 00:06:22,876
+And if it's not nil and the head of the
+list XX satisfies our predicate So P of X
+
+83
+00:06:22,876 --> 00:06:26,764
+is true.
+Then we return X followed by X dot filter
+
+84
+00:06:26,764 --> 00:06:30,080
+P.
+And otherwise just accept that filter P.
+
+85
+00:06:31,140 --> 00:06:36,182
+Again using filter we can write poseElems
+much more concisely.
+
+86
+00:06:36,182 --> 00:06:41,540
+We will just write excess filter x such
+that x is greater than zero.
+
+87
+00:06:42,080 --> 00:06:47,121
+Besides filter, there are also other
+methods that extract sub-lists a list
+
+88
+00:06:47,121 --> 00:06:51,413
+based on some predicate.
+You see the list of these methods here.
+
+89
+00:06:51,413 --> 00:06:56,931
+Rather than going through the list, I just
+wanted to show them in action in a new
+
+90
+00:06:56,931 --> 00:07:00,337
+worksheet.
+So what I'm going to do is I'm going to
+
+91
+00:07:00,337 --> 00:07:05,720
+take the data definitions of the previous
+worksheet and create a new worksheet.
+
+92
+00:07:06,100 --> 00:07:10,200
+Call this, call this list far.
+.
+
+93
+00:07:13,460 --> 00:07:20,909
+And we have our test data here.
+And what I'm, what we're gonna do is lets
+
+94
+00:07:20,909 --> 00:07:31,205
+say the first one would be numbs filter so
+all numbers greater than zero, so that
+
+95
+00:07:31,205 --> 00:07:38,611
+would have filtered out the -four here.
+If we do, nums filter not X, X greater
+
+96
+00:07:38,611 --> 00:07:42,758
+than zero, what do you expect to get?
+Right.
+
+97
+00:07:42,758 --> 00:07:47,696
+You'd expect to get just the negative
+number, -four.
+
+98
+00:07:47,992 --> 00:07:52,427
+The other.
+And as that was partitioned.
+
+99
+00:07:52,427 --> 00:07:56,870
+Partition is like filter and filter not in
+one go.
+
+100
+00:07:56,870 --> 00:08:02,558
+So, if you write that here.
+Then what you see is you get a pair of two
+
+101
+00:08:02,558 --> 00:08:05,861
+lists.
+The first list contains all those elements
+
+102
+00:08:05,861 --> 00:08:10,310
+for which the predicate is true.
+So that was the positive elements.
+
+103
+00:08:10,310 --> 00:08:15,433
+And the second list contains all those
+elements for which the predicates is
+
+104
+00:08:15,433 --> 00:08:18,399
+false.
+So you see the partition is just like
+
+105
+00:08:18,399 --> 00:08:23,387
+filter and filter not as a pair.
+However it will run in a single traversal
+
+106
+00:08:23,387 --> 00:08:28,915
+through the input list numbers, where as
+if you do first a filter and a filter not
+
+107
+00:08:28,915 --> 00:08:34,520
+you would get two traversals.
+The next two functions are a bit different
+
+108
+00:08:34,520 --> 00:08:39,020
+in that they look at a prefix and a suffix
+of a list.
+
+109
+00:08:39,020 --> 00:08:43,520
+So what I can do here is I can say, Nums
+TakeWhile.
+
+110
+00:08:43,800 --> 00:08:51,407
+X, X greater than zero.
+So what that gives me is the longest
+
+111
+00:08:51,407 --> 00:08:54,699
+prefix of the list, such that the
+predicate is true.
+
+112
+00:08:54,699 --> 00:08:57,926
+So here I would say okay two is greater
+than zero.
+
+113
+00:08:57,926 --> 00:09:02,767
+But then at minus four, I would stop,
+because minus four is not greater than
+
+114
+00:09:02,767 --> 00:09:05,735
+zero.
+So it will, any further elements will not
+
+115
+00:09:05,735 --> 00:09:09,866
+take part in take while.
+That's the main difference between take
+
+116
+00:09:09,866 --> 00:09:12,190
+while and filter.
+Filter will always.
+
+117
+00:09:12,190 --> 00:09:17,509
+Select all elements in the list that
+satisfy the criteria, whereas take while
+
+118
+00:09:17,509 --> 00:09:20,687
+will only take the longest prefix of the
+list.
+
+119
+00:09:20,687 --> 00:09:27,020
+The opposite of take while is drop while.
+So, let's write that.
+
+120
+00:09:29,660 --> 00:09:34,945
+So take while and drop while relate to
+each other such, just like take and drop
+
+121
+00:09:34,945 --> 00:09:39,226
+relate to each other.
+Drop while would then return the remainder
+
+122
+00:09:39,226 --> 00:09:44,578
+of the list, without the prefix taken by
+take while, so it would be the list that
+
+123
+00:09:44,578 --> 00:09:49,730
+starts with a negative element and then
+goes until the end of the input list.
+
+124
+00:09:49,730 --> 00:09:56,240
+And finally, where we had partition, that
+combined a filter and filter not, we also
+
+125
+00:09:56,240 --> 00:10:01,045
+have an operation that combines a take
+while and a drop while.
+
+126
+00:10:01,045 --> 00:10:06,254
+That operation is called span.
+So if we do that then what we will see is
+
+127
+00:10:06,254 --> 00:10:11,406
+that it will give us essentially the
+combination of a TakeWhile, that was a
+
+128
+00:10:11,406 --> 00:10:15,802
+list two and a DropWhile.
+But like Partition, it will only need a
+
+129
+00:10:15,802 --> 00:10:20,390
+single traversal, not two.
+Let's apply the function that we've seen
+
+130
+00:10:20,390 --> 00:10:24,872
+so far in an exercise.
+The task is to write a function pack that
+
+131
+00:10:24,872 --> 00:10:29,073
+packs consecutive duplicates of list
+elements into sublists.
+
+132
+00:10:29,073 --> 00:10:34,675
+So if you apply pack to this input list
+here, we would expect to get back a list
+
+133
+00:10:34,675 --> 00:10:39,926
+of lists, where the first sublist is
+formed from, from the three consecutive
+
+134
+00:10:39,926 --> 00:10:43,288
+A's here.
+The second sublist has just a single B.
+
+135
+00:10:43,288 --> 00:10:46,509
+The third sublist has the two consecutive
+C's.
+
+136
+00:10:46,509 --> 00:10:49,730
+And the final sublist has the trailing A
+here.
+
+137
+00:10:49,730 --> 00:10:55,457
+The idea is to use a template like this
+one here, we have a defined pack to be a
+
+138
+00:10:55,457 --> 00:11:01,185
+generic function over type lists of T,
+returns a list of lists of T, Obviously if
+
+139
+00:11:01,185 --> 00:11:05,049
+the list is empty, then that's what we
+would expect back.
+
+140
+00:11:05,049 --> 00:11:08,637
+So the only case to handle is really this
+case here.
+
+141
+00:11:08,637 --> 00:11:15,072
+If the list is nonempty, what do we do?
+I've already copied my input list data and
+
+142
+00:11:15,072 --> 00:11:20,779
+the template of the pack function, so the
+only case to fill in is when the list is
+
+143
+00:11:20,779 --> 00:11:23,980
+nonempty, consisting of a head, X, and a
+tail, XS.
+
+144
+00:11:23,980 --> 00:11:27,600
+Which of the six functions here would be
+applicable?
+
+145
+00:11:27,600 --> 00:11:33,502
+Well, what we wanna do is take off a
+leading sub list and then do something
+
+146
+00:11:33,502 --> 00:11:38,696
+with the rest of the list.
+So it's a combination of take while and
+
+147
+00:11:38,696 --> 00:11:42,316
+drop while and that's what span would give
+us.
+
+148
+00:11:42,316 --> 00:11:48,454
+So let's set up a para match first rest
+equals xs span and what should be the
+
+149
+00:11:48,454 --> 00:11:52,782
+predicate be.
+Well we say take elements as long as they
+
+150
+00:11:52,782 --> 00:11:56,560
+are equal to x, the leading elements of
+the list.
+
+151
+00:11:56,880 --> 00:12:04,368
+Once we have that we would say, first is
+already the sublist that will constitute
+
+152
+00:12:04,368 --> 00:12:11,589
+the first element of our list, and the
+other elements would be the result of a
+
+153
+00:12:11,589 --> 00:12:15,780
+recursive call of pack to the rest of the
+list.
+
+154
+00:12:18,340 --> 00:12:25,560
+And that gives us our function, pack, so
+let's apply pack to our data list.
+
+155
+00:12:27,340 --> 00:12:33,816
+Pack of data gives us.
+A list consisting of three As, one B, two
+
+156
+00:12:33,816 --> 00:12:36,270
+Cs, and an A.
+Just what we needed.
+
+157
+00:12:36,270 --> 00:12:42,239
+We're not done yet as a second exercise I
+would like you to use Peg to write a
+
+158
+00:12:42,239 --> 00:12:47,110
+second function and code that produces a
+run length encoding of a list.
+
+159
+00:12:47,110 --> 00:12:52,531
+Run length encodings are often used for
+compressions of images and other files.
+
+160
+00:12:52,737 --> 00:12:58,089
+The idea is to encode n consecutive
+duplicates of an element of the list as a
+
+161
+00:12:58,089 --> 00:13:01,519
+pair xn.
+So instead of writing the element n times
+
+162
+00:13:01,519 --> 00:13:07,283
+we just have a single entry pair of what
+the element was and how many times we have
+
+163
+00:13:07,283 --> 00:13:08,930
+written it.
+For instance.
+
+164
+00:13:08,930 --> 00:13:12,930
+Is in code of the list that we've seen
+before should give us.
+
+165
+00:13:12,930 --> 00:13:20,252
+A3, B1, C2 and again, A1.
+So, let's go again to the worksheet to
+
+166
+00:13:20,252 --> 00:13:28,399
+solve that.
+What we're interested in is a function in
+
+167
+00:13:28,399 --> 00:13:36,131
+code, and it should also be generic taking
+a list of T, and now it would return a
+
+168
+00:13:36,131 --> 00:13:42,220
+list of pairs of the element and the count
+which is an integer.
+
+169
+00:13:43,140 --> 00:13:48,246
+And what should the body of encode be?
+Well, it turns out that most of the work
+
+170
+00:13:48,246 --> 00:13:51,978
+has already been done by pack.
+Once we have a packed list.
+
+171
+00:13:52,174 --> 00:13:57,150
+All we need is, is a simple transformation
+to get to the run length encoding.
+
+172
+00:13:57,150 --> 00:14:00,816
+And that transformation will be applied to
+each element.
+
+173
+00:14:00,816 --> 00:14:06,054
+So the natural operation to use is a map.
+So what we do is we start with pack of
+
+174
+00:14:06,054 --> 00:14:08,848
+excess.
+And we then apply our map.
+
+175
+00:14:08,848 --> 00:14:12,246
+A pack of Xs lead to, here's a list of
+lists.
+
+176
+00:14:12,246 --> 00:14:18,656
+So if we apply our map then we have get
+each individual sub list as an argument.
+
+177
+00:14:18,656 --> 00:14:24,758
+Let's call that sub list Ys here and what
+do we do in the map, well, we return a
+
+178
+00:14:24,758 --> 00:14:31,091
+pair where the first element of the pair
+is the first element in the sub list and
+
+179
+00:14:31,091 --> 00:14:35,880
+the second element of the pair is the
+length of that sub list.
+
+180
+00:14:38,500 --> 00:14:43,380
+There we are with encode.
+All we need to do is encode of data.
+
+181
+00:14:43,680 --> 00:14:50,822
+To get a single test case.
+And we get what we expected, a 3B, one C2,
+
+182
+00:14:50,822 --> 00:14:51,580
+and A1.
