@@ -1,0 +1,689 @@
+1
+00:00:00,000 --> 00:00:02,094
+Hi.
+In this video, we are going to show you
+
+2
+00:00:02,094 --> 00:00:07,043
+how to install the tools required for our
+class on your machine.
+
+3
+00:00:07,043 --> 00:00:12,084
+This video is for people using Mac OSX.
+If you're using a different operating
+
+4
+00:00:12,084 --> 00:00:18,052
+system, check the getting started section
+on the video lectures part of the class
+
+5
+00:00:18,052 --> 00:00:21,098
+website.
+Everything that we show in this video is
+
+6
+00:00:21,098 --> 00:00:27,028
+also explained in text on the Tools Set Up
+wiki page on the class website.
+
+7
+00:00:27,028 --> 00:00:32,036
+So, let's have a look at this page.
+As you can see, there are three things
+
+8
+00:00:32,036 --> 00:00:37,073
+that you need to install on your machine
+in order to prepare for this class.
+
+9
+00:00:37,073 --> 00:00:43,038
+The first one is the JDK, the Java Runtime
+Environment, which is used to execute
+
+10
+00:00:43,038 --> 00:00:47,023
+Scala programs.
+The second one is SBT, a build tool for
+
+11
+00:00:47,023 --> 00:00:53,534
+Scala, which you will also use to submit
+your assignment solutions to Coursera.
+
+12
+00:00:53,534 --> 00:00:58,139
+The third one is the Scala IDE for
+Eclipse, which is the IDE that we are
+
+13
+00:00:58,139 --> 00:01:02,793
+going to use in this class.
+Okay, so, let's get started by installing
+
+14
+00:01:02,793 --> 00:01:07,165
+the Java debug kit.
+Every section in this tutorial has three
+
+15
+00:01:07,165 --> 00:01:10,706
+sub sections one for each operating
+system.
+
+16
+00:01:10,706 --> 00:01:16,794
+Since we are currently on Mac OS10, we
+will look at how to install JDK on Mac
+
+17
+00:01:16,794 --> 00:01:20,182
+OSX.
+In fact, Mac OSX either comes with Java
+
+18
+00:01:20,182 --> 00:01:24,838
+pre-installed or it will install it
+automatically for you.
+
+19
+00:01:24,838 --> 00:01:30,530
+To verify, if you already have Java, you
+have to open a terminal application.
+
+20
+00:01:30,530 --> 00:01:35,768
+So, you open the Finder, we go to the
+Applications folder and we open the
+
+21
+00:01:35,768 --> 00:01:40,593
+Utilities folder.
+In utilities, there's the application
+
+22
+00:01:40,593 --> 00:01:45,643
+named terminal.
+Since we will be using the terminal a lot,
+
+23
+00:01:45,643 --> 00:01:50,472
+in this class it makes sense to drag it
+into your dock.
+
+24
+00:01:50,472 --> 00:01:55,717
+Okay, so we can close the Finder window,
+open a terminal.
+
+25
+00:01:55,717 --> 00:02:00,826
+And now, we want to verify if we have Java
+installed.
+
+26
+00:02:00,826 --> 00:02:06,660
+In order to do that, you type Java minus
+version into the terminal.
+
+27
+00:02:06,660 --> 00:02:11,082
+On this machine I don't have Java
+installed yet.
+
+28
+00:02:11,082 --> 00:02:16,864
+So, I will get the window which tells me,
+to open Java, I actually need to install
+
+29
+00:02:16,864 --> 00:02:20,490
+it.
+So, the only thing you need to do is click
+
+30
+00:02:20,490 --> 00:02:24,633
+the Install button.
+Of course, you have to agree to the
+
+31
+00:02:24,633 --> 00:02:26,471
+license agreements.
+Okay.
+
+32
+00:02:26,471 --> 00:02:32,044
+So, once the Java installation has
+finished, we just click Okay and we run
+
+33
+00:02:32,044 --> 00:02:37,077
+Java minus version again.
+Now, we see the version number of the Java
+
+34
+00:02:37,077 --> 00:02:40,435
+installation that has been installed.
+Okay.
+
+35
+00:02:40,435 --> 00:02:47,489
+So, we close this terminal window and we
+move on to the second tool that we need to
+
+36
+00:02:47,489 --> 00:02:50,818
+install.
+The second tool that we need to install is
+
+37
+00:02:50,818 --> 00:02:54,023
+SBT.
+In order to install SBT on your system,
+
+38
+00:02:54,023 --> 00:02:59,168
+you can either use the homebrew package
+manager or you can do a manual
+
+39
+00:02:59,168 --> 00:03:02,706
+installation.
+In this video, I will do a manual
+
+40
+00:03:02,706 --> 00:03:06,532
+installation.
+So, we download SBT from this URL.
+
+41
+00:03:06,532 --> 00:03:14,774
+Once the download has finished, we
+navigate to the file in the Finder, and we
+
+42
+00:03:14,774 --> 00:03:18,404
+double click it to extract SBT.
+Okay.
+
+43
+00:03:18,404 --> 00:03:24,749
+So, since SBT is an application that we
+will reuse in the future, we will move it
+
+44
+00:03:24,749 --> 00:03:30,093
+to a different location.
+So, I open a new Finder window, and in my
+
+45
+00:03:30,093 --> 00:03:35,069
+home folder I create a subdirectory named
+applications.
+
+46
+00:03:36,050 --> 00:03:44,088
+Now, I take the extracted SBT folder and I
+move it to my newly created Applications
+
+47
+00:03:44,088 --> 00:03:48,040
+folder.
+Inside the SBT folder, you have a bin
+
+48
+00:03:48,040 --> 00:03:52,075
+subdirectory, which contains the
+executable files for SBT.
+
+49
+00:03:52,075 --> 00:03:57,099
+So, let's close the Finder window and go
+back to the tutorial.
+
+50
+00:03:57,099 --> 00:04:03,082
+So, we downloaded SBT, we unpacked the
+Archive, and moved it to the Applications
+
+51
+00:04:03,082 --> 00:04:07,555
+folder.
+And, and what we need to do last is adding
+
+52
+00:04:07,555 --> 00:04:12,005
+the bin directory of SBT to the path
+environment variable.
+
+53
+00:04:12,005 --> 00:04:17,482
+In order to do that, you have to open the
+file.bash<u>profile which is located in</u>
+
+54
+00:04:17,482 --> 00:04:23,085
+your home directory.
+If the file doesn't exist yet, you will
+
+55
+00:04:23,085 --> 00:04:29,016
+have to create it.
+Okay, so let's open a new Terminal window
+
+56
+00:04:29,016 --> 00:04:34,761
+and lets check if the bash<u>profile file
+already exists.</u> So, we type
+
+57
+00:04:34,761 --> 00:04:38,538
+ls.bash<u>profile.
+In my case, the file does no exist yet</u>
+
+58
+00:04:38,538 --> 00:04:44,008
+but it might very well be that you
+already have it.
+
+59
+00:04:44,008 --> 00:04:50,970
+So, in order to create or edit a file, we
+can use the Nano Text Editor, which is a
+
+60
+00:04:50,970 --> 00:04:57,887
+very simple command-line text editor.
+We type, nano.ash<u>profile and hit</u>
+
+61
+00:04:57,887 --> 00:05:05,001
+Enter. So now, we need to add one
+export command to dispatch profile file.
+
+62
+00:05:05,001 --> 00:05:10,004
+We go back to the setup instructions, we
+copy the export command.
+
+63
+00:05:10,004 --> 00:05:18,014
+Right click, Copy, and go back to the
+terminal, and paste it using right click
+
+64
+00:05:18,014 --> 00:05:22,094
+Paste.
+Now, in fact, we have to change the path
+
+65
+00:05:22,094 --> 00:05:31,004
+of our SBT installation to match the path
+were we actually extracted SBT.
+
+66
+00:05:31,004 --> 00:05:38,082
+In my case, this was /users/luc, my
+username, /applications, and then SBT bin
+
+67
+00:05:38,082 --> 00:05:44,994
+Now, we can exit the Nano text editor
+using Control+X, and we will save the
+
+68
+00:05:44,994 --> 00:05:52,093
+changes to the file by confirming with Y
+and then hitting Enter for the file name.
+
+69
+00:05:52,093 --> 00:05:57,069
+Okay, now, we need to verify if SBT has
+been installed correctly.
+
+70
+00:05:57,069 --> 00:06:02,053
+We close the Terminal window and we go
+back to the instructions.
+
+71
+00:06:02,053 --> 00:06:08,050
+In order to verify the SBT installation,
+we have to start a new Terminal window,
+
+72
+00:06:08,050 --> 00:06:14,009
+and we have to type SBT-H.
+If the installation was successful, then
+
+73
+00:06:14,009 --> 00:06:17,088
+you'll see SBT Help message appear on the
+screen.
+
+74
+00:06:17,088 --> 00:06:24,024
+Okay, so, we close the Terminal window, we
+go back to the set up instructions and we
+
+75
+00:06:24,024 --> 00:06:30,013
+go to the last tool that we have to
+install, the is Scala IDE four eclipse.
+
+76
+00:06:30,013 --> 00:06:38,332
+In order to install this Scala IDE, we
+have to open this website and scroll down
+
+77
+00:06:38,332 --> 00:06:43,054
+to the downloads.
+Now, you have to find the version of the
+
+78
+00:06:43,054 --> 00:06:47,053
+Scala IDE which matches your operating
+system.
+
+79
+00:06:47,053 --> 00:06:52,058
+In my case, I am on a 64-bit Mac OSX.
+So, I click this link.
+
+80
+00:06:52,058 --> 00:06:59,049
+Once the download of the Scala IDE has
+finished, we open the Download folder in
+
+81
+00:06:59,049 --> 00:07:04,052
+Finder.
+We unpack the Scala IDe by simply double
+
+82
+00:07:04,052 --> 00:07:09,529
+clicking the file.
+Since, the Scala IDE is on applications
+
+83
+00:07:09,529 --> 00:07:16,006
+that we will reuse in the future, we will
+also move it to our Applications folder.
+
+84
+00:07:16,006 --> 00:07:21,069
+So, I open a new window, I go to my
+Applications folder, and then move the
+
+85
+00:07:21,069 --> 00:07:27,072
+Eclipse folder into my applications.
+In order to open the Scala IDE, you simply
+
+86
+00:07:27,072 --> 00:07:32,081
+go into the Eclipse folder and you double
+click the Eclipse file.
+
+87
+00:07:34,012 --> 00:07:40,047
+When starting up Eclipse, you have to
+define which your, workspace you want to
+
+88
+00:07:40,047 --> 00:07:43,089
+use.
+We recommend that you create one work
+
+89
+00:07:43,089 --> 00:07:49,042
+space which you can then reuse for all the
+assignments of our class.
+
+90
+00:07:49,042 --> 00:07:55,069
+I will do this now by clicking the Browse
+button and going to my home folder.
+
+91
+00:07:56,007 --> 00:08:02,011
+Okay.
+So now, here I will create a new folder
+
+92
+00:08:02,011 --> 00:08:11,043
+named ProgFun Workspace.
+I will select the folder and click Open.
+
+93
+00:08:12,022 --> 00:08:17,084
+By clicking Okay, Eclipse will start up
+using that new workspace.
+
+94
+00:08:17,084 --> 00:08:23,098
+Okay, in order to test the Scala IDE,
+we'll go back to the tool set of
+
+95
+00:08:23,098 --> 00:08:28,099
+instructions page.
+We can close the Download page, and the
+
+96
+00:08:28,099 --> 00:08:36,011
+Tool Setup page explains you to create a
+simple Hello World project in the Scala
+
+97
+00:08:36,011 --> 00:08:39,044
+IDE.
+I will show you how to do this now.
+
+98
+00:08:39,044 --> 00:08:45,086
+So, you go to Eclipse and in the menu ,
+you select File, New Scalar Project.
+
+99
+00:08:46,017 --> 00:08:52,037
+You give the project a name, for instance,
+Hello World.
+
+100
+00:08:52,091 --> 00:08:56,092
+Okay.
+In order to enter the source code for the
+
+101
+00:08:56,092 --> 00:09:02,011
+Hello World application, we have to create
+a new Scala object.
+
+102
+00:09:02,011 --> 00:09:08,092
+So, we open a project, and we right-click
+on the Source folder, and select U Scala
+
+103
+00:09:08,092 --> 00:09:14,013
+object.
+We give the object a name, in this case,
+
+104
+00:09:14,013 --> 00:09:19,021
+Hello.
+And we define in which package job check
+
+105
+00:09:19,021 --> 00:09:23,098
+we defined, so we put here the package
+greeter.
+
+106
+00:09:23,098 --> 00:09:29,041
+We confirm by clicking Finish.
+Okay, now, the source code for the Hello
+
+107
+00:09:29,041 --> 00:09:34,038
+World application can be found on the
+Tools Setup instructions.
+
+108
+00:09:34,038 --> 00:09:40,061
+So, we go back to the wiki page and we
+scroll down to find the source code that
+
+109
+00:09:40,061 --> 00:09:44,039
+we need.
+We select it, copy it, go back to Eclipse
+
+110
+00:09:44,039 --> 00:09:49,789
+and just paste it into the file.
+We saved the file and, you can notice that
+
+111
+00:09:49,789 --> 00:09:55,562
+once you save the file, Eclipse will
+automatically compile the entire project
+
+112
+00:09:55,562 --> 00:09:59,046
+for you.
+In order to execute the Hello World
+
+113
+00:09:59,046 --> 00:10:05,020
+application, you simply have to right
+click on the hello.scala source file,
+
+114
+00:10:05,020 --> 00:10:08,045
+select Run S, and select Scala
+application.
+
+115
+00:10:08,045 --> 00:10:15,640
+You will see the output of the Hello World
+program in the, in the eclipse console.
+
+116
+00:10:15,640 --> 00:10:21,868
+The next feature that we are going to show
+you, is a brand new feature named the
+
+117
+00:10:21,868 --> 00:10:25,787
+Scala worksheet.
+In a Scala worksheet, you can type
+
+118
+00:10:25,787 --> 00:10:30,791
+arbitrary Scala expressions and see them
+evaluated on the fly.
+
+119
+00:10:30,791 --> 00:10:34,400
+It's a great tool to learn and explore
+Scala.
+
+120
+00:10:34,400 --> 00:10:41,375
+In order to create the worksheet, we right
+click on the Create Package, we select New
+
+121
+00:10:41,375 --> 00:10:47,345
+Scala Worksheet.
+You have to give the worksheet a name, and
+
+122
+00:10:47,345 --> 00:10:50,551
+click Finish to create it.
+Okay.
+
+123
+00:10:50,551 --> 00:10:58,621
+I will increase the size of this window in
+order to see all the, all the worksheet.
+
+124
+00:10:58,621 --> 00:11:04,616
+Now, to try out the worksheet, we have
+prepared some instructions for you that
+
+125
+00:11:04,616 --> 00:11:07,619
+you can paste into this newly created
+object.
+
+126
+00:11:07,619 --> 00:11:12,952
+So, if you go back to the set up
+instructions, and scroll down to the
+
+127
+00:11:12,952 --> 00:11:18,762
+bottom of the page, you will see a few
+lines of code that you can copy and paste
+
+128
+00:11:18,762 --> 00:11:21,740
+back in this freshly created Scala
+worksheet.
+
+129
+00:11:21,740 --> 00:11:25,317
+Okay.
+Once you save to file, Eclipse will
+
+130
+00:11:25,317 --> 00:11:32,426
+automatically evaluate at all the lines
+that are part of the worksheet and show
+
+131
+00:11:32,426 --> 00:11:36,765
+the result of the evaluation on the right
+hand side.
+
+132
+00:11:36,765 --> 00:11:41,188
+In this example, we assigned the number
+one to the value x.
+
+133
+00:11:41,188 --> 00:11:47,462
+We define the function increase which
+returns its argument increase by one.
+
+134
+00:11:47,462 --> 00:11:53,549
+Every test increase by invoking it and
+passing x into the function.
+
+135
+00:11:53,549 --> 00:11:57,411
+You can see that increase of x returns
+two.
+
+136
+00:11:57,411 --> 00:12:03,667
+Now, if you go back to Worksheet, and
+change the definition of x, for instance
+
+137
+00:12:03,667 --> 00:12:09,809
+to be five, as soon as we save the file,
+the whole buffer will be reevaluated.
+
+138
+00:12:09,809 --> 00:12:16,024
+And you can see that the result of the
+invocation of increase is now six.

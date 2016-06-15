@@ -1,0 +1,569 @@
+1
+00:00:00,000 --> 00:00:02,753
+Hi.
+In this video, we are going to show you
+
+2
+00:00:02,753 --> 00:00:05,506
+how to work on the Programming
+assignments.
+
+3
+00:00:05,506 --> 00:00:11,185
+We show you how to download them, how to
+import them into Eclipse, how to test your
+
+4
+00:00:11,185 --> 00:00:14,602
+code, and how to submit your solutions
+using SBT.
+
+5
+00:00:14,602 --> 00:00:18,275
+Okay, so, let's get started by going to
+the Assignments page.
+
+6
+00:00:18,275 --> 00:00:23,711
+And we open the Getting Started section
+and we go to the instructions of the
+
+7
+00:00:23,711 --> 00:00:28,665
+example assignment.
+So, the first thing you need to do is
+
+8
+00:00:28,665 --> 00:00:34,167
+installing all the required tools.
+How to do this is explained on the tools
+
+9
+00:00:34,167 --> 00:00:36,772
+setup page.
+I will quickly show it to you.
+
+10
+00:00:36,772 --> 00:00:42,155
+And for every Operating System, you can
+also have a screen shot which shows you
+
+11
+00:00:42,155 --> 00:00:46,584
+how to set up the tools.
+Since I already installed everything on
+
+12
+00:00:46,584 --> 00:00:49,728
+this machine, I just go right into the
+assignment.
+
+13
+00:00:49,728 --> 00:00:56,381
+So, the first thing you need to do is
+download the assignment archive.
+
+14
+00:00:56,381 --> 00:01:00,846
+Okay.
+We open that file in the Explorer.
+
+15
+00:01:00,846 --> 00:01:08,052
+And now, I will extract the assignment
+archive into my home directory.
+
+16
+00:01:08,052 --> 00:01:15,912
+So I right click, select Extract All, and
+I will create a new directory in my home
+
+17
+00:01:15,912 --> 00:01:21,312
+folder which I will use for the
+programming assignments.
+
+18
+00:01:21,312 --> 00:01:29,081
+So, I go to my home directory, I create a
+new folder, I call it Progfun Assignments.
+
+19
+00:01:30,018 --> 00:01:38,040
+And I click this right.
+So, I closed Explorer window and go back
+
+20
+00:01:38,040 --> 00:01:41,091
+to the assignment.
+And the first thing we are going to do is
+
+21
+00:01:41,091 --> 00:01:45,078
+start in the Scala record inside the
+project that we just created.
+
+22
+00:01:45,078 --> 00:01:49,099
+How you can do this is explained on the
+SBT tutorial website.
+
+23
+00:01:49,099 --> 00:01:55,341
+So, I opened the SBT tutorial and I follow
+the instructions which are on this page.
+
+24
+00:01:55,341 --> 00:02:00,278
+So, I open a command prompt, I go to the
+directory of my assignments.
+
+25
+00:02:00,278 --> 00:02:06,558
+So, I go to CD Progfun Assignments.
+And then here I go CD example, since I am
+
+26
+00:02:06,558 --> 00:02:10,890
+working on the example assignment, and I
+start SBT.
+
+27
+00:02:10,890 --> 00:02:16,750
+Okay, once that the SBT console has
+loaded, you can, from SBT start the Scala
+
+28
+00:02:16,750 --> 00:02:23,042
+REPL using the console command.
+So, you type console, hit Enter, and then
+
+29
+00:02:23,042 --> 00:02:28,098
+SBT will start the Scala REPL.
+Now, we are in the Scala interpreter.
+
+30
+00:02:28,098 --> 00:02:35,020
+Here, we can type arbitrary Scala
+expression, and they will be evaluated on
+
+31
+00:02:35,020 --> 00:02:39,031
+the fly.
+For example, you can say Println, and pass
+
+32
+00:02:39,031 --> 00:02:43,077
+the string, and the Println command will
+be evaluated.
+
+33
+00:02:43,077 --> 00:02:50,065
+That is how we recommend that you start
+the Scala interpreter during this class.
+
+34
+00:02:50,065 --> 00:02:55,406
+In order to close the Scala interpreter
+and get back to the SBT console, you have
+
+35
+00:02:55,406 --> 00:02:59,091
+to type Control+D.
+You will not see anything on the screen
+
+36
+00:02:59,091 --> 00:03:04,084
+except that the Scala interpreter exits.
+Now, we are back in the SBT shell.
+
+37
+00:03:04,084 --> 00:03:07,093
+Okay, so now, we will go back to the
+assignment.
+
+38
+00:03:07,093 --> 00:03:13,039
+We close the SBT tutorial and we move down
+to the next step, which is opening the
+
+39
+00:03:13,039 --> 00:03:16,028
+project in Eclipse.
+So, you start up Eclipse.
+
+40
+00:03:16,028 --> 00:03:19,018
+In my case, I have a shortcut on my
+desktop.
+
+41
+00:03:19,018 --> 00:03:24,003
+And once you start Eclipse, you have to
+choose a work space to work with.
+
+42
+00:03:24,003 --> 00:03:29,021
+If you already created a work space for
+our class, then you can just use that.
+
+43
+00:03:29,021 --> 00:03:34,027
+Otherwise, you just create a new folder in
+your home directory, and use that.
+
+44
+00:03:34,027 --> 00:03:38,037
+So, my work space is a Progfun web space
+in my home directory.
+
+45
+00:03:39,046 --> 00:03:42,076
+Okay.
+Inside Eclipse, you can just import a
+
+46
+00:03:42,076 --> 00:03:46,069
+project that you extracted in your home
+directory.
+
+47
+00:03:47,052 --> 00:03:52,070
+You do this by going to file, import, and
+then in the general section you select
+
+48
+00:03:52,070 --> 00:03:57,081
+Existing Projects Into Workspace.
+You go next and you browse to the
+
+49
+00:03:57,081 --> 00:04:01,020
+directory, where you've unpacked the
+assignment.
+
+50
+00:04:01,020 --> 00:04:07,165
+So, we go to the Progfun Assignments and
+we accept the sample folder which is the
+
+51
+00:04:07,165 --> 00:04:08,097
+project directory.
+Okay.
+
+52
+00:04:08,097 --> 00:04:12,053
+We click Finish.
+And all, we already have the source code
+
+53
+00:04:12,053 --> 00:04:16,009
+imported into Eclipse.
+So, we open up the project, and in the
+
+54
+00:04:16,009 --> 00:04:20,043
+source folder, source main Scala.
+In the package example, you see the file
+
+55
+00:04:20,043 --> 00:04:24,532
+lists of Scala, which is the file that you
+actually have to work on during this
+
+56
+00:04:24,532 --> 00:04:27,058
+assignment.
+Okay, so, let's go back to the
+
+57
+00:04:27,058 --> 00:04:29,928
+instructions.
+So, the next assignment that you have to
+
+58
+00:04:29,928 --> 00:04:32,636
+do is actually implementing the
+assignment.
+
+59
+00:04:32,636 --> 00:04:37,572
+If you look at the code, there are two
+functions that need to be implemented, sum
+
+60
+00:04:37,572 --> 00:04:40,606
+and max.
+Both functions are currently defined with
+
+61
+00:04:40,606 --> 00:04:44,505
+a triple question mark, which means they
+are not yet implemented.
+
+62
+00:04:44,505 --> 00:04:50,135
+Okay, in this case, I will not do a real
+implementation, but just return zero for
+
+63
+00:04:50,135 --> 00:04:55,802
+both of them, which is obviously wrong.
+But I don't want to spoil the solution.
+
+64
+00:04:55,802 --> 00:05:00,550
+So, let's go back to the assignment.
+The next step is running new code.
+
+65
+00:05:00,550 --> 00:05:06,127
+There are two ways to run new code.
+You can start the Scala REPL, and use the
+
+66
+00:05:06,127 --> 00:05:10,700
+functions that you just implemented in
+Eclipse in the Scala REPL.
+
+67
+00:05:10,700 --> 00:05:18,189
+For that, we go to the Command Prompt.
+We go back to the Scala REPL by typing
+
+68
+00:05:18,189 --> 00:05:22,027
+console.
+And now, we have another look at the
+
+69
+00:05:22,027 --> 00:05:25,417
+source code.
+So, the two functions that we just
+
+70
+00:05:25,417 --> 00:05:31,051
+implemented are defined in an object list,
+which, in fact, lives in package example.
+
+71
+00:05:31,051 --> 00:05:36,085
+So, if you want to use the functions, we
+have to either use the full name,
+
+72
+00:05:36,085 --> 00:05:42,086
+example.list.sum or we can also import the
+members of this object into the REPL.
+
+73
+00:05:42,086 --> 00:05:46,329
+In order to import it, we just type import
+example.lists.
+
+74
+00:05:46,329 --> 00:05:51,290
+Which means everything.
+And now, two functions that we defined are
+
+75
+00:05:51,290 --> 00:05:57,032
+available so we can try them out.
+For instance, we can try the sum function,
+
+76
+00:05:57,032 --> 00:06:02,441
+and type sum of list of one, two, and
+three and we get zero because obviously,
+
+77
+00:06:02,441 --> 00:06:05,598
+our implementation is not correct.
+Okay.
+
+78
+00:06:05,598 --> 00:06:10,567
+Another way to run your code is using a
+main object.
+
+79
+00:06:10,567 --> 00:06:14,771
+This is explained on the, on the
+assignment page and I will not go into
+
+80
+00:06:14,771 --> 00:06:18,689
+details right now.
+The next part of the assignment is writing
+
+81
+00:06:18,689 --> 00:06:21,418
+tests.
+So, if you go to Eclipse, you see that
+
+82
+00:06:21,418 --> 00:06:26,078
+there is a second source folder which is
+named Source Tests Scala and this
+
+83
+00:06:26,078 --> 00:06:31,043
+directory contains tests for our code.
+In fact, we already give you a test suite
+
+84
+00:06:31,043 --> 00:06:35,012
+for the list object.
+If you open it up, you will see that the
+
+85
+00:06:35,012 --> 00:06:39,921
+Lists Tests Suite is a whole tutorial on
+how to use Scala test, the tool that we
+
+86
+00:06:39,921 --> 00:06:43,079
+are using for testing.
+It is really important that you work
+
+87
+00:06:43,079 --> 00:06:48,053
+through this tutorial because we'll be
+using testing a lot during all of our
+
+88
+00:06:48,053 --> 00:06:51,080
+class.
+Okay, let's go back to the assignment.
+
+89
+00:06:51,080 --> 00:06:57,011
+After you're finished testing and
+everything is correct, you can submit your
+
+90
+00:06:57,011 --> 00:07:00,053
+solution.
+In order to do that, you have to go back
+
+91
+00:07:00,053 --> 00:07:03,086
+to SBT, okay?
+So, you open the Command Prompt.
+
+92
+00:07:03,086 --> 00:07:08,423
+And we see, in fact, we are still in the
+Scala shell right now, so we type
+
+93
+00:07:08,423 --> 00:07:11,095
+Control+D and we are back in the SBT
+shell, okay?
+
+94
+00:07:11,095 --> 00:07:17,005
+Now, to submit your solution, the SBT
+shell defines a command which is named
+
+95
+00:07:17,005 --> 00:07:20,010
+Submit.
+The Submit command takes two arguments.
+
+96
+00:07:20,010 --> 00:07:25,020
+The first one is your e-mail address, the
+one that you used for registering on
+
+97
+00:07:25,020 --> 00:07:28,092
+Coursera.
+The second argument to the Submit command
+
+98
+00:07:28,092 --> 00:07:33,038
+is your submission password.
+The submission password is not the
+
+99
+00:07:33,038 --> 00:07:38,078
+password that you use for logging in,
+instead the submission password can be
+
+100
+00:07:38,078 --> 00:07:43,067
+obtained at the Coursera website.
+So, we go to the Coursera website and we
+
+101
+00:07:43,067 --> 00:07:47,036
+scroll up and you have to go to the
+Assignments page.
+
+102
+00:07:47,036 --> 00:07:51,541
+On top of the Assignments page, you see
+your user name and your submission
+
+103
+00:07:51,541 --> 00:07:55,221
+password.
+Again, this is not your log in password.
+
+104
+00:07:55,221 --> 00:08:00,616
+So, we copy the submission password, we go
+back to shell and we paste it.
+
+105
+00:08:00,616 --> 00:08:06,672
+And now, if you type Enter, your solution
+will be packed and uploaded to Coursera.
+
+106
+00:08:06,672 --> 00:08:13,041
+Finally, in order to see your grade, again
+go to the Coursera website, you go to the
+
+107
+00:08:13,041 --> 00:08:17,109
+assignment, and look at the assignment you
+just submitted.
+
+108
+00:08:17,109 --> 00:08:20,601
+I already have a score because I submitted
+before.
+
+109
+00:08:20,601 --> 00:08:25,782
+Note that you can submit the same
+assignment as often as you like.
+
+110
+00:08:25,782 --> 00:08:31,484
+So, if I click on the Score, I will see
+the feedback that I received for earlier
+
+111
+00:08:31,484 --> 00:08:34,879
+submissions that I did.
+So, all the feedback below is for
+
+112
+00:08:34,879 --> 00:08:39,625
+submissions that I did a few days ago.
+But you can also see that there is a new
+
+113
+00:08:39,625 --> 00:08:43,520
+submission, which I did just right now,
+which has not yet been graded.
+
+114
+00:08:43,520 --> 00:08:46,069
+Usually, grading takes between five and
+ten minutes.

@@ -1,0 +1,179 @@
+1
+00:00:00,000 --> 00:00:03,051
+Welcome.
+I'm going to give you now a quick
+
+2
+00:00:03,051 --> 00:00:08,033
+introduction of my course, Functional
+Programming Principles in Scala, and tell
+
+3
+00:00:08,033 --> 00:00:12,089
+you how we are going to organize it.
+As usual, the course will consist of a
+
+4
+00:00:12,089 --> 00:00:17,095
+sequence of videos which will introduce
+the elements of the course one by one, and
+
+5
+00:00:17,095 --> 00:00:22,089
+the videos will also have quizzes where
+you are asked to fill in some questions.
+
+6
+00:00:22,089 --> 00:00:27,052
+Those questions could be multiple choice
+or also, quite often, we ask you to
+
+7
+00:00:27,052 --> 00:00:31,022
+program something.
+After the quizzes, you will always see the
+
+8
+00:00:31,022 --> 00:00:34,067
+answer in the videos.
+Besides the quizzes, there are also
+
+9
+00:00:34,067 --> 00:00:38,005
+assignments.
+The assignments you have to hand in, and
+
+10
+00:00:38,005 --> 00:00:40,795
+you are going to be graded on the
+assignments.
+
+11
+00:00:40,795 --> 00:00:45,622
+And if you pass the assignments, then you
+will get a certificate at the end of the
+
+12
+00:00:45,622 --> 00:00:48,506
+course.
+The quizzes, by contrast, they are just
+
+13
+00:00:48,506 --> 00:00:52,165
+for your own education.
+You are not going to be graded on them.
+
+14
+00:00:52,165 --> 00:00:56,693
+There's a timeline for the course.
+You can expect a new set of videos every
+
+15
+00:00:56,693 --> 00:00:59,641
+Tuesday morning, and including a new
+assignment.
+
+16
+00:00:59,641 --> 00:01:04,479
+And you will have one week to hand in the
+assignments, or the assignments will have
+
+17
+00:01:04,479 --> 00:01:07,365
+to be handed in Monday night the following
+week.
+
+18
+00:01:07,365 --> 00:01:13,109
+We're going to use for the programming in
+the course the Eclipse, IDE, Integrated
+
+19
+00:01:13,109 --> 00:01:18,021
+Development Environment.
+And, I will show you later on how you can
+
+20
+00:01:18,021 --> 00:01:21,237
+download the IDE and how you can install
+it.
+
+21
+00:01:21,237 --> 00:01:27,126
+There's also another tool we meet for
+handing in the assignments that's called
+
+22
+00:01:27,126 --> 00:01:32,065
+SBT, the Scala Build Tool.
+Again, we will go through the details how
+
+23
+00:01:32,065 --> 00:01:34,320
+to get and to install SBT.
+Okay.
+
+24
+00:01:34,320 --> 00:01:39,090
+Once you are on the site, the first thing
+you could do is go to Tools Setup.
+
+25
+00:01:41,093 --> 00:01:47,047
+Here, you'll see detailed setup
+instructions how to setup Eclipse and SBT
+
+26
+00:01:47,047 --> 00:01:52,001
+for all the major operating systems,
+Windows, Mac OS and Linux.
+
+27
+00:01:52,001 --> 00:01:58,038
+You could also simplify your life simply
+by looking at one of the three videos that
+
+28
+00:01:58,038 --> 00:02:01,095
+can tell you exactly what to do to get
+started.
+
+29
+00:02:01,095 --> 00:02:07,788
+Once you've done that, you could go next
+to Assignments, getting, going to get
+
+30
+00:02:07,788 --> 00:02:12,855
+started in the assignments.
+And then you'll see an example assignment
+
+31
+00:02:12,855 --> 00:02:17,098
+which is optional.
+We will grade it but it won't count
+
+32
+00:02:17,098 --> 00:02:22,879
+towards your points for the course.
+That's essentially takes you through the
+
+33
+00:02:22,879 --> 00:02:28,732
+steps of drafting an assignment, drafting
+an, an exercise submitting your solution
+
+34
+00:02:28,732 --> 00:02:35,013
+to the assignment so that then when we
+start at the real assignments, you already
+
+35
+00:02:35,013 --> 00:02:41,014
+know all the mechanics for that.
+That's all there is to know for now.
+
+36
+00:02:41,014 --> 00:02:46,020
+Have fun with the course and the
+assignments.
